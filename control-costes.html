@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<!-- PWA / iPhone webapp -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ATP Costes">
+<meta name="theme-color" content="#0a0b0f">
+<meta name="mobile-web-app-capable" content="yes">
+<!-- Touch icon (aparece en pantalla inicio) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230a0b0f'/%3E%3Ctext x='90' y='68' text-anchor='middle' font-family='Georgia,serif' font-size='52' font-style='italic' fill='%23e8ff47'%3EATP%3C/text%3E%3Ctext x='90' y='112' text-anchor='middle' font-family='Georgia,serif' font-size='18' fill='%238890a8'%3EControl%3C/text%3E%3Ctext x='90' y='134' text-anchor='middle' font-family='Georgia,serif' font-size='18' fill='%238890a8'%3Ede Costes%3C/text%3E%3C/svg%3E">
+<title>ATP Control de Costes 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Epilogue:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0b0f;--s1:#12141a;--s2:#1a1d26;--bd:#252836;--ac:#e8ff47;--ac2:#47c8ff;--ac4:#b47fff;--tx:#f0f2ff;--tx2:#8890a8;--tx3:#555d75;--gr:#3dffa0;--rd:#ff4d6d;--or:#ffaa47}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Epilogue,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;min-height:-webkit-fill-available;overflow-x:hidden;font-size:14px}
+.sb{padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(12px,env(safe-area-inset-bottom))}
+.main{padding-top:max(16px,calc(env(safe-area-inset-top) + 8px));padding-bottom:max(16px,env(safe-area-inset-bottom));padding-left:max(18px,env(safe-area-inset-right))}
+/* SIDEBAR */
+.sb{position:fixed;left:0;top:0;bottom:0;width:58px;background:var(--s1);border-right:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:3px;z-index:100}
+.logo{font-family:"DM Serif Display",serif;font-size:14px;color:var(--ac);margin-bottom:12px;writing-mode:vertical-rl;transform:rotate(180deg);text-transform:uppercase}
+.nb{width:36px;height:36px;border-radius:8px;border:none;background:transparent;color:var(--tx3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;position:relative;flex-shrink:0;transition:all .2s}
+.nb:hover,.nb.on{background:var(--s2);color:var(--ac)}
+.nb.on::before{content:"";position:absolute;left:-1px;width:3px;height:14px;background:var(--ac);border-radius:0 2px 2px 0}
+.ns{flex:1}
+/* MAIN */
+.main{margin-left:58px;padding:16px 18px;min-height:100vh}
+/* HEADER */
+.hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:8px;flex-wrap:wrap}
+.hdr h1{font-family:"DM Serif Display",serif;font-size:20px;font-weight:400}
+.hdr h1 span{color:var(--ac);font-style:italic}
+.hdr p{color:var(--tx2);font-size:9px;margin-top:2px;font-family:"DM Mono",monospace}
+.hdr-r{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+/* FILTER BAR */
+.fbar{display:flex;align-items:center;gap:7px;background:var(--s1);border:1px solid var(--bd);border-radius:11px;padding:8px 12px;margin-bottom:12px;flex-wrap:wrap}
+.fbar label{font-size:8px;font-family:"DM Mono",monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;white-space:nowrap}
+.fsel{background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:5px 9px;border-radius:7px;font-family:Epilogue,sans-serif;font-size:11px;cursor:pointer;outline:none}
+.fpill{padding:4px 12px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--tx2);font-family:Epilogue,sans-serif;font-size:11px;cursor:pointer;transition:all .2s}
+.fpill.on{background:var(--ac);color:#0a0b0f;border-color:var(--ac);font-weight:700}
+.fsep{width:1px;height:16px;background:var(--bd);flex-shrink:0}
+.fbadge{font-size:8px;font-family:"DM Mono",monospace;padding:2px 7px;border-radius:20px;background:rgba(232,255,71,.1);color:var(--ac);border:1px solid rgba(232,255,71,.2);white-space:nowrap}
+.btn-filter{background:var(--ac);color:#0a0b0f;border:none;padding:5px 14px;border-radius:8px;font-family:Epilogue,sans-serif;font-weight:700;font-size:11px;cursor:pointer;transition:transform .1s}
+.btn-filter:active{transform:scale(.96)}
+/* TABS */
+.tabs{display:flex;gap:2px;background:var(--s1);border-radius:10px;padding:3px;margin-bottom:12px;border:1px solid var(--bd);flex-wrap:wrap}
+.tab{padding:5px 11px;border-radius:7px;border:none;background:transparent;color:var(--tx2);font-family:Epilogue,sans-serif;font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .2s}
+.tab.on{background:var(--s2);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.view{display:none}.view.on{display:block}
+/* CARDS */
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:13px;padding:14px;margin-bottom:10px}
+.ctitle{font-size:9px;font-family:"DM Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--tx2);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+/* KPI GRID */
+.kg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.kc{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:13px;transition:border-color .2s}
+.kc:hover{border-color:var(--tx3)}
+.klbl{font-size:8px;font-family:"DM Mono",monospace;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx3);margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.kdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.kval{font-family:"DM Serif Display",serif;font-size:20px;letter-spacing:-1px;line-height:1;margin-bottom:3px}
+.kval .cur{font-size:11px;opacity:.6}
+.ksub{font-size:9px;color:var(--tx2)}
+.kbar{margin-top:7px;height:3px;background:var(--bd);border-radius:2px;overflow:hidden}
+.kbf{height:100%;border-radius:2px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+/* ACUM ROW */
+.arow{display:flex;gap:14px;flex-wrap:wrap;padding:9px 0;border-bottom:1px solid var(--bd);margin-bottom:10px}
+.ait{display:flex;flex-direction:column;gap:1px}
+.albl{font-size:7px;font-family:"DM Mono",monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase}
+.aval{font-family:"DM Serif Display",serif;font-size:16px;letter-spacing:-.5px}
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:7px;font-family:"DM Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);padding:0 0 7px;text-align:left;border-bottom:1px solid var(--bd)}
+.tbl td{padding:6px 0;border-bottom:1px solid rgba(37,40,54,.5);font-size:10px;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,.01)}
+.cb{display:inline-flex;align-items:center;gap:3px;background:var(--s2);border-radius:4px;padding:2px 5px;font-size:8px;color:var(--tx2)}
+.cdot{width:4px;height:4px;border-radius:50%;flex-shrink:0}
+.mono{font-family:"DM Mono",monospace;font-size:9px;font-weight:500}
+.neg{color:var(--rd)}.pos{color:var(--gr)}
+.bb{display:inline-flex;padding:1px 4px;border-radius:3px;font-size:7px;font-family:"DM Mono",monospace;font-weight:600}
+.b-bbva{background:rgba(0,75,155,.2);color:#5599ee;border:1px solid rgba(0,75,155,.3)}
+.b-unicaja{background:rgba(0,168,80,.15);color:#4dcc80;border:1px solid rgba(0,168,80,.25)}
+.b-revolut{background:rgba(108,71,255,.2);color:#a07fff;border:1px solid rgba(108,71,255,.3)}
+/* BARS */
+.mbars{display:flex;align-items:flex-end;gap:3px;height:68px}
+.mw{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.mi{width:100%;display:flex;align-items:flex-end;justify-content:center;gap:2px;flex:1}
+.mb{width:7px;border-radius:2px 2px 0 0;min-height:2px;cursor:pointer;transition:opacity .2s}
+.mb.inc{background:var(--gr);opacity:.45}.mb.exp{background:var(--rd);opacity:.45}
+.mb.hl{opacity:.95}
+.mblbl{font-size:7px;color:var(--tx3);font-family:"DM Mono",monospace}
+/* DONUT */
+.dw{display:flex;flex-direction:column;align-items:center;gap:10px}
+.leg{width:100%}
+.li{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(37,40,54,.4);font-size:9px}
+.li:last-child{border-bottom:none}
+.ll{display:flex;align-items:center;gap:4px}
+.lc{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+/* PRESUPUESTO */
+.bud-section{margin-bottom:14px}
+.bud-section-title{font-size:9px;font-family:"DM Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--ac);padding:6px 0;border-bottom:1px solid var(--bd);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.bud-row{display:grid;grid-template-columns:1fr 80px 90px 90px 70px 28px;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid rgba(37,40,54,.35)}
+.bud-row:last-child{border-bottom:none}
+.bud-row.sub{padding-left:14px;opacity:.85}
+.bud-row.sub .bud-name{font-size:10px;color:var(--tx2)}
+.bud-name{font-size:11px;font-weight:500}
+.bud-inp{background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:4px 7px;color:var(--tx);font-family:"DM Mono",monospace;font-size:11px;width:100%;outline:none;text-align:right}
+.bud-inp:focus{border-color:var(--ac)}
+.bud-real{font-family:"DM Mono",monospace;font-size:10px;text-align:right;color:var(--tx2)}
+.bud-diff{font-family:"DM Mono",monospace;font-size:9px;text-align:right;padding:2px 4px;border-radius:4px}
+.bud-hdr{display:grid;grid-template-columns:1fr 80px 90px 90px 70px 28px;gap:6px;padding:0 0 7px;border-bottom:1px solid var(--bd);margin-bottom:4px}
+.bud-hdr span{font-size:7px;font-family:"DM Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);text-align:right}
+.bud-hdr span:first-child{text-align:left}
+.inc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.inc-card{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px}
+.inc-label{font-size:8px;font-family:"DM Mono",monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:5px}
+.inc-inp{background:transparent;border:none;border-bottom:1px solid var(--bd);color:var(--ac);font-family:"DM Serif Display",serif;font-size:20px;width:100%;outline:none;padding:2px 0;letter-spacing:-1px}
+.inc-inp:focus{border-color:var(--ac)}
+.inc-note{font-size:9px;color:var(--tx3);margin-top:4px}
+.budget-total-bar{background:var(--s2);border-radius:10px;padding:12px;border:1px solid var(--bd);margin-bottom:12px}
+.bt-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;font-size:11px}
+.bt-track{height:8px;background:var(--bd);border-radius:4px;overflow:hidden;position:relative}
+.bt-fill{height:100%;border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+/* BANCOS VIEW */
+.bank-section{margin-bottom:14px}
+.bank-section-title{font-size:10px;font-weight:700;padding:8px 0;border-bottom:1px solid var(--bd);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+/* BvR */
+.bvr-row{display:grid;grid-template-columns:110px 1fr 55px 55px 48px;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid rgba(37,40,54,.4)}
+.bvr-row:last-child{border-bottom:none}
+.bvr-lbl{font-size:10px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bvr-track{position:relative;height:13px;background:var(--bd);border-radius:3px;overflow:hidden}
+.bvr-bg{position:absolute;top:0;left:0;height:100%;opacity:.18}
+.bvr-fill{position:absolute;top:2px;left:0;height:9px;border-radius:2px;opacity:.9;transition:width .5s}
+.bvr-hdr{display:grid;grid-template-columns:110px 1fr 55px 55px 48px;gap:7px;padding:0 0 6px;border-bottom:1px solid var(--bd);margin-bottom:2px}
+.bvr-hdr span{font-size:7px;font-family:"DM Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--tx3)}
+.bvr-hdr span:nth-child(n+3){text-align:right}
+/* ANNUAL */
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.ann-it{background:var(--s2);border-radius:9px;padding:10px;display:flex;align-items:center;gap:8px;border:1px solid var(--bd);cursor:pointer;transition:border-color .2s}
+.ann-it:hover{border-color:var(--tx3)}
+.ann-mo{min-width:32px;height:32px;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:7px;font-family:"DM Mono",monospace;flex-shrink:0;padding:0 4px}
+.ann-mo .mn{font-family:"DM Serif Display",serif;font-size:12px;line-height:1}
+.ann-in{flex:1;min-width:0}
+.ann-nm{font-size:10px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ann-mt{font-size:8px;color:var(--tx2);margin-top:2px;display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.ann-st{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+/* TIPS */
+.tlist{display:flex;flex-direction:column;gap:7px}
+.ti{background:var(--s2);border:1px solid var(--bd);border-radius:11px;padding:12px;display:flex;gap:9px;align-items:flex-start;transition:border-color .2s}
+.ti:hover{border-color:var(--tx3)}
+.tico{font-size:16px;flex-shrink:0}
+.tb{flex:1}
+.tt2{font-size:11px;font-weight:700;margin-bottom:2px}
+.td2{font-size:10px;color:var(--tx2);line-height:1.5}
+.tsav{margin-top:5px;font-family:"DM Mono",monospace;font-size:9px;color:var(--gr);background:rgba(61,255,160,.07);padding:2px 7px;border-radius:4px;display:inline-block}
+.tacts{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.tbtn{font-size:9px;padding:2px 7px;border-radius:5px;border:1px solid var(--bd);background:transparent;color:var(--tx2);cursor:pointer;font-family:Epilogue,sans-serif;transition:all .2s}
+.tbtn:hover{border-color:var(--ac);color:var(--ac)}
+.tbtn.done{background:rgba(61,255,160,.1);border-color:var(--gr);color:var(--gr)}
+/* IMPORT */
+.bank-tabs{display:flex;gap:5px;margin-bottom:10px}
+.btab{flex:1;padding:6px;border-radius:7px;border:1px solid var(--bd);background:var(--s2);color:var(--tx2);font-family:Epilogue,sans-serif;font-size:10px;cursor:pointer;text-align:center;font-weight:600;transition:all .2s}
+.btab.on{border-color:var(--ac);color:var(--ac);background:rgba(232,255,71,.06)}
+.drop-zone{border:2px dashed var(--bd);border-radius:9px;padding:20px;text-align:center;cursor:pointer;position:relative;transition:all .2s}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--ac);background:rgba(232,255,71,.03)}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.imp-row{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid rgba(37,40,54,.4);font-size:9px}
+.imp-row:last-child{border-bottom:none}
+.imp-check{width:13px;height:13px;accent-color:var(--ac);cursor:pointer;flex-shrink:0}
+.imp-cat{background:var(--s2);border:1px solid var(--bd);border-radius:4px;padding:1px 4px;color:var(--tx);font-size:8px;outline:none;font-family:"DM Mono",monospace}
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(10,11,15,.9);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .2s}
+.mo.on{opacity:1;pointer-events:all}
+.mbox{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:20px;width:420px;max-width:95vw;transform:translateY(10px);transition:transform .2s;max-height:88vh;overflow-y:auto}
+.mo.on .mbox{transform:translateY(0)}
+.mtit{font-family:"DM Serif Display",serif;font-size:17px;margin-bottom:3px}
+.msub{font-size:9px;color:var(--tx2);margin-bottom:14px}
+.fl{margin-bottom:10px}
+.fl label{font-size:8px;font-family:"DM Mono",monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:3px;display:block}
+.fi,.fs{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:7px 10px;color:var(--tx);font-family:Epilogue,sans-serif;font-size:12px;outline:none;appearance:none}
+.fi:focus,.fs:focus{border-color:var(--ac)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+.brow{display:flex;gap:6px;margin-top:12px}
+.bc{flex:1;padding:7px;background:var(--s2);border:1px solid var(--bd);border-radius:7px;color:var(--tx2);font-family:Epilogue,sans-serif;font-size:11px;cursor:pointer}
+.bs{flex:2;padding:7px;background:var(--ac);border:none;border-radius:7px;color:#0a0b0f;font-family:Epilogue,sans-serif;font-size:11px;font-weight:700;cursor:pointer}
+.bdel{flex:1;padding:7px;background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.3);border-radius:7px;color:var(--rd);font-family:Epilogue,sans-serif;font-size:11px;cursor:pointer}
+.bp{background:var(--ac);color:#0a0b0f;border:none;padding:5px 12px;border-radius:7px;font-family:Epilogue,sans-serif;font-weight:700;font-size:10px;cursor:pointer;transition:opacity .2s}
+.bp:hover{opacity:.85}
+.bs2{background:var(--s2);color:var(--tx2);border:1px solid var(--bd);padding:5px 10px;border-radius:7px;font-family:Epilogue,sans-serif;font-size:10px;cursor:pointer;transition:border-color .2s}
+.bs2:hover{border-color:var(--tx3);color:var(--tx)}
+/* TOAST */
+.toast{position:fixed;bottom:16px;right:16px;background:var(--s1);border:1px solid var(--bd);border-radius:9px;padding:8px 13px;font-size:10px;z-index:300;transform:translateY(60px);transition:transform .3s;display:flex;align-items:center;gap:6px;max-width:260px}
+.toast.on{transform:translateY(0)}
+.tdot{width:5px;height:5px;border-radius:50%;background:var(--ac);flex-shrink:0}
+@media(max-width:640px){.kg{grid-template-columns:1fr 1fr}.agrid{grid-template-columns:1fr}.bvr-row,.bvr-hdr{grid-template-columns:90px 1fr 48px 48px 42px}.bud-row,.bud-hdr{grid-template-columns:1fr 70px 80px 80px 55px 22px}.inc-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<nav class="sb">
+  <div class="logo">ATP</div>
+  <button class="nb on" onclick="gv(0)" title="Dashboard">&#9783;</button>
+  <button class="nb" onclick="gv(1)" title="Presupuesto">&#9632;</button>
+  <button class="nb" onclick="gv(2)" title="Movimientos">&#9783;</button>
+  <button class="nb" onclick="gv(3)" title="Bancos">&#9827;</button>
+  <button class="nb" onclick="gv(4)" title="Importar">&#8659;</button>
+  <button class="nb" onclick="gv(5)" title="Anuales">&#9776;</button>
+  <button class="nb" onclick="gv(6)" title="Ahorro">&#9788;</button>
+  <div class="ns"></div>
+</nav>
+<main class="main">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <h1>Control de <span>Costes</span></h1>
+    <p id="hdate">2026 &#183; DATOS REALES</p>
+  </div>
+  <div class="hdr-r">
+    <button class="bs2" onclick="gv(4)">Importar mes</button>
+    <button class="bp" onclick="exportExcel()">Exportar Excel</button>
+    <button class="bp" onclick="openAddG()">+ Gasto</button>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="fbar">
+  <label>Año</label>
+  <select class="fsel" id="fY">
+    <option value="2026" selected>2026</option>
+    <option value="2025">2025</option>
+  </select>
+  <div class="fsep"></div>
+  <label>Desde</label>
+  <select class="fsel" id="fMde">
+    <option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option>
+    <option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option>
+    <option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option>
+    <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+  </select>
+  <label>Hasta</label>
+  <select class="fsel" id="fMha">
+    <option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option>
+    <option value="4">Abril</option><option value="5">Mayo</option><option value="6" selected>Junio</option>
+    <option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option>
+    <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+  </select>
+  <div class="fsep"></div>
+  <button class="btn-filter" onclick="applyF()">Filtrar</button>
+  <span class="fbadge" id="fbadge">ENE-JUN 2026</span>
+</div>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div class="view on" id="v0">
+  <div class="tabs">
+    <button class="tab on" onclick="gv(0)">Dashboard</button>
+    <button class="tab" onclick="gv(1)">Presupuesto</button>
+    <button class="tab" onclick="gv(2)">Movimientos</button>
+    <button class="tab" onclick="gv(3)">Bancos</button>
+    <button class="tab" onclick="gv(4)">Importar</button>
+    <button class="tab" onclick="gv(5)">Anuales</button>
+    <button class="tab" onclick="gv(6)">Ahorro</button>
+  </div>
+  <div class="arow" id="acumRow"></div>
+  <div class="kg" id="kpiGrid"></div>
+  <div class="card">
+    <div class="ctitle">
+      <span>EVOLUCION MENSUAL 2026</span>
+      <span style="display:flex;gap:8px">
+        <span style="font-size:8px;color:var(--tx2);display:flex;align-items:center;gap:3px"><span style="display:inline-block;width:7px;height:7px;background:var(--gr);border-radius:2px;opacity:.65"></span>Ingresos</span>
+        <span style="font-size:8px;color:var(--tx2);display:flex;align-items:center;gap:3px"><span style="display:inline-block;width:7px;height:7px;background:var(--rd);border-radius:2px;opacity:.65"></span>Gastos</span>
+      </span>
+    </div>
+    <div class="mbars" id="barchart"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div class="card">
+      <div class="ctitle"><span>ULTIMOS MOVIMIENTOS</span><span id="dashLbl" style="font-size:7px;color:var(--tx3)"></span></div>
+      <table class="tbl"><thead><tr><th>FECHA</th><th>CONCEPTO</th><th>BANCO</th><th>CAT.</th><th>&#8364;</th></tr></thead>
+      <tbody id="dashT"></tbody></table>
+    </div>
+    <div class="card">
+      <div class="ctitle">POR CATEGORIA</div>
+      <div class="dw" id="donut"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRESUPUESTO ═══ -->
+<div class="view" id="v1">
+  <div class="tabs">
+    <button class="tab" onclick="gv(0)">Dashboard</button>
+    <button class="tab on" onclick="gv(1)">Presupuesto</button>
+    <button class="tab" onclick="gv(2)">Movimientos</button>
+    <button class="tab" onclick="gv(3)">Bancos</button>
+    <button class="tab" onclick="gv(4)">Importar</button>
+    <button class="tab" onclick="gv(5)">Anuales</button>
+    <button class="tab" onclick="gv(6)">Ahorro</button>
+  </div>
+
+  <!-- Ingresos por mes -->
+  <div class="card">
+    <div class="ctitle">
+      <span>INGRESOS MENSUALES</span>
+      <span style="font-size:8px;color:var(--tx3)">Nomina base + extras</span>
+    </div>
+    <div class="inc-grid" id="incGrid"></div>
+    <div style="display:flex;gap:16px;padding-top:8px;border-top:1px solid var(--bd);margin-top:4px;flex-wrap:wrap">
+      <div><div class="albl">TOTAL INGRESOS PERIODO</div><div style="font-family:'DM Serif Display',serif;font-size:18px;color:var(--gr)" id="incTotal">&#8364;0</div></div>
+      <div><div class="albl">PRESUPUESTO ASIGNADO</div><div style="font-family:'DM Serif Display',serif;font-size:18px;color:var(--or)" id="budAssigned">&#8364;0</div></div>
+      <div><div class="albl">SIN ASIGNAR</div><div style="font-family:'DM Serif Display',serif;font-size:18px" id="budFree">&#8364;0</div></div>
+    </div>
+  </div>
+
+  <!-- Barra total -->
+  <div class="budget-total-bar">
+    <div class="bt-row">
+      <span style="font-size:9px;color:var(--tx2)">Presupuesto usado vs ingresos</span>
+      <span style="font-family:'DM Mono',monospace;font-size:9px" id="budPct">0%</span>
+    </div>
+    <div class="bt-track"><div class="bt-fill" id="budBar" style="background:var(--ac)"></div></div>
+  </div>
+
+  <!-- Tabla presupuesto -->
+  <div class="card">
+    <div class="ctitle">
+      <span>PARTIDAS DEL PRESUPUESTO</span>
+      <div style="display:flex;gap:5px">
+        <button class="btn-filter" onclick="renderPresupuesto()" style="font-size:10px">&#8635; Actualizar</button>
+        <button class="bp" onclick="addBudLine()" style="font-size:9px">+ Partida</button>
+        <button class="bs2" onclick="exportExcel()" style="font-size:9px">Exportar</button>
+      </div>
+    </div>
+    <div class="bud-hdr">
+      <span>Concepto</span><span>&#8364;/mes</span><span>Total periodo</span><span>Real gastado</span><span>Diferencia</span><span></span>
+    </div>
+    <div id="budTable"></div>
+  </div>
+</div>
+
+<!-- ═══ MOVIMIENTOS ═══ -->
+<div class="view" id="v2">
+  <div class="tabs">
+    <button class="tab" onclick="gv(0)">Dashboard</button>
+    <button class="tab" onclick="gv(1)">Presupuesto</button>
+    <button class="tab on" onclick="gv(2)">Movimientos</button>
+    <button class="tab" onclick="gv(3)">Bancos</button>
+    <button class="tab" onclick="gv(4)">Importar</button>
+    <button class="tab" onclick="gv(5)">Anuales</button>
+    <button class="tab" onclick="gv(6)">Ahorro</button>
+  </div>
+  <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px;align-items:center">
+    <span style="font-size:8px;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:1px">BANCO:</span>
+    <div id="movBankF" style="display:flex;gap:4px;flex-wrap:wrap"></div>
+    <div class="fsep"></div>
+    <span style="font-size:8px;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:1px">CAT:</span>
+    <div id="movCatF" style="display:flex;gap:4px;flex-wrap:wrap"></div>
+    <div class="fsep"></div>
+    <button class="bp" onclick="exportExcel()" style="font-size:9px">Exportar</button>
+  </div>
+  <div class="card">
+    <div class="ctitle"><span>MOVIMIENTOS</span><span id="movCount" style="font-size:7px;color:var(--tx3)"></span></div>
+    <table class="tbl">
+      <thead><tr><th>FECHA</th><th>CONCEPTO</th><th>BANCO</th><th>CAT.</th><th>&#8364;</th></tr></thead>
+      <tbody id="movT"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ BANCOS ═══ -->
+<div class="view" id="v3">
+  <div class="tabs">
+    <button class="tab" onclick="gv(0)">Dashboard</button>
+    <button class="tab" onclick="gv(1)">Presupuesto</button>
+    <button class="tab" onclick="gv(2)">Movimientos</button>
+    <button class="tab on" onclick="gv(3)">Bancos</button>
+    <button class="tab" onclick="gv(4)">Importar</button>
+    <button class="tab" onclick="gv(5)">Anuales</button>
+    <button class="tab" onclick="gv(6)">Ahorro</button>
+  </div>
+  <div class="kg" style="grid-template-columns:repeat(3,1fr)" id="bkKpis"></div>
+  <div id="bkSections"></div>
+</div>
+
+<!-- ═══ IMPORTAR ═══ -->
+<div class="view" id="v4">
+  <div class="tabs">
+    <button class="tab" onclick="gv(0)">Dashboard</button>
+    <button class="tab" onclick="gv(1)">Presupuesto</button>
+    <button class="tab" onclick="gv(2)">Movimientos</button>
+    <button class="tab" onclick="gv(3)">Bancos</button>
+    <button class="tab on" onclick="gv(4)">Importar</button>
+    <button class="tab" onclick="gv(5)">Anuales</button>
+    <button class="tab" onclick="gv(6)">Ahorro</button>
+  </div>
+  <div class="card" style="border-color:rgba(232,255,71,.15);margin-bottom:9px">
+    <div class="ctitle">COMO EXPORTAR CADA MES</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:9px">
+      <div style="background:var(--s2);border-radius:6px;padding:9px;border-left:3px solid #5599ee"><b style="color:#5599ee">BBVA</b><br><span style="color:var(--tx2)">bbva.es Mi dinero Cuentas Movimientos Exportar Excel</span></div>
+      <div style="background:var(--s2);border-radius:6px;padding:9px;border-left:3px solid #4dcc80"><b style="color:#4dcc80">UNICAJA</b><br><span style="color:var(--tx2)">unicajabanco.es Cuentas Movimientos Exportar CSV</span></div>
+      <div style="background:var(--s2);border-radius:6px;padding:9px;border-left:3px solid #a07fff"><b style="color:#a07fff">REVOLUT</b><br><span style="color:var(--tx2)">App Perfil Extractos Mes CSV Descargar</span></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+    <div class="card">
+      <div class="ctitle">SUBIR EXTRACTO</div>
+      <div class="bank-tabs">
+        <button class="btab on" onclick="setBk(this,'bbva')">BBVA</button>
+        <button class="btab" onclick="setBk(this,'unicaja')">UNICAJA</button>
+        <button class="btab" onclick="setBk(this,'revolut')">REVOLUT</button>
+      </div>
+      <div class="drop-zone" id="dz">
+        <input type="file" accept=".csv,.xlsx,.xls,.txt" id="fInp" onchange="handleF(event)">
+        <div style="font-size:26px;margin-bottom:6px">+</div>
+        <div style="font-size:11px;font-weight:700;margin-bottom:2px">Arrastra o pulsa</div>
+        <div style="font-size:9px;color:var(--tx2)">CSV o Excel del banco</div>
+      </div>
+      <div id="impSt" style="margin-top:7px;padding:7px;background:var(--s2);border-radius:6px;font-size:9px;color:var(--tx3);border:1px solid var(--bd)">Esperando archivo...</div>
+      <div style="display:flex;gap:5px;margin-top:7px">
+        <button class="bp" id="impBtn" onclick="confImport()" style="display:none;flex:1">Importar seleccionados</button>
+        <button class="bs2" id="clrBtn" onclick="clrImp()" style="display:none">Limpiar</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle"><span>VISTA PREVIA</span><button class="bs2" onclick="selAll(1)" style="font-size:7px;padding:2px 6px">Sel. todos</button></div>
+      <div id="impPrev" style="font-size:9px;color:var(--tx3);text-align:center;padding:20px 0">Sube un archivo para previsualizar</div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:9px">
+    <div class="ctitle"><span>HISTORIAL</span><span id="histC" style="font-size:7px;color:var(--tx3)">0 importaciones</span></div>
+    <div id="histL" style="font-size:9px;color:var(--tx3);text-align:center;padding:14px">Sin importaciones</div>
+  </div>
+</div>
+
+<!-- ═══ ANUALES ═══ -->
+<div class="view" id="v5">
+  <div class="tabs">
+    <button class="tab" onclick="gv(0)">Dashboard</button>
+    <button class="tab" onclick="gv(1)">Presupuesto</button>
+    <button class="tab" onclick="gv(2)">Movimientos</button>
+    <button class="tab" onclick="gv(3)">Bancos</button>
+    <button class="tab" onclick="gv(4)">Importar</button>
+    <button class="tab on" onclick="gv(5)">Anuales</button>
+    <button class="tab" onclick="gv(6)">Ahorro</button>
+  </div>
+  <div class="kg">
+    <div class="kc"><div class="klbl"><div class="kdot" style="background:var(--ac4)"></div>TOTAL ANUAL</div><div class="kval" style="color:var(--ac4)"><span class="cur">&#8364;</span><span id="annT">0</span></div></div>
+    <div class="kc"><div class="klbl"><div class="kdot" style="background:var(--or)"></div>PENDIENTE</div><div class="kval" style="color:var(--or)"><span class="cur">&#8364;</span><span id="annP">0</span></div></div>
+    <div class="kc"><div class="klbl"><div class="kdot" style="background:var(--gr)"></div>MES EQUIV.</div><div class="kval" style="color:var(--gr)"><span class="cur">&#8364;</span><span id="annM">0</span></div></div>
+  </div>
+  <div class="card">
+    <div class="ctitle"><span>CALENDARIO VIVIENDA Y VEHICULO</span><button class="bp" onclick="openAddAnn()" style="font-size:8px">+ Anadir</button></div>
+    <div class="agrid" id="annG"></div>
+  </div>
+</div>
+
+<!-- ═══ AHORRO ═══ -->
+<div class="view" id="v6">
+  <div class="tabs">
+    <button class="tab" onclick="gv(0)">Dashboard</button>
+    <button class="tab" onclick="gv(1)">Presupuesto</button>
+    <button class="tab" onclick="gv(2)">Movimientos</button>
+    <button class="tab" onclick="gv(3)">Bancos</button>
+    <button class="tab" onclick="gv(4)">Importar</button>
+    <button class="tab" onclick="gv(5)">Anuales</button>
+    <button class="tab on" onclick="gv(6)">Ahorro</button>
+  </div>
+  <div class="kg" id="ahorroKpis"></div>
+  <div class="card">
+    <div class="ctitle"><span>SUGERENCIAS DE AHORRO</span><button class="bp" onclick="openAddTip()" style="font-size:8px">+ Nueva</button></div>
+    <div class="tlist" id="tipL"></div>
+  </div>
+</div>
+
+</main>
+
+<!-- MODAL GASTO -->
+<div class="mo" id="moG" onclick="if(event.target===this)cm(this)"><div class="mbox">
+  <div class="mtit" id="moGT">Nuevo Gasto</div><div class="msub">Anadir movimiento manual</div>
+  <input type="hidden" id="gId">
+  <div class="fl"><label>Concepto</label><input class="fi" id="gCon" placeholder="ej. Luz junio"></div>
+  <div class="fg">
+    <div class="fl"><label>Importe &#8364;</label><input class="fi" id="gImp" type="number" placeholder="0" min="0" step="0.01"></div>
+    <div class="fl"><label>Banco</label><select class="fs" id="gBan"><option value="bbva">BBVA</option><option value="unicaja">UNICAJA</option><option value="revolut">REVOLUT</option></select></div>
+  </div>
+  <div class="fl"><label>Categoria</label>
+    <select class="fs" id="gCat">
+      <option value="hogar">Hogar</option><option value="suministros">Suministros</option>
+      <option value="alimentacion">Supermercado</option><option value="restaurantes">Restaurantes</option>
+      <option value="transporte">Transporte</option><option value="salud">Salud</option>
+      <option value="compras">Compras online/ropa</option><option value="actividades">Actividades</option>
+      <option value="estetica">Estetica</option><option value="suscripciones">Suscripciones</option>
+      <option value="seguros">Seguros</option><option value="educacion">Educacion</option>
+      <option value="impuestos">Impuestos</option><option value="tabaco_loteria">Tabaco/Loteria</option>
+      <option value="efectivo">Efectivo</option><option value="inversion">Inversion</option>
+      <option value="ahorro">Ahorro</option><option value="otros">Otros</option>
+    </select>
+  </div>
+  <div class="fl"><label>Fecha</label><input class="fi" id="gFec" type="date"></div>
+  <div class="brow"><button class="bc" onclick="cm(document.getElementById('moG'))">Cancelar</button><button class="bs" onclick="saveG()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL TIP -->
+<div class="mo" id="moTip" onclick="if(event.target===this)cm(this)"><div class="mbox">
+  <div class="mtit" id="moTipT">Sugerencia</div>
+  <input type="hidden" id="tId">
+  <div class="fg"><div class="fl"><label>Icono/Texto</label><input class="fi" id="tIco" placeholder="*"></div><div class="fl"><label>Ahorro estimado</label><input class="fi" id="tSav"></div></div>
+  <div class="fl"><label>Titulo</label><input class="fi" id="tTit"></div>
+  <div class="fl"><label>Descripcion</label><textarea class="fi" id="tDes" rows="3" style="resize:vertical"></textarea></div>
+  <div class="brow"><button class="bc" onclick="cm(document.getElementById('moTip'))">Cancelar</button><button class="bdel" id="tDel" onclick="delTip()" style="display:none">Eliminar</button><button class="bs" onclick="saveTip()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL ANUAL -->
+<div class="mo" id="moAnn" onclick="if(event.target===this)cm(this)"><div class="mbox">
+  <div class="mtit" id="moAnnT">Gasto Anual / Puntual</div>
+  <input type="hidden" id="aId">
+  <div class="fl"><label>Concepto</label><input class="fi" id="aCon" placeholder="ej. IBI Casa Malaga"></div>
+  <div class="fg">
+    <div class="fl"><label>Importe Total &#8364;</label><input class="fi" id="aImp" type="number" min="0" placeholder="0"></div>
+    <div class="fl"><label>Banco</label><select class="fs" id="aBan"><option value="bbva">BBVA</option><option value="unicaja">UNICAJA</option><option value="revolut">REVOLUT</option></select></div>
+  </div>
+  <div class="fg">
+    <div class="fl"><label>Mes inicio (1-12)</label><input class="fi" id="aMesI" type="number" min="1" max="12" placeholder="1"></div>
+    <div class="fl"><label>Mes fin (1-12)</label><input class="fi" id="aMesF" type="number" min="1" max="12" placeholder="1"></div>
+  </div>
+  <div class="fl"><label>Frecuencia</label>
+    <select class="fs" id="aFrec">
+      <option value="unico">Pago unico</option>
+      <option value="mensual">Mensual (varios meses)</option>
+      <option value="anual">Anual recurrente</option>
+    </select>
+  </div>
+  <div class="fg">
+    <div class="fl"><label>Estado</label><select class="fs" id="aPag"><option value="false">Pendiente</option><option value="true">Pagado</option></select></div>
+    <div class="fl"><label>Categoria</label>
+      <select class="fs" id="aCat">
+        <option value="hogar">Hogar</option><option value="seguros">Seguros</option>
+        <option value="transporte">Transporte</option><option value="impuestos">Impuestos</option>
+        <option value="ocio">Ocio</option><option value="otros">Otros</option>
+      </select>
+    </div>
+  </div>
+  <div class="fl"><label>Notas</label><input class="fi" id="aNot" placeholder="Opcional"></div>
+  <div class="brow"><button class="bc" onclick="cm(document.getElementById('moAnn'))">Cancelar</button><button class="bdel" id="aDel" onclick="delAnn()" style="display:none">Eliminar</button><button class="bs" onclick="saveAnn()">Guardar</button></div>
+</div></div>
+
+<!-- MODAL NUEVA PARTIDA PRESUPUESTO -->
+<div class="mo" id="moBud" onclick="if(event.target===this)cm(this)"><div class="mbox">
+  <div class="mtit">Nueva Partida</div><div class="msub">Anadir linea al presupuesto</div>
+  <input type="hidden" id="budId">
+  <div class="fl"><label>Nombre</label><input class="fi" id="budNom" placeholder="ej. Dentista"></div>
+  <div class="fg">
+    <div class="fl"><label>Presupuesto mensual &#8364;</label><input class="fi" id="budAmt" type="number" min="0" placeholder="0"></div>
+    <div class="fl"><label>Categoria</label>
+      <select class="fs" id="budCat">
+        <option value="hogar">Hogar</option><option value="suministros">Suministros</option>
+        <option value="alimentacion">Supermercado</option><option value="restaurantes">Restaurantes</option>
+        <option value="transporte">Transporte</option><option value="salud">Salud</option>
+        <option value="compras">Compras</option><option value="actividades">Actividades</option>
+        <option value="estetica">Estetica</option><option value="suscripciones">Suscripciones</option>
+        <option value="seguros">Seguros</option><option value="educacion">Educacion</option>
+        <option value="inversion">Inversion</option><option value="ahorro">Ahorro</option>
+        <option value="otros">Otros</option>
+      </select>
+    </div>
+  </div>
+  <div class="fl"><label>Banco</label>
+    <select class="fs" id="budBan"><option value="bbva">BBVA</option><option value="unicaja">UNICAJA</option><option value="revolut">REVOLUT</option><option value="nomina">Nomina</option></select>
+  </div>
+  <div class="brow"><button class="bc" onclick="cm(document.getElementById('moBud'))">Cancelar</button><button class="bdel" id="budDel" onclick="delBudLine()" style="display:none">Eliminar</button><button class="bs" onclick="saveBudLine()">Guardar</button></div>
+</div></div>
+
+<div class="toast" id="toast"><div class="tdot"></div><span id="tmsg"></span></div>
+
+<script>
+var TX=[{"f":"2026-06-06","m":6,"d":"MERCADONA AGUILAR DE LA FAGUILAR DE","i":33.56,"b":"bbva","c":"alimentacion"},{"f":"2026-06-05","m":6,"d":"ADEUDO EXCMO. AYUNTAMIENTO DE MALAG","i":132.65,"b":"bbva","c":"impuestos"},{"f":"2026-06-05","m":6,"d":"ADEUDO EXCMO. AYUNTAMIENTO DE MALAG","i":9.88,"b":"bbva","c":"impuestos"},{"f":"2026-06-04","m":6,"d":"BIZUM","i":100.0,"b":"bbva","c":"compras"},{"f":"2026-06-02","m":6,"d":"ADEUDO PayPal Europe S.a.r.l. et Ci","i":18.15,"b":"bbva","c":"suscripciones"},{"f":"2026-06-02","m":6,"d":"ADEUDO PayPal Europe S.a.r.l. et Ci","i":28.98,"b":"bbva","c":"suscripciones"},{"f":"2026-05-30","m":5,"d":"VARIOS SERVICIO C. LOTERIAS","i":4.0,"b":"bbva","c":"tabaco_loteria"},{"f":"2026-05-29","m":5,"d":"ADEUDO ORANGE-FRANCE TELECOM","i":80.74,"b":"bbva","c":"suscripciones"},{"f":"2026-05-27","m":5,"d":"BIZUM","i":40.0,"b":"bbva","c":"otros"},{"f":"2026-05-16","m":5,"d":"WERKHAUS SL SCS","i":11.48,"b":"bbva","c":"hogar"},{"f":"2026-05-16","m":5,"d":"SERRANO","i":29.95,"b":"bbva","c":"compras"},{"f":"2026-05-16","m":5,"d":"VARIOS SERVICIO C. LOTERIAS","i":2.0,"b":"bbva","c":"tabaco_loteria"},{"f":"2026-05-15","m":5,"d":"EL CORTE INGLES-DEPARTAM.","i":39.99,"b":"bbva","c":"compras"},{"f":"2026-05-14","m":5,"d":"BIZUM","i":278.89,"b":"bbva","c":"educacion"},{"f":"2026-05-09","m":5,"d":"APPLE.COM/BILL","i":2.99,"b":"bbva","c":"suscripciones"},{"f":"2026-05-11","m":5,"d":"LOG287 H MATERNO INFANTIL","i":9.6,"b":"bbva","c":"salud"},{"f":"2026-05-09","m":5,"d":"SERRANO","i":60.05,"b":"bbva","c":"compras"},{"f":"2026-04-30","m":4,"d":"SMILE DENTAL 2010,SL","i":100.0,"b":"bbva","c":"salud"},{"f":"2026-05-04","m":5,"d":"ADEUDO PayPal Europe S.a.r.l. et Ci","i":25.98,"b":"bbva","c":"suscripciones"},{"f":"2026-05-01","m":5,"d":"RAIN FOREST","i":1.7,"b":"bbva","c":"restaurantes"},{"f":"2026-05-01","m":5,"d":"RAIN FOREST","i":4.5,"b":"bbva","c":"restaurantes"},{"f":"2026-05-01","m":5,"d":"RAIN FOREST","i":26.55,"b":"bbva","c":"restaurantes"},{"f":"2026-05-01","m":5,"d":"BIOPARC FUENGIROLA","i":95.0,"b":"bbva","c":"actividades"},{"f":"2026-04-30","m":4,"d":"COLOSO CHURRIANA         MALAGA  CH","i":68.88,"b":"bbva","c":"transporte"},{"f":"2026-04-30","m":4,"d":"BIZUM","i":100.0,"b":"bbva","c":"compras"},{"f":"2026-04-30","m":4,"d":"ADEUDO ORANGE-FRANCE TELECOM","i":80.74,"b":"bbva","c":"suscripciones"},{"f":"2026-04-29","m":4,"d":"BIZUM","i":22.0,"b":"bbva","c":"ocio_varios"},{"f":"2026-04-27","m":4,"d":"CAPUCHINOS PARK","i":12.0,"b":"bbva","c":"restaurantes"},{"f":"2026-04-27","m":4,"d":"BAR SEGALERVA","i":9.4,"b":"bbva","c":"restaurantes"},{"f":"2026-04-22","m":4,"d":"DELIKIA SP","i":1.1,"b":"bbva","c":"alimentacion"},{"f":"2026-04-23","m":4,"d":"BIZUM","i":56.0,"b":"bbva","c":"transporte"},{"f":"2026-04-23","m":4,"d":"AREA SANTA ANA S.L.","i":50.3,"b":"bbva","c":"transporte"},{"f":"2026-04-23","m":4,"d":"BIZUM","i":100.0,"b":"bbva","c":"transporte"},{"f":"2026-04-20","m":4,"d":"ALIMENTACION PEYMA","i":13.48,"b":"bbva","c":"alimentacion"},{"f":"2026-04-20","m":4,"d":"COLOSO CHURRIANA         MALAGA  CH","i":30.0,"b":"bbva","c":"transporte"},{"f":"2026-04-18","m":4,"d":"BIZUM","i":8.0,"b":"bbva","c":"restaurantes"},{"f":"2026-04-18","m":4,"d":"CHIRINGUITO OASIS","i":138.05,"b":"bbva","c":"restaurantes"},{"f":"2026-04-17","m":4,"d":"LA BARBERIA DE CHURRIANA","i":25.0,"b":"bbva","c":"estetica"},{"f":"2026-04-10","m":4,"d":"MORROFINO","i":63.6,"b":"bbva","c":"restaurantes"},{"f":"2026-04-09","m":4,"d":"APPLE.COM/BILL","i":2.99,"b":"bbva","c":"suscripciones"},{"f":"2026-04-13","m":4,"d":"MIRAVIA","i":47.99,"b":"bbva","c":"compras"},{"f":"2026-04-06","m":4,"d":"BIZUM","i":30.0,"b":"bbva","c":"actividades"},{"f":"2026-04-06","m":4,"d":"BIZUM","i":278.89,"b":"bbva","c":"educacion"},{"f":"2026-04-01","m":4,"d":"RET. EFECTIVO  A DEBITO CON TARJ. E","i":100.0,"b":"bbva","c":"efectivo"},{"f":"2026-04-01","m":4,"d":"MERCADONA AGUILAR DE LA F","i":68.23,"b":"bbva","c":"alimentacion"},{"f":"2026-03-31","m":3,"d":"ADEUDO PayPal Europe S.a.r.l. et Ci","i":25.98,"b":"bbva","c":"suscripciones"},{"f":"2026-03-31","m":3,"d":"ADEUDO ORANGE-FRANCE TELECOM","i":75.19,"b":"bbva","c":"suscripciones"},{"f":"2026-03-30","m":3,"d":"MERCADONA AGUILAR DE LA F","i":97.56,"b":"bbva","c":"alimentacion"},{"f":"2026-03-29","m":3,"d":"RET. EFECTIVO  A DEBITO CON TARJ. E","i":150.0,"b":"bbva","c":"efectivo"},{"f":"2026-03-27","m":3,"d":"BIZUM","i":49.9,"b":"bbva","c":"actividades"},{"f":"2026-03-27","m":3,"d":"COLOSO CHURRIANA         MALAGA  CH","i":55.01,"b":"bbva","c":"transporte"},{"f":"2026-03-27","m":3,"d":"LA BARBERIA DE CHURRIANA","i":11.0,"b":"bbva","c":"estetica"},{"f":"2026-03-27","m":3,"d":"BIZUM","i":27.0,"b":"bbva","c":"ocio_varios"},{"f":"2026-03-23","m":3,"d":"SMILE DENTAL 2010,SL","i":190.0,"b":"bbva","c":"salud"},{"f":"2026-03-25","m":3,"d":"FCIA MIGUEL RIVAS CABRERA","i":5.63,"b":"bbva","c":"salud"},{"f":"2026-03-14","m":3,"d":"E.S COLOSO CHURRIANA II  CHURRIANA ","i":66.54,"b":"bbva","c":"transporte"},{"f":"2026-03-14","m":3,"d":"FCIA MIGUEL RIVAS CABRERA","i":17.95,"b":"bbva","c":"salud"},{"f":"2026-03-11","m":3,"d":"TRANSFERENCIA REALIZADA","i":50.0,"b":"bbva","c":"alimentacion"},{"f":"2026-03-09","m":3,"d":"APPLE.COM/BILL","i":2.99,"b":"bbva","c":"suscripciones"},{"f":"2026-03-10","m":3,"d":"FCIA MIGUEL RIVAS CABRERA","i":32.54,"b":"bbva","c":"salud"},{"f":"2026-03-06","m":3,"d":"BIZUM","i":278.89,"b":"bbva","c":"educacion"},{"f":"2026-03-03","m":3,"d":"ADEUDO PayPal Europe S.a.r.l. et Ci","i":25.98,"b":"bbva","c":"suscripciones"},{"f":"2026-03-02","m":3,"d":"COLOSO CHURRIANA         MALAGA  CH","i":80.15,"b":"bbva","c":"transporte"},{"f":"2026-02-28","m":2,"d":"BIZUM","i":60.0,"b":"bbva","c":"ocio_varios"},{"f":"2026-02-28","m":2,"d":"BIZUM","i":118.0,"b":"bbva","c":"ocio_varios"},{"f":"2026-02-27","m":2,"d":"ADEUDO ORANGE-FRANCE TELECOM","i":79.69,"b":"bbva","c":"suscripciones"},{"f":"2026-02-22","m":2,"d":"FARMACIA AIDA LOPEZ CANO","i":12.26,"b":"bbva","c":"salud"},{"f":"2026-02-20","m":2,"d":"MERCADONA LAS ESTEaUELAS","i":5.71,"b":"bbva","c":"alimentacion"},{"f":"2026-02-20","m":2,"d":"MERCADONA LAS ESTEaUELAS","i":13.55,"b":"bbva","c":"alimentacion"},{"f":"2026-02-20","m":2,"d":"DECATHLON GUADALMAR","i":238.89,"b":"bbva","c":"compras"},{"f":"2026-02-12","m":2,"d":"BIZUM","i":15.0,"b":"bbva","c":"ocio_varios"},{"f":"2026-02-09","m":2,"d":"APPLE.COM/BILL","i":2.99,"b":"bbva","c":"suscripciones"},{"f":"2026-02-10","m":2,"d":"LA BARBERIA DE CHURRIANA","i":14.0,"b":"bbva","c":"estetica"},{"f":"2026-02-09","m":2,"d":"ITV EL VISO - MALAGA","i":48.62,"b":"bbva","c":"transporte"},{"f":"2026-02-08","m":2,"d":"PETROPRIX LICURGO        TOLEDO    ","i":48.63,"b":"bbva","c":"transporte"},{"f":"2026-02-05","m":2,"d":"TRANSFERENCIA REALIZADA","i":96.0,"b":"bbva","c":"hogar"},{"f":"2026-02-03","m":2,"d":"BIZUM","i":26.0,"b":"bbva","c":"ocio_varios"},{"f":"2026-02-03","m":2,"d":"BIZUM","i":278.89,"b":"bbva","c":"educacion"},{"f":"2026-02-02","m":2,"d":"ADEUDO PayPal Europe S.a.r.l. et Ci","i":25.98,"b":"bbva","c":"suscripciones"},{"f":"2026-01-30","m":1,"d":"ADEUDO ORANGE-FRANCE TELECOM","i":74.69,"b":"bbva","c":"suscripciones"},{"f":"2026-01-25","m":1,"d":"Vueling AirlJLS62A","i":145.98,"b":"bbva","c":"transporte"},{"f":"2026-01-22","m":1,"d":"COLOSO CHURRIANA         MALAGA  CH","i":50.0,"b":"bbva","c":"transporte"},{"f":"2026-01-17","m":1,"d":"ZARA MALAGA CC LARIOS","i":60.05,"b":"bbva","c":"compras"},{"f":"2026-01-17","m":1,"d":"SPRINGFIELD","i":12.99,"b":"bbva","c":"compras"},{"f":"2026-01-15","m":1,"d":"ADEUDO PayPal Europe S.a.r.l. et Ci","i":18.15,"b":"bbva","c":"suscripciones"},{"f":"2026-01-13","m":1,"d":"RET. EFECTIVO  A DEBITO CON TARJ. E","i":80.0,"b":"bbva","c":"efectivo"},{"f":"2026-01-09","m":1,"d":"APPLE.COM/BILL","i":2.99,"b":"bbva","c":"suscripciones"},{"f":"2026-01-11","m":1,"d":"BIZUM","i":15.0,"b":"bbva","c":"ocio_varios"},{"f":"2026-01-07","m":1,"d":"BIZUM","i":186.89,"b":"bbva","c":"educacion"},{"f":"2026-01-04","m":1,"d":"BIZUM","i":10.0,"b":"bbva","c":"tabaco_loteria"},{"f":"2026-01-02","m":1,"d":"FCIA MIGUEL RIVAS CABRERA","i":7.42,"b":"bbva","c":"salud"},{"f":"2026-06-03","m":6,"d":"C.P. RESID Comunidad","i":79.02,"b":"unicaja","c":"hogar"},{"f":"2026-06-01","m":6,"d":"Prosegur Alarma","i":46.22,"b":"unicaja","c":"seguros"},{"f":"2026-06-01","m":6,"d":"CUOTA MAYO PLAN UNI SEGUR","i":85.01,"b":"unicaja","c":"seguros"},{"f":"2026-05-28","m":5,"d":"Comida junio","i":400.0,"b":"unicaja","c":"alimentacion"},{"f":"2026-05-15","m":5,"d":"NATURGYC Gas","i":47.93,"b":"unicaja","c":"suministros"},{"f":"2026-05-15","m":5,"d":"SEG.CDTO Seguro credito hipoteca","i":323.24,"b":"unicaja","c":"hogar"},{"f":"2026-05-14","m":5,"d":"Comida mes mayo","i":150.0,"b":"unicaja","c":"alimentacion"},{"f":"2026-05-13","m":5,"d":"PRESTAMO Hipoteca","i":607.43,"b":"unicaja","c":"hogar"},{"f":"2026-05-08","m":5,"d":"GANA ENERG Agua","i":28.89,"b":"unicaja","c":"suministros"},{"f":"2026-05-05","m":5,"d":"C.P. RESID Comunidad","i":79.02,"b":"unicaja","c":"hogar"},{"f":"2026-05-01","m":5,"d":"CUOTA ABRIL PLAN UNI SEGUR","i":77.44,"b":"unicaja","c":"seguros"},{"f":"2026-04-30","m":4,"d":"Comida mes","i":400.0,"b":"unicaja","c":"alimentacion"},{"f":"2026-04-30","m":4,"d":"Prosegur Alarma","i":46.22,"b":"unicaja","c":"seguros"},{"f":"2026-04-21","m":4,"d":"Comida mes","i":150.0,"b":"unicaja","c":"alimentacion"},{"f":"2026-04-16","m":4,"d":"NATURGYC Gas","i":73.01,"b":"unicaja","c":"suministros"},{"f":"2026-04-13","m":4,"d":"PRESTAMO Hipoteca","i":607.43,"b":"unicaja","c":"hogar"},{"f":"2026-04-08","m":4,"d":"EMASA Agua","i":69.48,"b":"unicaja","c":"suministros"},{"f":"2026-04-07","m":4,"d":"C.P. RESID Comunidad","i":79.02,"b":"unicaja","c":"hogar"},{"f":"2026-04-01","m":4,"d":"CUOTA MARZO PLAN UNI SEGUR","i":77.28,"b":"unicaja","c":"seguros"},{"f":"2026-03-31","m":3,"d":"Prosegur Alarma","i":34.9,"b":"unicaja","c":"seguros"},{"f":"2026-03-29","m":3,"d":"Comida abril","i":450.0,"b":"unicaja","c":"alimentacion"},{"f":"2026-03-13","m":3,"d":"PRESTAMO Hipoteca","i":607.43,"b":"unicaja","c":"hogar"},{"f":"2026-03-13","m":3,"d":"NATURGYC Gas","i":73.43,"b":"unicaja","c":"suministros"},{"f":"2026-03-04","m":3,"d":"C.P. RESID Comunidad","i":79.02,"b":"unicaja","c":"hogar"},{"f":"2026-03-02","m":3,"d":"Prosegur Alarma","i":34.9,"b":"unicaja","c":"seguros"},{"f":"2026-03-02","m":3,"d":"GANA ENERG Agua","i":30.53,"b":"unicaja","c":"suministros"},{"f":"2026-03-01","m":3,"d":"CUOTA FEBRERO PLAN UNI SEGUR","i":77.28,"b":"unicaja","c":"seguros"},{"f":"2026-02-26","m":2,"d":"Comida marzo","i":450.0,"b":"unicaja","c":"alimentacion"},{"f":"2026-02-18","m":2,"d":"NATURGYC Gas","i":105.09,"b":"unicaja","c":"suministros"},{"f":"2026-02-13","m":2,"d":"PRESTAMO Hipoteca","i":607.43,"b":"unicaja","c":"hogar"},{"f":"2026-02-10","m":2,"d":"EMASA Agua","i":70.78,"b":"unicaja","c":"suministros"},{"f":"2026-02-03","m":2,"d":"C.P. RESID Comunidad","i":79.02,"b":"unicaja","c":"hogar"},{"f":"2026-02-03","m":2,"d":"Comida febrero","i":450.0,"b":"unicaja","c":"alimentacion"},{"f":"2026-02-02","m":2,"d":"Prosegur Alarma","i":34.9,"b":"unicaja","c":"seguros"},{"f":"2026-02-01","m":2,"d":"CUOTA ENERO PLAN UNI SEGUR","i":77.28,"b":"unicaja","c":"seguros"},{"f":"2026-01-19","m":1,"d":"GANA ENERG Agua","i":23.66,"b":"unicaja","c":"suministros"},{"f":"2026-01-19","m":1,"d":"NATURGYC Gas","i":85.73,"b":"unicaja","c":"suministros"},{"f":"2026-01-13","m":1,"d":"PRESTAMO Hipoteca","i":607.43,"b":"unicaja","c":"hogar"},{"f":"2026-01-02","m":1,"d":"C.P. RESID Comunidad","i":79.02,"b":"unicaja","c":"hogar"},{"f":"2026-01-01","m":1,"d":"CUOTA DICIEMBRE PLAN UNI SEGU","i":77.28,"b":"unicaja","c":"seguros"},{"f":"2026-01-03","m":1,"d":"Jin Peng","i":12.95,"b":"revolut","c":"restaurantes"},{"f":"2026-01-06","m":1,"d":"Bk Chu","i":36.58,"b":"revolut","c":"restaurantes"},{"f":"2026-01-07","m":1,"d":"Restaurante Ruance","i":11.0,"b":"revolut","c":"restaurantes"},{"f":"2026-01-10","m":1,"d":"Kebab Iftikhar","i":38.5,"b":"revolut","c":"restaurantes"},{"f":"2026-01-10","m":1,"d":"Tabacos","i":7.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-01-10","m":1,"d":"Bar Plaza","i":21.0,"b":"revolut","c":"restaurantes"},{"f":"2026-01-12","m":1,"d":"Mni*lopez Fernandez Cr","i":29.0,"b":"revolut","c":"otros"},{"f":"2026-01-12","m":1,"d":"El Pikon","i":12.0,"b":"revolut","c":"restaurantes"},{"f":"2026-01-15","m":1,"d":"Apple","i":9.99,"b":"revolut","c":"suscripciones"},{"f":"2026-01-15","m":1,"d":"Bk Chu","i":24.53,"b":"revolut","c":"restaurantes"},{"f":"2026-01-16","m":1,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-01-16","m":1,"d":"La Barberia De Churriana","i":25.0,"b":"revolut","c":"estetica"},{"f":"2026-01-16","m":1,"d":"Administracion De Loteria","i":1.0,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-01-16","m":1,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-01-19","m":1,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-01-21","m":1,"d":"Bk Chu","i":38.3,"b":"revolut","c":"restaurantes"},{"f":"2026-01-22","m":1,"d":"Amazon Prime","i":4.99,"b":"revolut","c":"suscripciones"},{"f":"2026-01-24","m":1,"d":"Fiti Lucena","i":53.7,"b":"revolut","c":"actividades"},{"f":"2026-01-25","m":1,"d":"New Multimon","i":4.5,"b":"revolut","c":"otros"},{"f":"2026-01-27","m":1,"d":"Hospital Materno-Infantil","i":10.65,"b":"revolut","c":"salud"},{"f":"2026-01-29","m":1,"d":"Just Eat","i":31.0,"b":"revolut","c":"restaurantes"},{"f":"2026-01-31","m":1,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-02-01","m":2,"d":"Alliance Vending","i":2.0,"b":"revolut","c":"restaurantes"},{"f":"2026-02-01","m":2,"d":"Alliance Vending","i":2.0,"b":"revolut","c":"restaurantes"},{"f":"2026-02-01","m":2,"d":"Alliance Vending","i":0.75,"b":"revolut","c":"restaurantes"},{"f":"2026-02-02","m":2,"d":"Jin Peng","i":11.95,"b":"revolut","c":"restaurantes"},{"f":"2026-02-02","m":2,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-02-03","m":2,"d":"Bar Segalerva","i":3.2,"b":"revolut","c":"restaurantes"},{"f":"2026-02-04","m":2,"d":"Tabacos","i":16.8,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-02-05","m":2,"d":"Bar Segalerva","i":5.7,"b":"revolut","c":"restaurantes"},{"f":"2026-02-05","m":2,"d":"Bk Chu","i":38.8,"b":"revolut","c":"restaurantes"},{"f":"2026-02-07","m":2,"d":"Saba","i":2.7,"b":"revolut","c":"transporte"},{"f":"2026-02-09","m":2,"d":"Volotea","i":203.5,"b":"revolut","c":"transporte"},{"f":"2026-02-10","m":2,"d":"Bk Chu","i":20.18,"b":"revolut","c":"restaurantes"},{"f":"2026-02-12","m":2,"d":"The Irish Corner","i":18.0,"b":"revolut","c":"ocio"},{"f":"2026-02-13","m":2,"d":"Telepizza","i":26.85,"b":"revolut","c":"restaurantes"},{"f":"2026-02-14","m":2,"d":"Apiflora","i":17.0,"b":"revolut","c":"salud"},{"f":"2026-02-15","m":2,"d":"Apple","i":7.99,"b":"revolut","c":"suscripciones"},{"f":"2026-02-16","m":2,"d":"Bar Segalerva","i":7.8,"b":"revolut","c":"restaurantes"},{"f":"2026-02-16","m":2,"d":"La Goleta Bar Cafe","i":11.0,"b":"revolut","c":"restaurantes"},{"f":"2026-02-20","m":2,"d":"La Barberia De Churriana","i":11.0,"b":"revolut","c":"estetica"},{"f":"2026-02-20","m":2,"d":"Administracion De Loteria","i":1.0,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-02-20","m":2,"d":"Tabacos","i":11.2,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-02-21","m":2,"d":"TuLotero","i":5.0,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-02-22","m":2,"d":"Viaducto de Lindabarcas","i":13.99,"b":"revolut","c":"viajes"},{"f":"2026-02-22","m":2,"d":"Panaderia Espana","i":19.6,"b":"revolut","c":"restaurantes"},{"f":"2026-02-22","m":2,"d":"El Ancla De Luarca","i":110.0,"b":"revolut","c":"restaurantes"},{"f":"2026-02-22","m":2,"d":"De Leo","i":12.0,"b":"revolut","c":"restaurantes"},{"f":"2026-02-23","m":2,"d":"La Mallorquina","i":14.2,"b":"revolut","c":"restaurantes"},{"f":"2026-02-23","m":2,"d":"Sidreria Tierra Astur Parrilla","i":98.92,"b":"revolut","c":"restaurantes"},{"f":"2026-02-23","m":2,"d":"Mercadona","i":15.75,"b":"revolut","c":"alimentacion"},{"f":"2026-02-24","m":2,"d":"100 Montaditos","i":7.0,"b":"revolut","c":"restaurantes"},{"f":"2026-02-24","m":2,"d":"bp","i":55.19,"b":"revolut","c":"transporte"},{"f":"2026-02-24","m":2,"d":"Casa Tataguyo","i":140.3,"b":"revolut","c":"restaurantes"},{"f":"2026-02-25","m":2,"d":"Bk Chu","i":39.8,"b":"revolut","c":"restaurantes"},{"f":"2026-02-27","m":2,"d":"Granier","i":14.55,"b":"revolut","c":"restaurantes"},{"f":"2026-02-28","m":2,"d":"Taberna La Antigua","i":9.3,"b":"revolut","c":"restaurantes"},{"f":"2026-02-28","m":2,"d":"Tabacos","i":11.2,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-02-28","m":2,"d":"Alliance Vending","i":1.25,"b":"revolut","c":"restaurantes"},{"f":"2026-02-28","m":2,"d":"Alliance Vending","i":1.25,"b":"revolut","c":"restaurantes"},{"f":"2026-03-02","m":3,"d":"Bar Segalerva","i":3.0,"b":"revolut","c":"restaurantes"},{"f":"2026-03-03","m":3,"d":"Bar Segalerva","i":10.3,"b":"revolut","c":"restaurantes"},{"f":"2026-03-07","m":3,"d":"Quiosco La Canasta","i":8.2,"b":"revolut","c":"restaurantes"},{"f":"2026-03-07","m":3,"d":"TuLotero","i":5.0,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-03-09","m":3,"d":"Hospital Materno-Infantil","i":7.05,"b":"revolut","c":"salud"},{"f":"2026-03-09","m":3,"d":"La Goleta Bar Cafe","i":11.0,"b":"revolut","c":"restaurantes"},{"f":"2026-03-10","m":3,"d":"Cafeteria Martin","i":7.1,"b":"revolut","c":"restaurantes"},{"f":"2026-03-10","m":3,"d":"Bk Chu","i":27.3,"b":"revolut","c":"restaurantes"},{"f":"2026-03-11","m":3,"d":"Baston Pub","i":22.5,"b":"revolut","c":"restaurantes"},{"f":"2026-03-11","m":3,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-03-11","m":3,"d":"Uber","i":12.94,"b":"revolut","c":"transporte"},{"f":"2026-03-12","m":3,"d":"Serrano","i":30.4,"b":"revolut","c":"compras"},{"f":"2026-03-15","m":3,"d":"Apple","i":7.99,"b":"revolut","c":"suscripciones"},{"f":"2026-03-14","m":3,"d":"Alliance Vending","i":0.75,"b":"revolut","c":"restaurantes"},{"f":"2026-03-16","m":3,"d":"Kebap Los Rosales","i":8.5,"b":"revolut","c":"restaurantes"},{"f":"2026-03-16","m":3,"d":"Bk Chu","i":27.24,"b":"revolut","c":"restaurantes"},{"f":"2026-03-21","m":3,"d":"Alimentacion Peyma","i":10.15,"b":"revolut","c":"alimentacion"},{"f":"2026-03-21","m":3,"d":"Estanco","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-03-22","m":3,"d":"The Burger Prime","i":31.2,"b":"revolut","c":"restaurantes"},{"f":"2026-03-23","m":3,"d":"La Cocina De Emi","i":9.0,"b":"revolut","c":"restaurantes"},{"f":"2026-03-23","m":3,"d":"Coviran","i":1.97,"b":"revolut","c":"alimentacion"},{"f":"2026-03-24","m":3,"d":"PadThaiWok","i":29.5,"b":"revolut","c":"restaurantes"},{"f":"2026-03-25","m":3,"d":"La Barberia De Churriana","i":14.0,"b":"revolut","c":"estetica"},{"f":"2026-03-27","m":3,"d":"Parking Central","i":2.3,"b":"revolut","c":"transporte"},{"f":"2026-03-27","m":3,"d":"Chvt Cakes","i":6.95,"b":"revolut","c":"restaurantes"},{"f":"2026-03-28","m":3,"d":"Alimentacion Peyma","i":5.73,"b":"revolut","c":"alimentacion"},{"f":"2026-03-29","m":3,"d":"Andorrano Joyeria","i":1133.39,"b":"revolut","c":"compras"},{"f":"2026-03-31","m":3,"d":"Estanco","i":16.8,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-03-31","m":3,"d":"Vueling","i":12.0,"b":"revolut","c":"transporte"},{"f":"2026-04-01","m":4,"d":"Helados Galiana","i":15.9,"b":"revolut","c":"restaurantes"},{"f":"2026-04-02","m":4,"d":"Lc Taxi 22","i":18.36,"b":"revolut","c":"transporte"},{"f":"2026-04-03","m":4,"d":"Meson Da Estrada","i":38.3,"b":"revolut","c":"restaurantes"},{"f":"2026-04-03","m":4,"d":"Teleclub","i":24.0,"b":"revolut","c":"suscripciones"},{"f":"2026-04-03","m":4,"d":"Gutrei Galicia","i":104.5,"b":"revolut","c":"restaurantes"},{"f":"2026-04-04","m":4,"d":"Vueling","i":11.0,"b":"revolut","c":"transporte"},{"f":"2026-04-05","m":4,"d":"Aelia Duty Free","i":15.7,"b":"revolut","c":"transporte"},{"f":"2026-04-05","m":4,"d":"A Tenda Do Colmado","i":1.9,"b":"revolut","c":"restaurantes"},{"f":"2026-04-05","m":4,"d":"The Burger Prime","i":31.8,"b":"revolut","c":"restaurantes"},{"f":"2026-04-09","m":4,"d":"Bar Segalerva","i":15.4,"b":"revolut","c":"restaurantes"},{"f":"2026-04-09","m":4,"d":"Rest Bar Ruance","i":11.0,"b":"revolut","c":"restaurantes"},{"f":"2026-04-10","m":4,"d":"Hospital Materno-Infantil","i":11.35,"b":"revolut","c":"salud"},{"f":"2026-04-10","m":4,"d":"Maria De Los Angeles","i":11.2,"b":"revolut","c":"salud"},{"f":"2026-04-11","m":4,"d":"Muelle Uno","i":10.1,"b":"revolut","c":"restaurantes"},{"f":"2026-04-15","m":4,"d":"Apple","i":7.99,"b":"revolut","c":"suscripciones"},{"f":"2026-04-14","m":4,"d":"Bk Chu","i":26.35,"b":"revolut","c":"restaurantes"},{"f":"2026-04-17","m":4,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-04-18","m":4,"d":"Malaga-Costa del Sol Airport","i":10.0,"b":"revolut","c":"transporte"},{"f":"2026-04-21","m":4,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-04-22","m":4,"d":"Delikia","i":1.1,"b":"revolut","c":"alimentacion"},{"f":"2026-04-22","m":4,"d":"Sojo Mercado","i":25.5,"b":"revolut","c":"restaurantes"},{"f":"2026-04-24","m":4,"d":"La Bremen","i":35.0,"b":"revolut","c":"restaurantes"},{"f":"2026-04-25","m":4,"d":"Estanco","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-05-02","m":5,"d":"ONCE","i":2.0,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-05-04","m":5,"d":"El Pikon","i":13.0,"b":"revolut","c":"restaurantes"},{"f":"2026-05-04","m":5,"d":"Bar Segalerva","i":10.9,"b":"revolut","c":"restaurantes"},{"f":"2026-05-05","m":5,"d":"Estanco","i":6.3,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-05-07","m":5,"d":"Bk Chu","i":22.3,"b":"revolut","c":"restaurantes"},{"f":"2026-05-10","m":5,"d":"Vueling","i":321.76,"b":"revolut","c":"transporte"},{"f":"2026-05-10","m":5,"d":"Vueling","i":20.0,"b":"revolut","c":"transporte"},{"f":"2026-05-15","m":5,"d":"Apple","i":7.99,"b":"revolut","c":"suscripciones"},{"f":"2026-05-20","m":5,"d":"La Barberia De Churriana","i":15.0,"b":"revolut","c":"estetica"},{"f":"2026-05-21","m":5,"d":"Faunia","i":52.9,"b":"revolut","c":"actividades"},{"f":"2026-05-21","m":5,"d":"Faunia","i":23.95,"b":"revolut","c":"actividades"},{"f":"2026-05-21","m":5,"d":"Sports Direct","i":45.0,"b":"revolut","c":"compras"},{"f":"2026-05-22","m":5,"d":"Selecta","i":2.9,"b":"revolut","c":"otros"},{"f":"2026-05-22","m":5,"d":"Faunia","i":5.0,"b":"revolut","c":"actividades"},{"f":"2026-05-22","m":5,"d":"Mercadona","i":16.0,"b":"revolut","c":"alimentacion"},{"f":"2026-05-22","m":5,"d":"Gestion Parque Ani El Ro","i":11.1,"b":"revolut","c":"actividades"},{"f":"2026-05-23","m":5,"d":"Plenergy","i":18.0,"b":"revolut","c":"transporte"},{"f":"2026-05-23","m":5,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-05-24","m":5,"d":"ALDI","i":16.97,"b":"revolut","c":"alimentacion"},{"f":"2026-05-25","m":5,"d":"Taxi Lic.235 Malaga","i":12.78,"b":"revolut","c":"transporte"},{"f":"2026-05-26","m":5,"d":"Caseta Abril","i":10.0,"b":"revolut","c":"actividades"},{"f":"2026-05-26","m":5,"d":"Caseta La Despecha","i":21.0,"b":"revolut","c":"actividades"},{"f":"2026-05-26","m":5,"d":"Caseta Abril","i":15.0,"b":"revolut","c":"actividades"},{"f":"2026-05-26","m":5,"d":"Caseta La Despecha","i":42.0,"b":"revolut","c":"actividades"},{"f":"2026-05-29","m":5,"d":"Leroy Merlin","i":309.26,"b":"revolut","c":"hogar"},{"f":"2026-05-31","m":5,"d":"Restaurante La Benevolenc","i":56.8,"b":"revolut","c":"restaurantes"},{"f":"2026-06-01","m":6,"d":"Capuchinos Park","i":15.0,"b":"revolut","c":"restaurantes"},{"f":"2026-06-02","m":6,"d":"Bambu Lab","i":848.75,"b":"revolut","c":"compras"},{"f":"2026-06-02","m":6,"d":"Amazon","i":36.98,"b":"revolut","c":"suscripciones"},{"f":"2026-06-04","m":6,"d":"Bk Chu","i":29.9,"b":"revolut","c":"restaurantes"},{"f":"2026-06-05","m":6,"d":"Apple","i":22.0,"b":"revolut","c":"suscripciones"},{"f":"2026-06-05","m":6,"d":"ONCE","i":3.0,"b":"revolut","c":"tabaco_loteria"}];
+var MO={"1":{"total":1931.97,"cats":{"suscripciones":110.81,"transporte":195.98,"compras":73.04,"efectivo":80.0,"ocio_varios":15.0,"educacion":186.89,"tabaco_loteria":41.0,"salud":18.07,"suministros":109.39,"hogar":686.45,"seguros":77.28,"restaurantes":225.86,"otros":33.5,"estetica":25.0,"actividades":53.7},"banks":{"bbva":664.16,"unicaja":873.12,"revolut":394.69}},"2":{"total":3953.03,"cats":{"ocio_varios":219.0,"suscripciones":116.65,"salud":29.26,"alimentacion":935.01,"compras":238.89,"estetica":25.0,"transporte":358.64,"hogar":782.45,"educacion":278.89,"suministros":175.87,"seguros":112.18,"restaurantes":598.4,"tabaco_loteria":50.8,"ocio":18.0,"viajes":13.99},"banks":{"bbva":1084.21,"unicaja":1874.5,"revolut":994.32}},"3":{"total":4103.26,"cats":{"suscripciones":138.13,"alimentacion":615.41,"efectivo":150.0,"actividades":49.9,"transporte":228.94,"estetica":25.0,"ocio_varios":27.0,"salud":253.17,"educacion":278.89,"seguros":147.08,"hogar":686.45,"suministros":103.96,"restaurantes":202.54,"tabaco_loteria":33.0,"compras":1163.79},"banks":{"bbva":1242.31,"unicaja":1387.49,"revolut":1473.46}},"4":{"total":3352.34,"cats":{"salud":122.55,"transporte":360.24,"compras":147.99,"suscripciones":115.72,"ocio_varios":22.0,"restaurantes":546.8,"alimentacion":633.91,"estetica":25.0,"actividades":30.0,"educacion":278.89,"efectivo":100.0,"seguros":123.5,"suministros":142.49,"hogar":686.45,"tabaco_loteria":16.8},"banks":{"bbva":1406.65,"unicaja":1502.44,"revolut":443.25}},"5":{"total":3510.88,"cats":{"tabaco_loteria":19.9,"suscripciones":117.7,"otros":42.9,"hogar":1330.43,"compras":174.99,"educacion":278.89,"salud":9.6,"restaurantes":135.75,"actividades":275.95,"alimentacion":582.97,"suministros":76.82,"seguros":77.44,"transporte":372.54,"estetica":15.0},"banks":{"bbva":713.42,"unicaja":1713.95,"revolut":1083.51}},"6":{"total":1489.1,"cats":{"alimentacion":33.56,"impuestos":142.53,"compras":948.75,"suscripciones":106.11,"hogar":79.02,"seguros":131.23,"restaurantes":44.9,"tabaco_loteria":3.0},"banks":{"bbva":323.22,"unicaja":210.25,"revolut":955.63}}};
+var INCOME_BASE=2505;
+var MN=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+var MF=['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+// Ingresos personalizados por mes (nomina + extra)
+var INGRESOS={
+  1:{base:2505,extra:0},2:{base:2505,extra:0},3:{base:2505,extra:0},
+  4:{base:2505,extra:0},5:{base:2505,extra:0},6:{base:2505,extra:0},
+  7:{base:2505,extra:0},8:{base:2505,extra:0},9:{base:2505,extra:0},
+  10:{base:2505,extra:0},11:{base:2505,extra:0},12:{base:2505,extra:0}
+};
+
+function incMes(m){var r=INGRESOS[m]||{base:2505,extra:0};return r.base+r.extra;}
+
+// BUDGET LINES - editable
+var BLINES=[
+  // HOGAR
+  {id:1,nom:'Hipoteca',cat:'hogar',banco:'unicaja',mes:608,parent:0},
+  {id:2,nom:'Comunidad',cat:'hogar',banco:'unicaja',mes:79,parent:0},
+  {id:3,nom:'Alarma',cat:'hogar',banco:'unicaja',mes:42,parent:0},
+  // SUMINISTROS
+  {id:4,nom:'Luz',cat:'suministros',banco:'bbva',mes:90,parent:0},
+  {id:5,nom:'Gas',cat:'suministros',banco:'unicaja',mes:15,parent:0},
+  {id:6,nom:'Agua',cat:'suministros',banco:'unicaja',mes:35,parent:0},
+  // SEGUROS
+  {id:7,nom:'Seguros Chalet',cat:'seguros',banco:'unicaja',mes:78,parent:0},
+  {id:8,nom:'Seguro Medico Roi',cat:'seguros',banco:'nomina',mes:59,parent:0},
+  // SUSCRIPCIONES
+  {id:9,nom:'Orange',cat:'suscripciones',banco:'bbva',mes:80,parent:0},
+  {id:10,nom:'Apple',cat:'suscripciones',banco:'bbva',mes:3,parent:0},
+  {id:11,nom:'ChatGPT',cat:'suscripciones',banco:'bbva',mes:8,parent:0},
+  {id:12,nom:'Claude Pro',cat:'suscripciones',banco:'revolut',mes:22,parent:0},
+  {id:13,nom:'Netflix',cat:'suscripciones',banco:'bbva',mes:26,parent:0},
+  // EDUCACION
+  {id:14,nom:'Guarderia',cat:'educacion',banco:'bbva',mes:278,parent:0},
+  {id:15,nom:'Ingles Roi',cat:'educacion',banco:'bbva',mes:70,parent:0},
+  // COMIDA (con subfamilias)
+  {id:16,nom:'Comida total',cat:'alimentacion',banco:'unicaja',mes:450,parent:0},
+  {id:17,nom:'Supermercado',cat:'alimentacion',banco:'unicaja',mes:300,parent:16},
+  {id:18,nom:'Tiendas',cat:'alimentacion',banco:'revolut',mes:80,parent:16},
+  {id:19,nom:'Farmacia',cat:'salud',banco:'bbva',mes:50,parent:16},
+  {id:20,nom:'Otros comida',cat:'alimentacion',banco:'revolut',mes:20,parent:16},
+  // DENTISTA
+  {id:21,nom:'Dentista',cat:'salud',banco:'bbva',mes:100,parent:0},
+  // GASOIL
+  {id:22,nom:'Gasoil',cat:'transporte',banco:'bbva',mes:200,parent:0},
+  // OCIO (con subfamilias)
+  {id:23,nom:'Ocio total',cat:'ocio_varios',banco:'revolut',mes:400,parent:0},
+  {id:24,nom:'Restaurantes',cat:'restaurantes',banco:'revolut',mes:150,parent:23},
+  {id:25,nom:'Ropa',cat:'compras',banco:'revolut',mes:80,parent:23},
+  {id:26,nom:'Compras online',cat:'compras',banco:'revolut',mes:80,parent:23},
+  {id:27,nom:'Transporte ocio',cat:'transporte',banco:'revolut',mes:50,parent:23},
+  {id:28,nom:'Otros ocio',cat:'ocio_varios',banco:'revolut',mes:40,parent:23},
+  // INVERSION / AHORRO
+  {id:29,nom:'Inversion',cat:'inversion',banco:'revolut',mes:50,parent:0},
+  {id:30,nom:'Ahorro Roi',cat:'ahorro',banco:'revolut',mes:50,parent:0}
+];
+
+var CATS={
+  hogar:{l:'Hogar',c:'#b47fff'},suministros:{l:'Suministros',c:'#47c8ff'},
+  alimentacion:{l:'Supermercado',c:'#3dffa0'},restaurantes:{l:'Restaurantes',c:'#ff8c42'},
+  transporte:{l:'Transporte',c:'#ffaa47'},salud:{l:'Salud',c:'#ff6b47'},
+  compras:{l:'Compras',c:'#f7c59f'},actividades:{l:'Actividades',c:'#e8ff47'},
+  estetica:{l:'Estetica',c:'#c9b1ff'},ocio_varios:{l:'Ocio varios',c:'#aaa'},
+  seguros:{l:'Seguros',c:'#ff4d6d'},suscripciones:{l:'Suscripciones',c:'#a8ffea'},
+  educacion:{l:'Educacion',c:'#ffbb87'},impuestos:{l:'Impuestos',c:'#ff9f9f'},
+  tabaco_loteria:{l:'Tabaco/Lot.',c:'#888'},efectivo:{l:'Efectivo',c:'#ffe587'},
+  viajes:{l:'Viajes',c:'#87e0ff'},inversion:{l:'Inversion',c:'#5599ee'},
+  ahorro:{l:'Ahorro',c:'#3dffa0'},ocio:{l:'Ocio',c:'#e8ff47'},otros:{l:'Otros',c:'#666'}
+};
+var BK={bbva:{l:'BBVA',cls:'b-bbva',c:'#5599ee'},unicaja:{l:'UNI',cls:'b-unicaja',c:'#4dcc80'},revolut:{l:'REV',cls:'b-revolut',c:'#a07fff'}};
+var MNB=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+// ── ANUALES ──────────────────────────────────
+var annuals=[
+  {id:1,c:'Seguro del Coche',cat:'seguros',banco:'bbva',imp:620,mesI:1,mesF:1,frec:'anual',pag:true,not:''},
+  {id:2,c:'Seguro Hogar Chalet',cat:'seguros',banco:'unicaja',imp:280,mesI:2,mesF:2,frec:'anual',pag:true,not:''},
+  {id:3,c:'IBI Vivienda Malaga',cat:'impuestos',banco:'bbva',imp:480,mesI:3,mesF:3,frec:'anual',pag:false,not:''},
+  {id:4,c:'Impuesto Circulacion',cat:'impuestos',banco:'bbva',imp:180,mesI:4,mesF:4,frec:'anual',pag:true,not:''},
+  {id:5,c:'ITV Coche',cat:'transporte',banco:'bbva',imp:55,mesI:6,mesF:6,frec:'unico',pag:false,not:''},
+  {id:6,c:'Mantenimiento Coche',cat:'transporte',banco:'bbva',imp:250,mesI:8,mesF:8,frec:'unico',pag:false,not:''},
+  {id:7,c:'Comunidad Ext. Malaga',cat:'hogar',banco:'bbva',imp:180,mesI:9,mesF:9,frec:'anual',pag:false,not:''},
+  {id:8,c:'Vacaciones',cat:'ocio',banco:'revolut',imp:800,mesI:7,mesF:7,frec:'anual',pag:false,not:''},
+  {id:9,c:'Navidad Regalos',cat:'ocio',banco:'revolut',imp:350,mesI:12,mesF:12,frec:'anual',pag:false,not:''},
+  {id:10,c:'Declaracion Renta',cat:'impuestos',banco:'bbva',imp:0,mesI:5,mesF:5,frec:'anual',pag:false,not:'A confirmar'}
+];
+
+// ── TIPS ──────────────────────────────────────
+var tips=[
+  {id:1,ico:'T',t:'Orange: bajar tarifa',d:'Pagas 80 EUR/mes. Digi o MasMov desde 20 EUR. Llama a retencion y negocia.',s:'40-60 EUR/mes',done:false},
+  {id:2,ico:'!',t:'Alarma Prosegur: renegociar',d:'42 EUR/mes es caro. Llama exigiendo descuento. Puedes bajar a 25-30 EUR.',s:'15-20 EUR/mes',done:false},
+  {id:3,ico:'>',t:'Reducir restaurantes y delivery',d:'Mayor desviacion del presupuesto. Limitar a 2-3 salidas semanales.',s:'80-100 EUR/mes',done:false},
+  {id:4,ico:'=',t:'Consolidar IAs',d:'Pagas 30 EUR/mes entre ChatGPT y Claude. Evalua cual usas mas y cancela el otro.',s:'8-22 EUR/mes',done:false},
+  {id:5,ico:'+',t:'Reducir gasoil',d:'Supera el presupuesto. Teletrabajo puntual o car-sharing. Mantenimiento mejora consumo.',s:'30-50 EUR/mes',done:false},
+  {id:6,ico:'~',t:'Agrupar seguros',d:'Medico, chalet y coche en distintas entidades. Consolidar genera 10-15% descuento.',s:'100-200 EUR/anyo',done:false},
+  {id:7,ico:'-',t:'Luz: tarifa horaria',d:'Programa electrodomesticos de 22h a 8h. Ahorro del 20-30% en la factura.',s:'15-25 EUR/mes',done:false},
+  {id:8,ico:'%',t:'Tabaco y loteria',d:'164 EUR acumulados en 2026. Reducir un 50% ahorraría 16 EUR/mes.',s:'16 EUR/mes',done:false}
+];
+
+// ── FILTER STATE ──────────────────────────────
+var FMde=1,FMha=6,FY=2026,MBF='all',MCF='all',impBk='bbva',pend=[],hist=[];
+
+function numMeses(){return Math.max(1,FMha-FMde+1);}
+
+function applyF(){
+  FY=parseInt(document.getElementById('fY').value)||2026;
+  FMde=parseInt(document.getElementById('fMde').value)||1;
+  FMha=parseInt(document.getElementById('fMha').value)||6;
+  if(FMha<FMde){document.getElementById('fMha').value=FMde;FMha=FMde;}
+  var mos=numMeses();
+  var label=FMde===FMha?MF[FMde]:MN[FMde]+'-'+MN[FMha];
+  document.getElementById('fbadge').textContent=label+' '+FY+' ('+mos+' mes'+(mos>1?'es':'')+')';
+  document.getElementById('hdate').textContent=label+' '+FY+' - DATOS REALES';
+  renderAll();
+}
+
+function ftx(){
+  return TX.filter(function(t){
+    if(!t||!t.f)return false;
+    var yr=parseInt(t.f.substring(0,4));
+    if(yr!==FY)return false;
+    var mo=t.m||0;
+    return mo>=FMde&&mo<=FMha;
+  });
+}
+
+function fCats(){
+  var ct={};
+  ftx().forEach(function(t){ct[t.c]=(ct[t.c]||0)+t.i;});
+  return ct;
+}
+
+function totalIngresos(){
+  var s=0;
+  for(var m=FMde;m<=FMha;m++) s+=incMes(m);
+  return s;
+}
+
+// ── NAVIGATION ────────────────────────────────
+function gv(n){
+  for(var i=0;i<7;i++){
+    var el=document.getElementById('v'+i);
+    if(el)el.className='view'+(i===n?' on':'');
+  }
+  document.querySelectorAll('.nb').forEach(function(b,i){b.className='nb'+(i===n?' on':'');});
+  if(n===1){renderPresupuesto();}
+  if(n===2){renderMov();}
+  if(n===3){renderBancos();}
+  if(n===5){renderAnnuals();}
+  if(n===6){renderTips();}
+}
+
+function fmt(n){return Math.round(n).toLocaleString('es-ES');}
+function fmtD(n){return n.toFixed(2);}
+
+// ── RENDER ALL ────────────────────────────────
+function renderAll(){
+  renderAcum();
+  renderKPIs();
+  renderDash();
+  renderDonut();
+  renderBar();
+}
+
+// ── ACUM ROW ──────────────────────────────────
+function renderAcum(){
+  var txns=ftx();
+  var total=txns.reduce(function(s,t){return s+t.i;},0);
+  var inc=totalIngresos();
+  var bal=inc-total;
+  var mos=numMeses();
+  var wm=1,wv=0;
+  for(var m=1;m<=12;m++){var v=(MO[m]||{total:0}).total;if(v>wv){wv=v;wm=m;}}
+  var items=[
+    {l:'INGRESOS',v:'&#8364;'+fmt(inc),c:'var(--gr)'},
+    {l:'GASTO',v:'&#8364;'+fmt(total),c:'var(--rd)'},
+    {l:'BALANCE',v:(bal<0?'-':'+')+'&#8364;'+fmt(Math.abs(bal)),c:bal>=0?'var(--ac)':'var(--rd)'},
+    {l:'MOV.',v:''+txns.length,c:'var(--tx2)'},
+    {l:'MEDIA/MES',v:'&#8364;'+fmt(total/mos),c:'var(--ac2)'},
+    {l:'PEOR MES',v:MN[wm]+' &#8364;'+fmt(wv),c:'var(--or)'}
+  ];
+  document.getElementById('acumRow').innerHTML=items.map(function(it){
+    return '<div class="ait"><div class="albl">'+it.l+'</div><div class="aval" style="color:'+it.c+'">'+it.v+'</div></div>';
+  }).join('');
+}
+
+// ── KPIs ──────────────────────────────────────
+function renderKPIs(){
+  var txns=ftx();
+  var total=txns.reduce(function(s,t){return s+t.i;},0);
+  var inc=totalIngresos();
+  var bal=inc-total;
+  var pct=Math.min(100,Math.round((total/inc)*100));
+  document.getElementById('kpiGrid').innerHTML=
+    kcard('INGRESOS','var(--gr)','&#8364;'+fmt(inc),'Personalizable',100,'var(--gr)')+
+    kcard('GASTO REAL','var(--rd)','&#8364;'+fmt(total),pct+'% del ingreso',pct,'var(--rd)')+
+    kcard(bal>=0?'BALANCE':'NEGATIVO',bal>=0?'var(--ac)':'var(--rd)',(bal<0?'-':'+')+' &#8364;'+fmt(Math.abs(bal)),bal>=0?'Positivo':'Revisar gastos',Math.max(5,100-pct),'var(--ac)');
+}
+
+function kcard(lbl,clr,val,sub,pct,bc){
+  return '<div class="kc" style="border-color:'+clr+'44"><div class="klbl"><div class="kdot" style="background:'+clr+'"></div>'+lbl+'</div>'+
+    '<div class="kval" style="color:'+clr+'">'+val+'</div>'+
+    '<div class="ksub">'+sub+'</div>'+
+    '<div class="kbar"><div class="kbf" style="width:'+pct+'%;background:'+bc+'"></div></div></div>';
+}
+
+// ── DASH TABLE ────────────────────────────────
+function renderDash(){
+  var txns=ftx().sort(function(a,b){return b.f<a.f?-1:1;}).slice(0,14);
+  document.getElementById('dashLbl').textContent=(FMde===FMha?MF[FMde]:MN[FMde]+'-'+MN[FMha])+' '+FY;
+  document.getElementById('dashT').innerHTML=txns.map(function(t){
+    var cat=CATS[t.c]||{l:t.c,c:'#888'};
+    var bk=BK[t.b]||{l:t.b,cls:'b-bbva'};
+    return '<tr><td class="mono" style="color:var(--tx3)">'+t.f.slice(5)+'</td>'+
+      '<td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+t.d+'</td>'+
+      '<td><span class="bb '+bk.cls+'">'+bk.l+'</span></td>'+
+      '<td><span class="cb"><span class="cdot" style="background:'+cat.c+'"></span>'+cat.l+'</span></td>'+
+      '<td><span class="mono neg">&#8364;'+t.i.toFixed(2)+'</span></td></tr>';
+  }).join('');
+}
+
+// ── DONUT ─────────────────────────────────────
+function renderDonut(){
+  var ct=fCats();
+  var total=Object.keys(ct).reduce(function(s,k){return s+ct[k];},0)||1;
+  var entries=Object.keys(ct).filter(function(k){return ct[k]>0;}).sort(function(a,b){return ct[b]-ct[a];});
+  var R=52,CX=68,CY=68,ang=-Math.PI/2,paths='';
+  entries.forEach(function(cat){
+    var val=ct[cat],a=(val/total)*2*Math.PI,ea=ang+a;
+    var x1=CX+R*Math.cos(ang),y1=CY+R*Math.sin(ang);
+    var x2=CX+R*Math.cos(ea),y2=CY+R*Math.sin(ea);
+    var co=CATS[cat]||{c:'#888'};
+    paths+='<path d="M'+CX+','+CY+' L'+x1.toFixed(1)+','+y1.toFixed(1)+' A'+R+','+R+' 0 '+(a>Math.PI?1:0)+',1 '+x2.toFixed(1)+','+y2.toFixed(1)+' Z" fill="'+co.c+'" opacity=".85"/>';
+    ang=ea;
+  });
+  paths+='<circle cx="'+CX+'" cy="'+CY+'" r="28" fill="var(--s1)"/>';
+  var leg=entries.slice(0,9).map(function(cat){
+    var val=ct[cat],co=CATS[cat]||{l:cat,c:'#888'};
+    return '<div class="li"><div class="ll"><div class="lc" style="background:'+co.c+'"></div><span>'+co.l+'</span></div>'+
+      '<div style="display:flex;gap:5px"><span class="mono" style="color:var(--tx2)">'+Math.round((val/total)*100)+'%</span>'+
+      '<span class="mono">&#8364;'+fmt(val)+'</span></div></div>';
+  }).join('');
+  document.getElementById('donut').innerHTML=
+    '<svg width="136" height="136" viewBox="0 0 136 136" style="overflow:visible">'+paths+
+    '<text x="'+CX+'" y="'+(CY-5)+'" text-anchor="middle" font-family="DM Serif Display" font-size="13" fill="var(--tx)" dominant-baseline="middle">&#8364;'+fmt(total)+'</text>'+
+    '<text x="'+CX+'" y="'+(CY+7)+'" text-anchor="middle" font-family="DM Mono" font-size="5.5" fill="var(--tx3)" letter-spacing="1" dominant-baseline="middle">REAL</text></svg>'+
+    '<div class="leg">'+leg+'</div>';
+}
+
+// ── BAR CHART ─────────────────────────────────
+function renderBar(){
+  var maxV=0;
+  for(var m=1;m<=12;m++){
+    var v=(MO[m]||{total:0}).total;
+    if(v>maxV)maxV=v;
+    var inc=incMes(m);
+    if(inc>maxV)maxV=inc;
+  }
+  var H=60;
+  document.getElementById('barchart').innerHTML=[1,2,3,4,5,6,7,8,9,10,11,12].map(function(m){
+    var d=MO[m]||{total:0};
+    var inc=incMes(m);
+    var hI=Math.max(2,(inc/maxV)*H);
+    var hE=d.total>0?Math.max(2,(d.total/maxV)*H):2;
+    var hl=m>=FMde&&m<=FMha;
+    return '<div class="mw"><div class="mi">'+
+      '<div class="mb inc'+(hl?' hl':'')+'" style="height:'+hI+'px" title="&#8364;'+inc+'"></div>'+
+      '<div class="mb exp'+(hl?' hl':'')+'" style="height:'+hE+'px;cursor:pointer" onclick="selM('+m+')" title="&#8364;'+Math.round(d.total)+'"></div>'+
+    '</div><div class="mblbl">'+MN[m]+'</div></div>';
+  }).join('');
+}
+function selM(m){document.getElementById('fMde').value=m;document.getElementById('fMha').value=m;applyF();}
+
+// ── PRESUPUESTO ───────────────────────────────
+function renderPresupuesto(){
+  var mos=numMeses();
+  var inc=totalIngresos();
+  var ct=fCats();
+
+  // Render income cards
+  var months=[];for(var _m=FMde;_m<=FMha;_m++)months.push(_m);
+  var incHtml=months.map(function(m){
+    var r=INGRESOS[m]||{base:2505,extra:0};
+    return '<div class="inc-card">'+
+      '<div class="inc-label">'+MF[m].toUpperCase()+'</div>'+
+      '<div style="display:flex;gap:6px;align-items:baseline">'+
+        '<span style="font-size:10px;color:var(--tx3)">&#8364;</span>'+
+        '<input class="inc-inp" type="number" value="'+(r.base+r.extra)+'" id="inc_'+m+'" onchange="updInc('+m+',this.value)" style="width:100%;font-size:20px">'+
+      '</div>'+
+      '<div class="inc-note">Base &#8364;'+r.base+(r.extra?' + Extra &#8364;'+r.extra:'')+'</div>'+
+    '</div>';
+  }).join('');
+  document.getElementById('incGrid').innerHTML=incHtml;
+
+  // Totals
+  var totalBud=0;
+  BLINES.filter(function(b){return b.parent===0;}).forEach(function(b){totalBud+=b.mes*mos;});
+  var free=inc-totalBud;
+  document.getElementById('incTotal').innerHTML='&#8364;'+fmt(inc);
+  document.getElementById('budAssigned').innerHTML='&#8364;'+fmt(totalBud);
+  document.getElementById('budFree').innerHTML='<span style="color:'+(free>=0?'var(--gr)':'var(--rd)')+'">&#8364;'+fmt(Math.abs(free))+(free>=0?' libre':' excedido')+'</span>';
+  var pct=Math.min(100,Math.round((totalBud/inc)*100));
+  document.getElementById('budPct').textContent=pct+'%';
+  document.getElementById('budBar').style.width=pct+'%';
+  document.getElementById('budBar').style.background=pct>100?'var(--rd)':pct>85?'var(--or)':'var(--ac)';
+
+  // Budget table - group by parent
+  var html='';
+  var sections=[
+    {title:'HOGAR Y SUMINISTROS',cats:['hogar','suministros']},
+    {title:'SEGUROS',cats:['seguros']},
+    {title:'SUSCRIPCIONES Y COMUNICACIONES',cats:['suscripciones']},
+    {title:'EDUCACION',cats:['educacion']},
+    {title:'COMIDA',ids:[16,17,18,19,20]},
+    {title:'SALUD',ids:[21]},
+    {title:'TRANSPORTE',ids:[22]},
+    {title:'OCIO Y COMPRAS',ids:[23,24,25,26,27,28]},
+    {title:'INVERSION Y AHORRO',cats:['inversion','ahorro']}
+  ];
+
+  // Build by section
+  var sumMes=0, sumTotal=0, sumReal=0, sumDiff=0;
+  sections.forEach(function(sec){
+    var lines;
+    if(sec.ids){
+      lines=BLINES.filter(function(b){return sec.ids.indexOf(b.id)>=0;});
+    } else {
+      lines=BLINES.filter(function(b){return sec.cats.indexOf(b.cat)>=0;});
+    }
+    if(!lines.length)return;
+    html+='<div class="bud-section"><div class="bud-section-title">'+sec.title+'</div>';
+    lines.forEach(function(b){
+      var isChild=b.parent>0;
+      var budgTotal=b.mes*mos;
+      var real=ct[b.cat]||0;
+      var diff=budgTotal-real;
+      var clr=diff<0?'var(--rd)':diff<budgTotal*.1?'var(--or)':'var(--gr)';
+      var dbg=diff<0?'rgba(255,77,109,.12)':'rgba(61,255,160,.08)';
+      // Only sum parent lines for subtotals
+      if(!isChild){
+        sumMes+=b.mes;
+        sumTotal+=budgTotal;
+        sumReal+=real;
+        sumDiff+=diff;
+      }
+      html+='<div class="bud-row'+(isChild?' sub':'')+'">'+
+        '<div class="bud-name">'+(isChild?'&#8627; ':'')+b.nom+
+          '<span style="font-size:8px;color:var(--tx3);margin-left:5px">'+((BK[b.banco]||{l:b.banco}).l)+'</span>'+
+        '</div>'+
+        '<input class="bud-inp" type="number" value="'+b.mes+'" onchange="updBline('+b.id+',this.value)" title="EUR por mes">'+
+        '<div class="bud-real" style="color:var(--or);text-align:right;font-family:DM Mono,monospace;font-size:10px">&#8364;'+fmt(budgTotal)+'</div>'+
+        '<div class="bud-real" style="color:var(--ac2)">&#8364;'+fmt(real)+'</div>'+
+        '<div class="bvr-diff bud-diff" style="background:'+dbg+';color:'+clr+'">'+(diff>=0?'+':'')+fmt(diff)+'</div>'+
+        '<button onclick="openEditBud('+b.id+')" style="background:none;border:none;color:var(--tx3);cursor:pointer;font-size:11px" title="Editar">&#9998;</button>'+
+      '</div>';
+    });
+    html+='</div>';
+  });
+
+  // SUBTOTAL ROW
+  var sdiff=sumTotal-sumReal;
+  var sclr=sdiff<0?'var(--rd)':'var(--gr)';
+  html+='<div style="display:grid;grid-template-columns:1fr 80px 90px 90px 70px 28px;gap:6px;padding:10px 0 4px;border-top:2px solid var(--bd);margin-top:8px">'+
+    '<div style="font-size:10px;font-weight:700;font-family:DM Mono,monospace;letter-spacing:1px;color:var(--tx2)">SUBTOTAL ('+mos+' mes'+(mos>1?'es':'')+')</div>'+
+    '<div style="font-family:DM Mono,monospace;font-size:10px;font-weight:700;text-align:right;color:var(--tx)">&#8364;'+fmt(sumMes)+'</div>'+
+    '<div style="font-family:DM Mono,monospace;font-size:10px;font-weight:700;text-align:right;color:var(--or)">&#8364;'+fmt(sumTotal)+'</div>'+
+    '<div style="font-family:DM Mono,monospace;font-size:10px;font-weight:700;text-align:right;color:var(--ac2)">&#8364;'+fmt(sumReal)+'</div>'+
+    '<div style="font-family:DM Mono,monospace;font-size:10px;font-weight:700;text-align:right;padding:2px 5px;border-radius:5px;background:'+(sdiff<0?'rgba(255,77,109,.12)':'rgba(61,255,160,.1)')+';color:'+sclr+'">'+(sdiff>=0?'+':'')+fmt(sdiff)+'</div>'+
+    '<div></div>'+
+  '</div>';
+
+  document.getElementById('budTable').innerHTML=html;
+}
+
+function updInc(m,val){
+  var n=parseFloat(val)||0;
+  var r=INGRESOS[m]||{base:2505,extra:0};
+  INGRESOS[m]={base:n,extra:0};
+  renderPresupuesto();
+  renderAll();
+}
+
+function updBline(id,val){
+  var b=BLINES.find(function(x){return x.id===id;});
+  if(b)b.mes=parseFloat(val)||0;
+  renderPresupuesto();
+}
+
+function addBudLine(){
+  document.getElementById('budId').value='';
+  document.getElementById('budNom').value='';
+  document.getElementById('budAmt').value='';
+  document.getElementById('budDel').style.display='none';
+  om('moBud');
+}
+
+function openEditBud(id){
+  var b=BLINES.find(function(x){return x.id===id;});if(!b)return;
+  document.getElementById('budId').value=id;
+  document.getElementById('budNom').value=b.nom;
+  document.getElementById('budAmt').value=b.mes;
+  document.getElementById('budCat').value=b.cat;
+  document.getElementById('budBan').value=b.banco;
+  document.getElementById('budDel').style.display='block';
+  om('moBud');
+}
+
+function saveBudLine(){
+  var id=parseInt(document.getElementById('budId').value);
+  var nom=document.getElementById('budNom').value.trim();
+  var amt=parseFloat(document.getElementById('budAmt').value)||0;
+  var cat=document.getElementById('budCat').value;
+  var banco=document.getElementById('budBan').value;
+  if(!nom){tt('Anade un nombre');return;}
+  if(id){
+    var b=BLINES.find(function(x){return x.id===id;});
+    if(b){b.nom=nom;b.mes=amt;b.cat=cat;b.banco=banco;}
+  } else {
+    var newId=Math.max.apply(null,BLINES.map(function(x){return x.id;}))+1;
+    BLINES.push({id:newId,nom:nom,cat:cat,banco:banco,mes:amt,parent:0});
+  }
+  cm(document.getElementById('moBud'));
+  renderPresupuesto();
+  tt('Partida guardada');
+}
+
+function delBudLine(){
+  var id=parseInt(document.getElementById('budId').value);
+  BLINES=BLINES.filter(function(b){return b.id!==id&&b.parent!==id;});
+  cm(document.getElementById('moBud'));
+  renderPresupuesto();
+  tt('Partida eliminada');
+}
+
+// ── MOVIMIENTOS ───────────────────────────────
+function renderMov(){
+  var banks=['all','bbva','unicaja','revolut'];
+  document.getElementById('movBankF').innerHTML=banks.map(function(b){
+    var l=b==='all'?'Todos':(BK[b]?BK[b].l:b);
+    return '<button class="fpill'+(MBF===b?' on':'')+'" data-v="'+b+'" onclick="setMBF(this.dataset.v)" style="font-size:10px">'+l+'</button>';
+  }).join('');
+
+  var avail=[];
+  ftx().forEach(function(t){if(avail.indexOf(t.c)<0)avail.push(t.c);});
+  document.getElementById('movCatF').innerHTML=['all'].concat(avail).map(function(c){
+    var l=c==='all'?'Todas':(CATS[c]?CATS[c].l:c);
+    return '<button class="fpill'+(MCF===c?' on':'')+'" style="font-size:9px" data-v="'+c+'" onclick="setMCF(this.dataset.v)">'+l+'</button>';
+  }).join('');
+
+  var txns=ftx()
+    .filter(function(t){return MBF==='all'||t.b===MBF;})
+    .filter(function(t){return MCF==='all'||t.c===MCF;})
+    .sort(function(a,b){return b.f<a.f?-1:1;});
+  document.getElementById('movCount').textContent=txns.length+' mov. - &#8364;'+fmt(txns.reduce(function(s,t){return s+t.i;},0));
+  document.getElementById('movT').innerHTML=txns.map(function(t){
+    var cat=CATS[t.c]||{l:t.c,c:'#888'},bk=BK[t.b]||{l:t.b,cls:'b-bbva'};
+    return '<tr><td class="mono" style="color:var(--tx3)">'+t.f+'</td>'+
+      '<td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+t.d+'</td>'+
+      '<td><span class="bb '+bk.cls+'">'+bk.l+'</span></td>'+
+      '<td><span class="cb"><span class="cdot" style="background:'+cat.c+'"></span>'+cat.l+'</span></td>'+
+      '<td><span class="mono neg">&#8364;'+t.i.toFixed(2)+'</span></td></tr>';
+  }).join('');
+}
+function setMBF(b){MBF=b;renderMov();}
+function setMCF(c){MCF=c;renderMov();}
+
+// ── BANCOS ────────────────────────────────────
+function renderBancos(){
+  var txns=ftx();
+  var banks=['bbva','unicaja','revolut'];
+  var bt={bbva:0,unicaja:0,revolut:0};
+  txns.forEach(function(t){if(bt[t.b]!==undefined)bt[t.b]+=t.i;});
+  document.getElementById('bkKpis').innerHTML=banks.map(function(b){
+    var bk=BK[b];
+    return '<div class="kc" style="border-color:'+bk.c+'33">'+
+      '<div class="klbl"><div class="kdot" style="background:'+bk.c+'"></div>'+bk.l+'</div>'+
+      '<div class="kval" style="color:'+bk.c+'"><span class="cur">&#8364;</span>'+fmt(bt[b])+'</div>'+
+      '<div class="ksub">'+txns.filter(function(t){return t.b===b;}).length+' movimientos</div></div>';
+  }).join('');
+  document.getElementById('bkSections').innerHTML=banks.map(function(b){
+    var bk=BK[b];
+    var items=txns.filter(function(t){return t.b===b;}).sort(function(a,c){return c.f<a.f?-1:1;});
+    if(!items.length)return '';
+    return '<div class="card"><div class="bank-section-title"><span class="bb '+bk.cls+'" style="font-size:10px;padding:3px 8px">'+bk.l+'</span><span style="font-family:DM Mono,monospace;font-size:11px;color:'+bk.c+'">&#8364;'+fmt(bt[b])+'</span><span style="font-size:9px;color:var(--tx3)">'+items.length+' mov.</span></div>'+
+      '<table class="tbl"><thead><tr><th>FECHA</th><th>CONCEPTO</th><th>CATEGORIA</th><th>&#8364;</th></tr></thead><tbody>'+
+      items.map(function(t){
+        var cat=CATS[t.c]||{l:t.c,c:'#888'};
+        return '<tr><td class="mono" style="color:var(--tx3)">'+t.f+'</td>'+
+          '<td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+t.d+'</td>'+
+          '<td><span class="cb"><span class="cdot" style="background:'+cat.c+'"></span>'+cat.l+'</span></td>'+
+          '<td><span class="mono neg">&#8364;'+t.i.toFixed(2)+'</span></td></tr>';
+      }).join('')+
+      '</tbody></table></div>';
+  }).join('');
+}
+
+// ── ANUALES ───────────────────────────────────
+function renderAnnuals(){
+  var t=annuals.reduce(function(s,a){return s+a.imp;},0);
+  var p=annuals.filter(function(a){return !a.pag;}).reduce(function(s,a){return s+a.imp;},0);
+  document.getElementById('annT').textContent=fmt(t);
+  document.getElementById('annP').textContent=fmt(p);
+  document.getElementById('annM').textContent=fmt(t/12);
+  var mc=['#b47fff','#47c8ff','#3dffa0','#ffaa47','#ff6b47','#e8ff47','#ff4d6d','#a8ffea','#ffbb87','#ff9f9f','#b3f0ff','#ffe587'];
+  document.getElementById('annG').innerHTML=annuals.map(function(a){
+    var bk=BK[a.banco]||BK.bbva;
+    var co=mc[a.mesI-1];
+    var mesLabel=a.mesI===a.mesF?MN[a.mesI]:MN[a.mesI]+'-'+MN[a.mesF];
+    var frecLabel=a.frec==='unico'?'Unico':a.frec==='mensual'?'Mensual':'Anual';
+    return '<div class="ann-it" onclick="openEditAnn('+a.id+')">'+
+      '<div class="ann-mo" style="background:'+co+'22;color:'+co+'"><div class="mn">'+String(a.mesI).padStart(2,'0')+'</div><div>'+MN[a.mesI]+'</div></div>'+
+      '<div class="ann-in">'+
+        '<div class="ann-nm">'+a.c+'</div>'+
+        '<div class="ann-mt">'+
+          '<span class="bb '+bk.cls+'" style="font-size:7px">'+bk.l+'</span>'+
+          '<span>&#8364;'+(a.imp>0?a.imp:'?')+'</span>'+
+          '<span style="color:var(--tx3)">'+mesLabel+'</span>'+
+          '<span style="font-size:8px;color:var(--or)">'+frecLabel+'</span>'+
+          (a.not?'<span style="color:var(--tx3);font-size:8px">'+a.not+'</span>':'')+
+        '</div>'+
+      '</div>'+
+      '<div class="ann-st" style="background:'+(a.pag?'var(--gr)':'var(--or)')+'"></div></div>';
+  }).join('');
+}
+
+function openAddAnn(){
+  document.getElementById('moAnnT').textContent='Nuevo Gasto Anual';
+  document.getElementById('aId').value='';
+  document.getElementById('aCon').value='';
+  document.getElementById('aImp').value='';
+  document.getElementById('aMesI').value='1';
+  document.getElementById('aMesF').value='1';
+  document.getElementById('aNot').value='';
+  document.getElementById('aDel').style.display='none';
+  om('moAnn');
+}
+function openEditAnn(id){
+  var e=annuals.find(function(x){return x.id===id;});if(!e)return;
+  document.getElementById('moAnnT').textContent='Editar Gasto Anual';
+  document.getElementById('aId').value=id;
+  document.getElementById('aCon').value=e.c;
+  document.getElementById('aImp').value=e.imp;
+  document.getElementById('aMesI').value=e.mesI;
+  document.getElementById('aMesF').value=e.mesF;
+  document.getElementById('aBan').value=e.banco;
+  document.getElementById('aFrec').value=e.frec;
+  document.getElementById('aPag').value=String(e.pag);
+  document.getElementById('aCat').value=e.cat;
+  document.getElementById('aNot').value=e.not||'';
+  document.getElementById('aDel').style.display='block';
+  om('moAnn');
+}
+function saveAnn(){
+  var id=parseInt(document.getElementById('aId').value);
+  var c=document.getElementById('aCon').value.trim();
+  var imp=parseFloat(document.getElementById('aImp').value)||0;
+  var mesI=Math.max(1,Math.min(12,parseInt(document.getElementById('aMesI').value)||1));
+  var mesF=Math.max(mesI,Math.min(12,parseInt(document.getElementById('aMesF').value)||mesI));
+  var banco=document.getElementById('aBan').value;
+  var frec=document.getElementById('aFrec').value;
+  var pag=document.getElementById('aPag').value==='true';
+  var cat=document.getElementById('aCat').value;
+  var not=document.getElementById('aNot').value.trim();
+  if(!c){tt('Anade concepto');return;}
+  if(id){
+    var e=annuals.find(function(x){return x.id===id;});
+    if(e){e.c=c;e.imp=imp;e.mesI=mesI;e.mesF=mesF;e.banco=banco;e.frec=frec;e.pag=pag;e.cat=cat;e.not=not;}
+  } else {
+    var newId=Math.max.apply(null,annuals.map(function(x){return x.id;}))+1;
+    annuals.push({id:newId,c:c,cat:cat,banco:banco,imp:imp,mesI:mesI,mesF:mesF,frec:frec,pag:pag,not:not});
+  }
+  cm(document.getElementById('moAnn'));renderAnnuals();tt('Guardado');
+}
+function delAnn(){
+  annuals=annuals.filter(function(e){return e.id!==parseInt(document.getElementById('aId').value);});
+  cm(document.getElementById('moAnn'));renderAnnuals();tt('Eliminado');
+}
+
+// ── AHORRO ────────────────────────────────────
+function renderTips(){
+  var total=ftx().reduce(function(s,t){return s+t.i;},0);
+  var inc=totalIngresos();
+  var bal=inc-total;
+  var pct=Math.min(100,Math.round((total/inc)*100));
+  document.getElementById('ahorroKpis').innerHTML=
+    kcard('BALANCE ACTUAL',bal>=0?'var(--gr)':'var(--rd)',(bal<0?'-':'+')+' &#8364;'+fmt(Math.abs(bal)),bal>=0?'Positivo':'Negativo',Math.max(5,100-pct),'var(--ac)')+
+    kcard('AHORRO POTENCIAL','var(--gr)','&#8364;260','Aplicando sugerencias',60,'var(--gr)')+
+    kcard('OBJETIVO','var(--ac)','+&#8364;214','Balance posible',50,'var(--ac)');
+  document.getElementById('tipL').innerHTML=tips.map(function(t){
+    return '<div class="ti" style="'+(t.done?'opacity:.45':'')+'">'+
+      '<div class="tico">'+t.ico+'</div>'+
+      '<div class="tb"><div class="tt2">'+t.t+'</div><div class="td2">'+t.d+'</div>'+
+      '<div class="tsav">Ahorro: '+t.s+'</div>'+
+      '<div class="tacts">'+
+        '<button class="tbtn'+(t.done?' done':'')+'" onclick="togT('+t.id+')">'+(t.done?'Aplicado':'Marcar aplicado')+'</button>'+
+        '<button class="tbtn" onclick="editTip('+t.id+')">Editar</button>'+
+        '<button class="tbtn" onclick="delTipI('+t.id+')" style="color:var(--rd)">Eliminar</button>'+
+      '</div></div></div>';
+  }).join('');
+}
+function togT(id){var t=tips.find(function(x){return x.id===id;});if(t){t.done=!t.done;renderTips();tt(t.done?'Aplicada':'Pendiente');}}
+
+// ── TIPS MODAL ────────────────────────────────
+function openAddTip(){
+  document.getElementById('moTipT').textContent='Nueva Sugerencia';
+  document.getElementById('tId').value='';
+  document.getElementById('tIco').value='*';
+  document.getElementById('tTit').value='';
+  document.getElementById('tDes').value='';
+  document.getElementById('tSav').value='';
+  document.getElementById('tDel').style.display='none';
+  om('moTip');
+}
+function editTip(id){
+  var t=tips.find(function(x){return x.id===id;});if(!t)return;
+  document.getElementById('moTipT').textContent='Editar Sugerencia';
+  document.getElementById('tId').value=id;
+  document.getElementById('tIco').value=t.ico;
+  document.getElementById('tTit').value=t.t;
+  document.getElementById('tDes').value=t.d;
+  document.getElementById('tSav').value=t.s;
+  document.getElementById('tDel').style.display='block';
+  om('moTip');
+}
+function saveTip(){
+  var id=parseInt(document.getElementById('tId').value);
+  var ico=document.getElementById('tIco').value||'*';
+  var tit=document.getElementById('tTit').value.trim();
+  var des=document.getElementById('tDes').value.trim();
+  var sav=document.getElementById('tSav').value.trim();
+  if(!tit){tt('Anade titulo');return;}
+  if(id){var tp=tips.find(function(x){return x.id===id;});if(tp){tp.ico=ico;tp.t=tit;tp.d=des;tp.s=sav;}}
+  else tips.push({id:Date.now(),ico:ico,t:tit,d:des,s:sav,done:false});
+  cm(document.getElementById('moTip'));renderTips();tt('Guardada');
+}
+function delTip(){delTipI(parseInt(document.getElementById('tId').value));cm(document.getElementById('moTip'));}
+function delTipI(id){tips=tips.filter(function(t){return t.id!==id;});renderTips();tt('Eliminada');}
+
+// ── GASTO MODAL ───────────────────────────────
+function openAddG(){
+  document.getElementById('moGT').textContent='Nuevo Gasto';
+  document.getElementById('gId').value='';
+  document.getElementById('gCon').value='';
+  document.getElementById('gImp').value='';
+  document.getElementById('gFec').value=new Date().toISOString().slice(0,10);
+  om('moG');
+}
+function saveG(){
+  var con=document.getElementById('gCon').value.trim();
+  var imp=parseFloat(document.getElementById('gImp').value)||0;
+  var ban=document.getElementById('gBan').value;
+  var cat=document.getElementById('gCat').value;
+  var fec=document.getElementById('gFec').value||new Date().toISOString().slice(0,10);
+  if(!con||imp<=0){tt('Rellena concepto e importe');return;}
+  var mo=parseInt(fec.substring(5,7));
+  TX.push({f:fec,m:mo,d:con,i:imp,b:ban,c:cat});
+  rebuildMO();cm(document.getElementById('moG'));renderAll();tt('Anadido: '+con);
+}
+
+// ── IMPORT ────────────────────────────────────
+function autoCat(d){
+  d=d.toLowerCase();
+  if(/revolut|go fit|bonus gofit/.test(d))return 'transferencia';
+  if(/hipoteca|prestamo|comunidad|resid|chalet/.test(d))return 'hogar';
+  if(/naturgy|endesa|iberdrola|gana energ|emasa|agua/.test(d))return 'suministros';
+  if(/seguro|caser|prosegur|plan uni segur/.test(d))return 'seguros';
+  if(/mercadona|carrefour|lidl|aldi|coviran|peyma/.test(d))return 'alimentacion';
+  if(/restaurante|segalerva|kebab|just eat|telepizza|burger|morrofino|chiringuito|meson|cocina|montaditos|taberna|baston|muelle uno|sojo|bremen|cafeteria|panaderia/.test(d))return 'restaurantes';
+  if(/gasoil|gasolina|petroprix|repsol|cepsa|parking|peaje|itv|uber|taxi|vueling|volotea/.test(d))return 'transporte';
+  if(/farmacia|dental|hospital|medic|clinica/.test(d))return 'salud';
+  if(/orange|apple|netflix|spotify|amazon|chatgpt|claude|openai|paypal/.test(d))return 'suscripciones';
+  if(/ingles|academia|colegio|guarder|mensualidad roi/.test(d))return 'educacion';
+  if(/zara|springfield|decathlon|el corte|miravia|sports direct|ropa/.test(d))return 'compras';
+  if(/barberia|peluquer/.test(d))return 'estetica';
+  if(/tabacos|estanco|tulotero|loteria/.test(d))return 'tabaco_loteria';
+  if(/faunia|bioparc|caseta|titanitos|padel|gym|gimnasio/.test(d))return 'actividades';
+  if(/hotel|booking|airbnb/.test(d))return 'viajes';
+  if(/ayuntamiento|aeat|irpf/.test(d))return 'impuestos';
+  if(/bizum/.test(d))return 'ocio_varios';
+  if(/cajero|efectivo/.test(d))return 'efectivo';
+  return 'otros';
+}
+
+function setBk(el,b){impBk=b;document.querySelectorAll('.btab').forEach(function(x){x.className='btab';});el.className='btab on';}
+function setSt(msg,c){var el=document.getElementById('impSt');el.textContent=msg;el.style.color=c||'var(--tx2)';}
+
+function handleF(ev){
+  var f=ev.target.files[0];if(!f)return;
+  setSt('Procesando...','var(--tx2)');
+  var r=new FileReader();
+  r.onload=function(e){parseCSV(e.target.result);};
+  r.onerror=function(){setSt('Error leyendo archivo','var(--rd)');};
+  r.readAsText(f,'UTF-8');
+}
+
+function parseCSV(txt){
+  pend=[];
+  var lines=txt.split('\n');
+  var started=false;
+  for(var i=0;i<lines.length;i++){
+    var line=lines[i].trim();if(!line)continue;
+    var parts=splitL(line);
+    if(!started){
+      var j=parts.join(' ').toLowerCase();
+      if(j.indexOf('fecha')>=0||j.indexOf('date')>=0||j.indexOf('descripci')>=0){started=true;continue;}
+      if(/^\d{2}[\/-]\d{2}[\/-]\d{4}/.test(parts[0]||''))started=true;
+    }
+    if(parts.length<2)continue;
+    var fecha=pDate(parts[0])||pDate(parts[1]);if(!fecha)continue;
+    var desc='',imp=0;
+    for(var k=1;k<parts.length&&k<8;k++){
+      var cl=parts[k].replace(/[^0-9,.\-]/g,'');
+      if(cl){var n=parseFloat(cl.replace(',','.'));if(!isNaN(n)&&n!==0&&Math.abs(n)<50000){imp=n;break;}}
+    }
+    desc=(parts[2]||parts[1]||'').replace(/"/g,'').trim().slice(0,35);
+    if(imp>=0||!desc)continue;
+    var cat=autoCat(desc);
+    if(cat==='transferencia')continue;
+    pend.push({f:fecha,d:desc,i:Math.abs(imp),b:impBk,c:cat,sel:true});
+  }
+  if(!pend.length){setSt('Sin movimientos. Verifica banco y formato.','var(--or)');return;}
+  setSt('Detectados '+pend.length+' movimientos.','var(--gr)');
+  renderPrev();
+  document.getElementById('impBtn').style.display='block';
+  document.getElementById('clrBtn').style.display='block';
+}
+
+function splitL(l){
+  var sep=l.split(';').length>l.split(',').length?';':',';
+  var r=[],cur='',inQ=false;
+  for(var i=0;i<l.length;i++){
+    var ch=l[i];
+    if(ch==='"'){inQ=!inQ;}
+    else if(ch===sep&&!inQ){r.push(cur.trim());cur='';}
+    else{cur+=ch;}
+  }
+  r.push(cur.trim());return r;
+}
+
+function pDate(s){
+  if(!s)return null;s=s.replace(/[" ]/g,'');
+  var m=s.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})$/);if(m)return m[3]+'-'+m[2]+'-'+m[1];
+  m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return m[1]+'-'+m[2]+'-'+m[3];
+  return null;
+}
+
+function renderPrev(){
+  var catOpts=Object.keys(CATS).map(function(c){return '<option value="'+c+'">'+CATS[c].l+'</option>';}).join('');
+  document.getElementById('impPrev').innerHTML=
+    '<div style="max-height:260px;overflow-y:auto">'+
+    pend.map(function(r,i){
+      return '<div class="imp-row">'+
+        '<input type="checkbox" class="imp-check" id="ic'+i+'" '+(r.sel?'checked':'')+' onchange="pend['+i+'].sel=this.checked">'+
+        '<span style="color:var(--tx3);width:36px;flex-shrink:0">'+r.f.slice(5)+'</span>'+
+        '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+r.d+'</span>'+
+        '<select class="imp-cat" onchange="pend['+i+'].c=this.value">'+catOpts.replace('value="'+r.c+'"','value="'+r.c+'" selected')+'</select>'+
+        '<span class="mono neg" style="width:46px;text-align:right;flex-shrink:0">'+r.i.toFixed(2)+'</span></div>';
+    }).join('')+'</div>';
+}
+
+function selAll(v){pend.forEach(function(_,i){pend[i].sel=!!v;var cb=document.getElementById('ic'+i);if(cb)cb.checked=!!v;});}
+
+function clrImp(){
+  pend=[];
+  document.getElementById('impPrev').innerHTML='<div style="font-size:9px;color:var(--tx3);text-align:center;padding:20px">Sube un archivo</div>';
+  document.getElementById('impBtn').style.display='none';
+  document.getElementById('clrBtn').style.display='none';
+  setSt('Esperando archivo...','var(--tx3)');
+  document.getElementById('fInp').value='';
+}
+
+function confImport(){
+  var sel=pend.filter(function(r){return r.sel&&r.i>0;});
+  if(!sel.length){tt('Selecciona al menos un movimiento');return;}
+  var added=0,dupes=0;
+  sel.forEach(function(r){
+    var mo=parseInt(r.f.substring(5,7));
+    var dup=TX.some(function(t){return t.f===r.f&&Math.abs(t.i-r.i)<0.01&&t.b===r.b;});
+    if(dup){dupes++;return;}
+    TX.push({f:r.f,m:mo,d:r.d,i:r.i,b:r.b,c:r.c});added++;
+  });
+  rebuildMO();clrImp();renderAll();
+  hist.unshift({date:new Date().toLocaleDateString('es-ES'),bank:impBk.toUpperCase(),added:added,dupes:dupes});
+  renderHist();
+  tt(added+' importados'+(dupes?' - '+dupes+' dup.':''));
+}
+
+function rebuildMO(){
+  for(var m=1;m<=12;m++)MO[m]={total:0,cats:{},banks:{}};
+  TX.forEach(function(t){
+    if(!t||!t.m)return;
+    var m=t.m;
+    if(!MO[m])MO[m]={total:0,cats:{},banks:{}};
+    MO[m].total=Math.round(((MO[m].total||0)+t.i)*100)/100;
+    MO[m].cats[t.c]=Math.round(((MO[m].cats[t.c]||0)+t.i)*100)/100;
+    if(t.b)MO[m].banks[t.b]=Math.round(((MO[m].banks[t.b]||0)+t.i)*100)/100;
+  });
+}
+
+function renderHist(){
+  document.getElementById('histC').textContent=hist.length+' importaciones';
+  document.getElementById('histL').innerHTML=hist.length===0?
+    '<div style="font-size:9px;color:var(--tx3);text-align:center;padding:12px">Sin importaciones</div>':
+    hist.map(function(h){
+      var bk=BK[h.bank.toLowerCase()]||{c:'var(--tx2)',l:h.bank};
+      return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(37,40,54,.4);font-size:9px;gap:5px">'+
+        '<span style="color:var(--tx3)">'+h.date+'</span>'+
+        '<span style="padding:1px 5px;border-radius:20px;background:'+bk.c+'22;color:'+bk.c+'">'+h.bank+'</span>'+
+        '<span><b>'+h.added+'</b> importados</span>'+
+        (h.dupes?'<span style="color:var(--tx3)">'+h.dupes+' dup.</span>':'')+'</div>';
+    }).join('');
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  var dz=document.getElementById('dz');
+  if(dz){
+    dz.addEventListener('dragover',function(e){e.preventDefault();dz.classList.add('drag');});
+    dz.addEventListener('dragleave',function(){dz.classList.remove('drag');});
+    dz.addEventListener('drop',function(e){e.preventDefault();dz.classList.remove('drag');var f=e.dataTransfer.files[0];if(f)handleF({target:{files:[f]}});});
+  }
+});
+
+// ── EXPORT EXCEL ──────────────────────────────
+function exportExcel(){
+  var mos=numMeses();
+  var period=(FMde===FMha?MF[FMde]:MN[FMde]+'-'+MN[FMha])+'-'+FY;
+
+  // Sheet 1: Movimientos
+  var txns=ftx();
+  var rows1=[['Fecha','Concepto','Banco','Categoria','Importe']];
+  txns.forEach(function(t){
+    var cat=CATS[t.c]?CATS[t.c].l:t.c;
+    var bk=BK[t.b]?BK[t.b].l:t.b;
+    rows1.push([t.f,t.d,bk,cat,t.i.toFixed(2)]);
+  });
+  rows1.push([]);
+  rows1.push(['TOTAL','','','',txns.reduce(function(s,t){return s+t.i;},0).toFixed(2)]);
+
+  // Sheet 2: Presupuesto
+  var ct=fCats();
+  var rows2=[['Concepto','Banco','Presupuesto EUR','Real EUR','Diferencia']];
+  BLINES.forEach(function(b){
+    var budg=b.mes*mos;
+    var real=ct[b.cat]||0;
+    var diff=budg-real;
+    rows2.push([b.nom,(BK[b.banco]||{l:b.banco}).l,budg.toFixed(2),real.toFixed(2),diff.toFixed(2)]);
+  });
+
+  // Sheet 3: Ingresos
+  var rows3=[['Mes','Ingreso']];
+  var ms=[];for(var _em=FMde;_em<=FMha;_em++)ms.push(_em);
+  ms.forEach(function(m){rows3.push([MF[m],incMes(m).toFixed(2)]);});
+
+  // Build CSV with multiple sections
+  var csv='CONTROL DE COSTES - '+period+'\r\n\r\n';
+  csv+='=== MOVIMIENTOS ===\r\n';
+  rows1.forEach(function(r){csv+=r.join(';')+'\r\n';});
+  csv+='\r\n=== PRESUPUESTO ===\r\n';
+  rows2.forEach(function(r){csv+=r.join(';')+'\r\n';});
+  csv+='\r\n=== INGRESOS ===\r\n';
+  rows3.forEach(function(r){csv+=r.join(';')+'\r\n';});
+
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download='ATP_costes_'+period+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  tt('Exportado: ATP_costes_'+period+'.csv');
+}
+
+// ── MODAL HELPERS ─────────────────────────────
+function om(el){if(typeof el==='string')el=document.getElementById(el);el.className='mo on';}
+function cm(el){if(typeof el==='string')el=document.getElementById(el);el.className='mo';}
+
+// ── TOAST ─────────────────────────────────────
+var _tt;
+function tt(msg){
+  clearTimeout(_tt);
+  document.getElementById('tmsg').textContent=msg;
+  document.getElementById('toast').className='toast on';
+  _tt=setTimeout(function(){document.getElementById('toast').className='toast';},3200);
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  document.getElementById('fMde').value=1;
+  document.getElementById('fMha').value=6;
+  applyF();
+});
+</script>
+</body>
+</html>
