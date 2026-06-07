@@ -384,7 +384,7 @@ body.light .fi,.light .fs{color:var(--tx)}
     <div class="ctitle">
       <span>PARTIDAS DEL PRESUPUESTO</span>
       <div style="display:flex;gap:5px">
-        <button class="btn-filter" onclick="renderPresupuesto();renderAll();renderUnmatched();" style="font-size:10px">&#8635; Actualizar</button>
+        <button class="btn-filter" onclick="renderPresupuesto();renderAll();renderUnmatched();saveState();" style="font-size:10px">&#8635; Actualizar</button>
         <button class="bp" onclick="addBudLine()" style="font-size:9px">+ Partida</button>
         <button class="bs2" onclick="exportExcel()" style="font-size:9px">Exportar</button>
       </div>
@@ -666,7 +666,6 @@ body.light .fi,.light .fs{color:var(--tx)}
     <div id="alertGrid"></div>
   </div>
 </div>
->
 </main>
 
 <!-- MODAL GASTO -->
@@ -1236,6 +1235,7 @@ function updBline(id,val){
   var b=BLINES.find(function(x){return x.id===id;});
   if(b)b.mes=parseFloat(val)||0;
   renderPresupuesto();
+  saveState();
 }
 
 function addBudLine(){
