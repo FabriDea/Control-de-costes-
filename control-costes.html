@@ -725,15 +725,9 @@ body.light .fi,.light .fs{color:var(--tx)}
       <option value="anual">Anual recurrente</option>
     </select>
   </div>
-  <div class="fg">
-    <div class="fl"><label>Estado</label><select class="fs" id="aPag"><option value="false">Pendiente</option><option value="true">Pagado</option></select></div>
-    <div class="fl"><label>Categoria</label>
-      <select class="fs" id="aCat">
-        <option value="hogar">Hogar</option><option value="seguros">Seguros</option>
-        <option value="transporte">Transporte</option><option value="impuestos">Impuestos</option>
-        <option value="ocio">Ocio</option><option value="otros">Otros</option>
-      </select>
-    </div>
+  <div class="fl"><label>Estado</label><select class="fs" id="aPag"><option value="false">Pendiente</option><option value="true">Pagado</option></select></div>
+  <div class="fl"><label>Partida del presupuesto</label>
+    <select class="fs" id="aBline"><option value="">Selecciona partida...</option></select>
   </div>
   <div class="fl"><label>Notas</label><input class="fi" id="aNot" placeholder="Opcional"></div>
   <div class="brow"><button class="bc" onclick="cm(document.getElementById('moAnn'))">Cancelar</button><button class="bdel" id="aDel" onclick="delAnn()" style="display:none">Eliminar</button><button class="bs" onclick="saveAnn()">Guardar</button></div>
@@ -1425,7 +1419,8 @@ function openAddAnn(){
   document.getElementById('aMesF').value='1';
   document.getElementById('aNot').value='';
   document.getElementById('aDel').style.display='none';
-  document.getElementById('aBline').innerHTML=buildBlineOpts('');
+  var bl=document.getElementById('aBline');
+  if(bl) bl.innerHTML=buildBlineOpts('');
   om('moAnn');
 }
 function openEditAnn(id){
@@ -1439,7 +1434,8 @@ function openEditAnn(id){
   document.getElementById('aBan').value=e.banco;
   document.getElementById('aFrec').value=e.frec;
   document.getElementById('aPag').value=String(e.pag);
-  document.getElementById('aBline').innerHTML=buildBlineOpts(e.blineId||'');
+  var blEl=document.getElementById('aBline');
+  if(blEl) blEl.innerHTML=buildBlineOpts(e.blineId||'');
   document.getElementById('aNot').value=e.not||'';
   document.getElementById('aDel').style.display='block';
   om('moAnn');
@@ -1458,18 +1454,58 @@ function saveAnn(){
   var cat=targetLine.cat;
   var not=document.getElementById('aNot').value.trim();
   if(!c){tt('Anade concepto');return;}
+  // Calculate imputed amount per month
+  var numMesesAnn = Math.max(1, mesF - mesI + 1);
+  var impPorMes = frec === 'mensual' ? imp : imp / numMesesAnn;
+
   if(id){
     var e=annuals.find(function(x){return x.id===id;});
-    if(e){e.c=c;e.imp=imp;e.mesI=mesI;e.mesF=mesF;e.banco=banco;e.frec=frec;e.pag=pag;e.cat=cat;e.blineId=blineId;e.not=not;}
+    if(e){
+      e.c=c;e.imp=imp;e.mesI=mesI;e.mesF=mesF;e.banco=banco;e.frec=frec;e.pag=pag;e.cat=cat;e.blineId=blineId;e.not=not;
+      // Remove old TX entries for this annual
+      TX = TX.filter(function(t){ return t._annualId !== id; });
+    }
   } else {
     var newId=Math.max.apply(null,annuals.map(function(x){return x.id;}))+1;
+    id = newId;
     annuals.push({id:newId,c:c,cat:cat,blineId:blineId,banco:banco,imp:imp,mesI:mesI,mesF:mesF,frec:frec,pag:pag,not:not});
   }
-  cm(document.getElementById('moAnn'));renderAnnuals();saveState();tt('Guardado');
+
+  // Add TX entries for each month in the range
+  for(var m = mesI; m <= mesF; m++){
+    var txImp = frec === 'mensual' ? imp : (mesI === mesF ? imp : Math.round((imp / numMesesAnn)*100)/100);
+    var fecha = '2026-' + String(m).padStart(2,'0') + '-01';
+    TX.push({
+      f: fecha,
+      m: m,
+      year: 2026,
+      d: c,
+      i: txImp,
+      b: banco,
+      c: cat,
+      _validated: true,
+      _blineId: blineId,
+      _annualId: id,
+      manual: true
+    });
+  }
+
+  rebuildMO();
+  cm(document.getElementById('moAnn'));
+  renderAnnuals();
+  renderAll();
+  renderPresupuesto();
+  saveState();
+  tt('Guardado e imputado en presupuesto');
 }
 function delAnn(){
-  annuals=annuals.filter(function(e){return e.id!==parseInt(document.getElementById('aId').value);});
-  cm(document.getElementById('moAnn'));renderAnnuals();tt('Eliminado');
+  var delId=parseInt(document.getElementById('aId').value);
+  annuals=annuals.filter(function(e){return e.id!==delId;});
+  TX=TX.filter(function(t){return t._annualId!==delId;});
+  rebuildMO();
+  cm(document.getElementById('moAnn'));
+  renderAnnuals();renderAll();renderPresupuesto();
+  saveState();tt('Eliminado');
 }
 
 // ── AHORRO ────────────────────────────────────
@@ -2341,6 +2377,26 @@ function loadState(){
     if(state.annuals && state.annuals.length) annuals = state.annuals;
     if(state.tips && state.tips.length) tips = state.tips;
     if(state.tickets && state.tickets.length) tickets = state.tickets;
+    // Remove any _annualId TX that came from localStorage (will be regenerated)
+    TX = TX.filter(function(t){ return !t._annualId; });
+    // Re-generate TX from annuals
+    annuals.forEach(function(ann){
+      if(!ann.blineId) return;
+      var targetLine = BLINES.find(function(b){ return b.id===ann.blineId; });
+      if(!targetLine) return;
+      var numM = Math.max(1, ann.mesF - ann.mesI + 1);
+      for(var m=ann.mesI; m<=ann.mesF; m++){
+        var txImp = ann.frec==='mensual' ? ann.imp : Math.round((ann.imp/numM)*100)/100;
+        TX.push({
+          f:'2026-'+String(m).padStart(2,'0')+'-01',
+          m:m, year:2026,
+          d:ann.c, i:txImp,
+          b:ann.banco, c:ann.cat,
+          _validated:true, _blineId:ann.blineId,
+          _annualId:ann.id, manual:true
+        });
+      }
+    });
     rebuildMO();
   }catch(e){ 
     console.warn('No se pudo cargar estado:', e);
