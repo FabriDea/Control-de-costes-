@@ -872,13 +872,13 @@ function txMatchesLine(t, b){
   // 1. Manually validated to this category
   if(t._validated && t.c === b.cat) return true;
 
-  // 2. Keyword match on this line — highest priority
+  // 2. Keyword match on this line - highest priority
   if(b.kw && b.kw.length > 0){
     var desc = t.d.toLowerCase();
     if(b.kw.some(function(kw){ return kw && desc.indexOf(kw.toLowerCase()) >= 0; })){
       return true;
     }
-    // This line has keywords but none matched — don't fall through to cat match
+    // This line has keywords but none matched - don't fall through to cat match
     return false;
   }
 
@@ -916,7 +916,7 @@ var BK={
 };
 var MNB=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 
-// ── ANUALES ──────────────────────────────────
+// -- ANUALES ----------------------------------
 var annuals=[
   {id:1,c:'Seguro del Coche',cat:'seguros',banco:'bbva',imp:620,mesI:1,mesF:1,frec:'anual',pag:true,not:''},
   {id:2,c:'Seguro Hogar Chalet',cat:'seguros',banco:'unicaja',imp:280,mesI:2,mesF:2,frec:'anual',pag:true,not:''},
@@ -930,7 +930,7 @@ var annuals=[
   {id:10,c:'Declaracion Renta',cat:'impuestos',banco:'bbva',imp:0,mesI:5,mesF:5,frec:'anual',pag:false,not:'A confirmar'}
 ];
 
-// ── TIPS ──────────────────────────────────────
+// -- TIPS --------------------------------------
 var tips=[
   {id:1,ico:'T',t:'Orange: bajar tarifa',d:'Pagas 80 EUR/mes. Digi o MasMov desde 20 EUR. Llama a retencion y negocia.',s:'40-60 EUR/mes',done:false},
   {id:2,ico:'!',t:'Alarma Prosegur: renegociar',d:'42 EUR/mes es caro. Llama exigiendo descuento. Puedes bajar a 25-30 EUR.',s:'15-20 EUR/mes',done:false},
@@ -939,10 +939,10 @@ var tips=[
   {id:5,ico:'+',t:'Reducir gasoil',d:'Supera el presupuesto. Teletrabajo puntual o car-sharing. Mantenimiento mejora consumo.',s:'30-50 EUR/mes',done:false},
   {id:6,ico:'~',t:'Agrupar seguros',d:'Medico, chalet y coche en distintas entidades. Consolidar genera 10-15% descuento.',s:'100-200 EUR/anyo',done:false},
   {id:7,ico:'-',t:'Luz: tarifa horaria',d:'Programa electrodomesticos de 22h a 8h. Ahorro del 20-30% en la factura.',s:'15-25 EUR/mes',done:false},
-  {id:8,ico:'%',t:'Tabaco y loteria',d:'164 EUR acumulados en 2026. Reducir un 50% ahorraría 16 EUR/mes.',s:'16 EUR/mes',done:false}
+  {id:8,ico:'%',t:'Tabaco y loteria',d:'164 EUR acumulados en 2026. Reducir un 50% ahorraria 16 EUR/mes.',s:'16 EUR/mes',done:false}
 ];
 
-// ── FILTER STATE ──────────────────────────────
+// -- FILTER STATE ------------------------------
 var FMde=1,FMha=6,FY=2026,MBF='all',MCF='all',impBk='bbva',pend=[],hist=[];
 
 function numMeses(){return Math.max(1,FMha-FMde+1);}
@@ -982,7 +982,7 @@ function totalIngresos(){
   return s;
 }
 
-// ── NAVIGATION ────────────────────────────────
+// -- NAVIGATION --------------------------------
 function gv(n){
   for(var i=0;i<7;i++){
     var el=document.getElementById('v'+i);
@@ -993,13 +993,13 @@ function gv(n){
   if(n===2){renderMov();}
   if(n===3){renderBancos();}
   if(n===5){renderAnnuals();}
-  if(n===6){renderTips();}
+  if(n===6){renderTips();renderAnalisis();renderSimLines();}
 }
 
 function fmt(n){return Math.round(n).toLocaleString('es-ES');}
 function fmtD(n){return n.toFixed(2);}
 
-// ── RENDER ALL ────────────────────────────────
+// -- RENDER ALL --------------------------------
 function renderAll(){
   renderAcum();
   renderKPIs();
@@ -1008,7 +1008,7 @@ function renderAll(){
   renderBar();
 }
 
-// ── ACUM ROW ──────────────────────────────────
+// -- ACUM ROW ----------------------------------
 function renderAcum(){
   var txns=ftx();
   var total=txns.reduce(function(s,t){return s+t.i;},0);
@@ -1030,7 +1030,7 @@ function renderAcum(){
   }).join('');
 }
 
-// ── KPIs ──────────────────────────────────────
+// -- KPIs --------------------------------------
 function renderKPIs(){
   var txns=ftx();
   var total=txns.reduce(function(s,t){return s+t.i;},0);
@@ -1050,7 +1050,7 @@ function kcard(lbl,clr,val,sub,pct,bc){
     '<div class="kbar"><div class="kbf" style="width:'+pct+'%;background:'+bc+'"></div></div></div>';
 }
 
-// ── DASH TABLE ────────────────────────────────
+// -- DASH TABLE --------------------------------
 function renderDash(){
   var txns=ftx().sort(function(a,b){return b.f<a.f?-1:1;}).slice(0,14);
   document.getElementById('dashLbl').textContent=(FMde===FMha?MF[FMde]:MN[FMde]+'-'+MN[FMha])+' '+FY;
@@ -1065,7 +1065,7 @@ function renderDash(){
   }).join('');
 }
 
-// ── DONUT ─────────────────────────────────────
+// -- DONUT -------------------------------------
 function renderDonut(){
   var ct=fCats();
   var total=Object.keys(ct).reduce(function(s,k){return s+ct[k];},0)||1;
@@ -1093,7 +1093,7 @@ function renderDonut(){
     '<div class="leg">'+leg+'</div>';
 }
 
-// ── BAR CHART ─────────────────────────────────
+// -- BAR CHART ---------------------------------
 function renderBar(){
   var maxV=0;
   for(var m=1;m<=12;m++){
@@ -1117,7 +1117,7 @@ function renderBar(){
 }
 function selM(m){document.getElementById('fMde').value=m;document.getElementById('fMha').value=m;applyF();}
 
-// ── PRESUPUESTO ───────────────────────────────
+// -- PRESUPUESTO -------------------------------
 function renderPresupuesto(){
   var mos=numMeses();
   var inc=totalIngresos();
@@ -1308,7 +1308,7 @@ function delBudLine(){
   renderUnmatched();
 }
 
-// ── MOVIMIENTOS ───────────────────────────────
+// -- MOVIMIENTOS -------------------------------
 function renderMov(){
   var banks=['all','bbva','unicaja','revolut'];
   document.getElementById('movBankF').innerHTML=banks.map(function(b){
@@ -1347,7 +1347,7 @@ function renderMov(){
 function setMBF(b){MBF=b;renderMov();}
 function setMCF(c){MCF=c;renderMov();}
 
-// ── BANCOS ────────────────────────────────────
+// -- BANCOS ------------------------------------
 function renderBancos(){
   var txns=ftx();
   var banks=['bbva','unicaja','revolut','efectivo'];
@@ -1381,7 +1381,7 @@ function renderBancos(){
   }).join('');
 }
 
-// ── ANUALES ───────────────────────────────────
+// -- ANUALES -----------------------------------
 function renderAnnuals(){
   var t=annuals.reduce(function(s,a){return s+a.imp;},0);
   var p=annuals.filter(function(a){return !a.pag;}).reduce(function(s,a){return s+a.imp;},0);
@@ -1508,7 +1508,7 @@ function delAnn(){
   saveState();tt('Eliminado');
 }
 
-// ── AHORRO ────────────────────────────────────
+// -- AHORRO ------------------------------------
 function renderTips(){
   var total=ftx().reduce(function(s,t){return s+t.i;},0);
   var inc=totalIngresos();
@@ -1532,7 +1532,7 @@ function renderTips(){
 }
 function togT(id){var t=tips.find(function(x){return x.id===id;});if(t){t.done=!t.done;renderTips();tt(t.done?'Aplicada':'Pendiente');}}
 
-// ── TIPS MODAL ────────────────────────────────
+// -- TIPS MODAL --------------------------------
 function openAddTip(){
   document.getElementById('moTipT').textContent='Nueva Sugerencia';
   document.getElementById('tId').value='';
@@ -1568,7 +1568,7 @@ function saveTip(){
 function delTip(){delTipI(parseInt(document.getElementById('tId').value));cm(document.getElementById('moTip'));}
 function delTipI(id){tips=tips.filter(function(t){return t.id!==id;});renderTips();tt('Eliminada');}
 
-// ── GASTO MODAL ───────────────────────────────
+// -- GASTO MODAL -------------------------------
 function openAddG(){
   document.getElementById('moGT').textContent='Nuevo Gasto';
   document.getElementById('gId').value='';
@@ -1589,7 +1589,7 @@ function saveG(){
   rebuildMO();saveState();cm(document.getElementById('moG'));renderAll();tt('Anadido: '+con);
 }
 
-// ── IMPORT ────────────────────────────────────
+// -- IMPORT ------------------------------------
 function autoCat(d){
   d=d.toLowerCase();
   if(/revolut|go fit|bonus gofit/.test(d))return 'transferencia';
@@ -1762,7 +1762,7 @@ function showDupeModal(dupes, toAdd){
       '<div style="margin-bottom:14px">'+rows+'</div>'+
       '<div style="font-size:9px;color:var(--tx2);margin-bottom:14px;padding:8px;background:var(--s2);border-radius:8px">'+
         '<b>'+toAdd.length+'</b> movimientos nuevos se importaran automaticamente.<br>'+
-        'Los marcados en naranja ya existen — decide si importarlos igualmente.'+
+        'Los marcados en naranja ya existen - decide si importarlos igualmente.'+
       '</div>'+
       '<div style="display:flex;gap:8px">'+
         '<button onclick="cancelDupeImport()" style="flex:1;padding:8px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--tx2);font-family:sans-serif;font-size:11px;cursor:pointer">Cancelar todo</button>'+
@@ -1831,7 +1831,7 @@ function doImport(toAdd, dupes){
   saveState();
   renderHist();
   var msg = added + ' importados';
-  if(dupes.length) msg += ' · ' + dupes.length + ' duplicados gestionados';
+  if(dupes.length) msg += ' . ' + dupes.length + ' duplicados gestionados';
   tt('&#10003; ' + msg);
 }
 
@@ -1872,7 +1872,7 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 });
 
-// ── EXPORT EXCEL ──────────────────────────────
+// -- EXPORT EXCEL ------------------------------
 function exportExcel(){
   var mos=numMeses();
   var period=(FMde===FMha?MF[FMde]:MN[FMde]+'-'+MN[FMha])+'-'+FY;
@@ -1921,11 +1921,11 @@ function exportExcel(){
   tt('Exportado: ATP_costes_'+period+'.csv');
 }
 
-// ── MODAL HELPERS ─────────────────────────────
+// -- MODAL HELPERS -----------------------------
 function om(el){if(typeof el==='string')el=document.getElementById(el);el.className='mo on';}
 function cm(el){if(typeof el==='string')el=document.getElementById(el);el.className='mo';}
 
-// ── TOAST ─────────────────────────────────────
+// -- TOAST -------------------------------------
 var _tt;
 function tt(msg){
   clearTimeout(_tt);
@@ -1935,9 +1935,9 @@ function tt(msg){
 }
 
 
-// ═══════════════════════════════════════
+// =======================================
 // DRILL-DOWN: movimientos de una partida
-// ═══════════════════════════════════════
+// =======================================
 function toggleDrill(budId){
   var bLine=BLINES.find(function(x){return x.id===budId;});
   if(!bLine)return;
@@ -1993,7 +1993,7 @@ function toggleDrill(budId){
 
   el.innerHTML='<div class="drill-panel" style="grid-column:1/-1">'+
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'+
-      '<span style="font-size:8px;font-family:monospace;color:var(--tx3);letter-spacing:1px">'+matched.length+' MOVIMIENTOS · TOTAL &#8364;'+fmt(total)+'</span>'+
+      '<span style="font-size:8px;font-family:monospace;color:var(--tx3);letter-spacing:1px">'+matched.length+' MOVIMIENTOS . TOTAL &#8364;'+fmt(total)+'</span>'+
       '<span style="font-size:8px;color:var(--tx2)">Cambia la categoria si esta mal asignado</span>'+
     '</div>'+
     rows+
@@ -2007,7 +2007,7 @@ function changeTxCat(sel, txIdx){
   var oldCat=TX[txIdx].c;
   TX[txIdx].c=newCat;
 
-  // Full global refresh — order matters
+  // Full global refresh - order matters
   rebuildMO();saveState();        // 1. Recalc monthly totals from TX
   renderAll();        // 2. Dashboard KPIs, charts, donut
   renderPresupuesto(); // 3. Budget table with new real amounts
@@ -2111,9 +2111,9 @@ function buildBlineOpts(selectedId){
   return result;
 }
 
-// ═══════════════════════════════════
+// ===================================
 // GASTO MANUAL
-// ═══════════════════════════════════
+// ===================================
 function populateManualBline(){
   var sel = document.getElementById('mBline');
   if(!sel) return;
@@ -2168,9 +2168,9 @@ function saveManualGasto(){
   tt('&#10003; '+con+' &#8364;'+imp.toFixed(2)+' registrado en '+targetLine.nom);
 }
 
-// ═══════════════════════════════════
+// ===================================
 // EDITAR / ELIMINAR MOVIMIENTO
-// ═══════════════════════════════════
+// ===================================
 function editDrillTx(txIdx){
   var t = TX[txIdx]; if(!t) return;
   document.getElementById('etIdx').value = txIdx;
@@ -2270,9 +2270,9 @@ function showInfo(key){
   if(el)el.style.display=el.style.display==='none'?'block':'none';
 }
 
-// ═══════════════════════════════════════
+// =======================================
 // MOVIMIENTOS SIN ASIGNAR A PRESUPUESTO
-// ═══════════════════════════════════════
+// =======================================
 function renderUnmatched(){
   var txns=ftx();
   var parentLines = BLINES.filter(function(b){ return b.parent === 0; });
@@ -2291,7 +2291,7 @@ function renderUnmatched(){
   }
   
   card.style.display='block';
-  count.textContent=unmatched.length+' sin asignar · &#8364;'+fmt(unmatched.reduce(function(s,t){return s+t.i;},0));
+  count.textContent=unmatched.length+' sin asignar . &#8364;'+fmt(unmatched.reduce(function(s,t){return s+t.i;},0));
 
   // Group by description similarity to avoid duplicates
     var catOpts2=Object.keys(CATS).filter(function(c){return c!=='transferencia';}).map(function(c){
@@ -2340,9 +2340,9 @@ function quickAssign(desc, cat){
   tt('Sugiero la clave "'+firstWord+'" - ajusta y guarda');
 }
 
-// ═══════════════════════════════════
+// ===================================
 // PERSISTENCIA
-// ═══════════════════════════════════
+// ===================================
 function saveState(){
   try{
     var state={
@@ -2442,9 +2442,9 @@ document.addEventListener('DOMContentLoaded',function(){
   renderTicketList();
 });
 
-// ═══════════════════════════════════════
+// =======================================
 // THEME TOGGLE
-// ═══════════════════════════════════════
+// =======================================
 var isDark=true;
 function toggleTheme(){
   isDark=!isDark;
@@ -2452,9 +2452,9 @@ function toggleTheme(){
   document.getElementById('themeBtn').innerHTML=isDark?'&#9790; Oscuro':'&#9728; Claro';
 }
 
-// ═══════════════════════════════════════
+// =======================================
 // NAVIGATION - extend gv for new views
-// ═══════════════════════════════════════
+// =======================================
 var _origGv=gv;
 gv=function(n){
   for(var i=0;i<9;i++){
@@ -2466,14 +2466,14 @@ gv=function(n){
   if(n===2){renderMov();}
   if(n===3){renderBancos();}
   if(n===5){renderAnnuals();}
-  if(n===6){renderTips();}
+  if(n===6){renderTips();renderAnalisis();renderSimLines();}
   if(n===4){populateManualBline();}
   if(n===7){renderAnalisis();}
 };
 
-// ═══════════════════════════════════════
+// =======================================
 // TICKET / FOTO / TEXTO LIBRE
-// ═══════════════════════════════════════
+// =======================================
 var tickets=[];
 var ticketImg=null;
 
@@ -2519,7 +2519,7 @@ function analyzeText(){
 function parseTextGasto(txt){
   var lower = txt.toLowerCase();
   // Extract amount - find first number
-  var impMatch = lower.match(/(\d+[.,]?\d*)\s*(euros?|eur|e|€)?/);
+  var impMatch = lower.match(/(\d+[.,]?\d*)\s*(euros?|eur|e|&#8364;)?/);
   var importe = impMatch ? parseFloat(impMatch[1].replace(',','.')) : 0;
   // Extract month
   var months = {enero:1,febrero:2,marzo:3,abril:4,mayo:5,junio:6,julio:7,agosto:8,septiembre:9,octubre:10,noviembre:11,diciembre:12};
@@ -2532,7 +2532,7 @@ function parseTextGasto(txt){
   else if(lower.indexOf('unicaja')>=0) banco='unicaja';
   else if(lower.indexOf('revolut')>=0) banco='revolut';
   // Extract concept - first meaningful words before the number
-  var concepto = txt.replace(/\d+[.,]?\d*/,'').replace(/euros?|eur|€/gi,'').replace(/bbva|unicaja|revolut|efectivo/gi,'');
+  var concepto = txt.replace(/\d+[.,]?\d*/,'').replace(/euros?|eur|&#8364;/gi,'').replace(/bbva|unicaja|revolut|efectivo/gi,'');
   Object.keys(months).forEach(function(m){ concepto = concepto.replace(new RegExp(m,'gi'),''); });
   concepto = concepto.replace(/\s+/g,' ').trim() || 'Gasto manual';
   // Detect category
@@ -2674,17 +2674,29 @@ function showBigImg(i){
   document.body.appendChild(overlay);
 }
 
-// ═══════════════════════════════════════
+// =======================================
 // ANALISIS: PROYECCION, TENDENCIA, ALERTAS, SIMULADOR
-// ═══════════════════════════════════════
+// =======================================
 function renderAnalisis(){
-  renderSimLines();
-  renderSavGoal();
-  renderEmerg();
-  renderSim();
-  renderProjection();
-  renderTrends();
-  renderAlerts();
+  try{ renderSimLines(); }catch(e){ console.log('simLines:'+e); }
+  try{ renderSavGoal(); }catch(e){ console.log('savGoal:'+e); }
+  try{ renderEmerg(); }catch(e){ console.log('emerg:'+e); }
+  try{ renderSim(); }catch(e){ console.log('sim:'+e); }
+  try{ renderProjection(); }catch(e){
+    console.log('proj:'+e);
+    var el=document.getElementById('projGrid');
+    if(el) el.innerHTML='<div style="color:var(--rd);font-size:10px;padding:10px">Error: '+e.message+'</div>';
+  }
+  try{ renderTrends(); }catch(e){
+    console.log('trend:'+e);
+    var el2=document.getElementById('trendGrid');
+    if(el2) el2.innerHTML='<div style="color:var(--rd);font-size:10px;padding:10px">Error: '+e.message+'</div>';
+  }
+  try{ renderAlerts(); }catch(e){
+    console.log('alert:'+e);
+    var el3=document.getElementById('alertGrid');
+    if(el3) el3.innerHTML='<div style="color:var(--rd);font-size:10px;padding:10px">Error: '+e.message+'</div>';
+  }
 }
 
 // OBJETIVO DE AHORRO
@@ -2787,7 +2799,14 @@ function renderSim(){
 function renderProjection(){
   var ct=fCats();
   var mos=numMeses();
+  var txCount=ftx().length;
   var cats=Object.keys(ct).filter(function(c){return ct[c]>0;}).sort(function(a,b){return ct[b]-ct[a];}).slice(0,8);
+  // Debug: if no data show message
+  if(txCount===0){
+    var el=document.getElementById('projGrid');
+    if(el) el.innerHTML='<div style="color:var(--tx2);font-size:10px;padding:12px;text-align:center">Sin datos para el periodo seleccionado. Pulsa Filtrar primero.</div>';
+    return;
+  }
   var inc=totalIngresos();
   var incAnual=(mos>0?inc/mos:inc)*12;
   var totalReal=ftx().reduce(function(s,t){return s+t.i;},0);
@@ -2798,7 +2817,7 @@ function renderProjection(){
   var html='<div style="background:var(--s2);border-radius:9px;padding:12px;margin-bottom:10px;display:flex;gap:16px;flex-wrap:wrap">'+
     '<div><div style="font-size:8px;color:var(--tx3);font-family:monospace;letter-spacing:1px">GASTO PROYECTADO</div><div style="font-family:Georgia,serif;font-size:20px;color:var(--rd)">&#8364;'+fmt(proj12)+'</div></div>'+
     '<div><div style="font-size:8px;color:var(--tx3);font-family:monospace;letter-spacing:1px">INGRESOS ANUALES</div><div style="font-family:Georgia,serif;font-size:20px;color:var(--gr)">&#8364;'+fmt(incAnual)+'</div></div>'+
-    '<div><div style="font-size:8px;color:var(--tx3);font-family:monospace;letter-spacing:1px">BALANCE AÑO</div><div style="font-family:Georgia,serif;font-size:20px;color:'+(projBal>=0?'var(--ac)':'var(--rd)')+'">&#8364;'+fmt(projBal)+'</div></div>'+
+    '<div><div style="font-size:8px;color:var(--tx3);font-family:monospace;letter-spacing:1px">BALANCE ANO</div><div style="font-family:Georgia,serif;font-size:20px;color:'+(projBal>=0?'var(--ac)':'var(--rd)')+'">&#8364;'+fmt(projBal)+'</div></div>'+
   '</div>';
 
   html+=cats.map(function(cat){
@@ -2816,7 +2835,14 @@ function renderProjection(){
       '<div class="proj-bar"><div class="proj-fill" style="width:'+(pct||50)+'%;background:'+co.c+'"></div></div>'+
     '</div>';
   }).join('');
-  document.getElementById('projGrid').innerHTML=html;
+  var projEl = document.getElementById('projGrid');
+  if(projEl){
+    if(!html || html.length < 10){
+      projEl.innerHTML='<div style="color:var(--tx2);font-size:10px;padding:12px;text-align:center">Aplica un filtro y pulsa Filtrar para ver la proyeccion</div>';
+    } else {
+      projEl.innerHTML=html;
+    }
+  }
 }
 
 // TENDENCIAS MES A MES
@@ -2842,8 +2868,11 @@ function renderTrends(){
       '<div style="font-family:monospace;font-size:10px;font-weight:600;color:'+clr+';width:60px;text-align:right">'+(diff>0?'+':'')+fmt(diff)+'</div>'+
     '</div>';
   });
-  document.getElementById('trendGrid').innerHTML=hasTrend?html:
-    '<div style="font-size:10px;color:var(--tx3);text-align:center;padding:14px">Selecciona al menos 2 meses para ver tendencias</div>';
+  var trendEl = document.getElementById('trendGrid');
+  if(trendEl){
+    trendEl.innerHTML = hasTrend ? html :
+      '<div style="font-size:10px;color:var(--tx2);text-align:center;padding:14px">Selecciona un rango de al menos 2 meses en el filtro para ver tendencias</div>';
+  }
 }
 
 // ALERTAS DE DESVIACION
@@ -2872,16 +2901,19 @@ function renderAlerts(){
     var over=a.pct>100;
     var barPct=Math.min(100,a.pct);
     var clr=over?'var(--rd)':'var(--or)';
+    var projAnualA=Math.round((a.real/mos)*12);
+    var budgAnualA=a.budgMes*12;
     return '<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(37,40,54,.4)">'+
       '<div style="flex:1;min-width:0">'+
         '<div style="font-size:11px;font-weight:600;margin-bottom:5px">'+a.name+'</div>'+
         '<div style="position:relative;height:6px;background:var(--bd);border-radius:3px;overflow:hidden">'+
           '<div style="position:absolute;top:0;left:0;height:100%;width:'+barPct+'%;background:'+clr+';border-radius:3px;transition:width .5s"></div>'+
         '</div>'+
-        '<div style="display:flex;justify-content:space-between;margin-top:3px">'+
-          '<span style="font-size:8px;color:var(--tx3)">Presup. '+a.mos+' mes'+(a.mos>1?'es':'')+': &#8364;'+fmt(a.budgTotal)+' (&#8364;'+fmt(a.budgMes)+'/mes)</span>'+
-          '<span style="font-size:8px;color:'+clr+'">Real: &#8364;'+fmt(a.real)+'</span>'+
+        '<div style="display:flex;justify-content:space-between;margin-top:3px;flex-wrap:wrap;gap:2px">'+
+          '<span style="font-size:8px;color:var(--tx3)">Periodo '+a.mos+' mes'+(a.mos>1?'es':'')+': &#8364;'+fmt(a.budgTotal)+' (&#8364;'+fmt(a.budgMes)+'/mes)</span>'+
+          '<span style="font-size:8px;color:'+clr+'">Real periodo: &#8364;'+fmt(a.real)+'</span>'+
         '</div>'+
+        '<div style="font-size:8px;color:var(--tx3);margin-top:2px">Proyeccion anual: &#8364;'+fmt(projAnualA)+' vs presup. &#8364;'+fmt(budgAnualA)+'/ano</div>'+
       '</div>'+
       '<div style="flex-shrink:0;text-align:right">'+
         '<div style="font-size:10px;font-family:monospace;font-weight:700;color:'+clr+'">'+a.pct+'%</div>'+
@@ -2892,20 +2924,35 @@ function renderAlerts(){
     '</div>';
   }).join('');
 
-  var okHtml=ok.length?'<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--bd)">'+
-    '<div style="font-size:8px;font-family:monospace;color:var(--tx3);letter-spacing:1px;margin-bottom:6px">DENTRO DEL PRESUPUESTO ('+ok.length+')</div>'+
+  var okHtml=ok.length?'<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--bd)">'+
+    '<div style="font-size:8px;font-family:monospace;color:var(--tx3);letter-spacing:1px;margin-bottom:8px">DENTRO DEL PRESUPUESTO ('+ok.length+')</div>'+
     ok.map(function(a){
-      return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:10px">'+
-        '<div style="flex:1">'+a.name+'</div>'+
-        '<div style="font-family:monospace;font-size:9px;color:var(--tx2)">&#8364;'+fmt(a.real)+' / &#8364;'+fmt(a.budgTotal)+'</div>'+
-        '<div style="font-family:monospace;font-size:9px;color:var(--gr)">'+a.pct+'%</div>'+
+      var barPctOk=Math.min(100,a.pct);
+      var clrOk=a.pct>=80?'var(--or)':a.pct>=50?'var(--ac2)':'var(--gr)';
+      var projAnual=Math.round((a.real/mos)*12);
+      return '<div style="margin-bottom:10px">'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">'+
+          '<span style="font-size:11px;font-weight:600">'+a.name+'</span>'+
+          '<span style="font-family:monospace;font-size:10px;color:'+clrOk+'">'+a.pct+'%</span>'+
+        '</div>'+
+        '<div style="height:5px;background:var(--bd);border-radius:3px;overflow:hidden;margin-bottom:3px">'+
+          '<div style="height:100%;width:'+barPctOk+'%;background:'+clrOk+';border-radius:3px"></div>'+
+        '</div>'+
+        '<div style="display:flex;justify-content:space-between">'+
+          '<span style="font-size:9px;color:var(--tx2)">&#8364;'+fmt(a.real)+' / &#8364;'+fmt(a.budgTotal)+'</span>'+
+          '<span style="font-size:9px;color:var(--tx3)">Proy. &#8364;'+fmt(projAnual)+'/ano</span>'+
+        '</div>'+
       '</div>';
     }).join('')+'</div>':'';
 
-  document.getElementById('alertGrid').innerHTML=
-    (alerts.length===0?'<div style="font-size:10px;color:var(--gr);text-align:center;padding:10px">&#10003; Todo dentro del presupuesto para este periodo</div>':alertsHtml)+
-    okHtml;
+  var alertEl = document.getElementById('alertGrid');
+  if(alertEl){
+    alertEl.innerHTML =
+      (alerts.length===0 ? '<div style="font-size:10px;color:var(--gr);text-align:center;padding:10px">OK Todo dentro del presupuesto para este periodo</div>' : alertsHtml) +
+      okHtml;
+  }
 }
+
 
 </script>
 </body>
