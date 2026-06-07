@@ -12,16 +12,16 @@
 <!-- Touch icon (aparece en pantalla inicio) -->
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230a0b0f'/%3E%3Ctext x='90' y='68' text-anchor='middle' font-family='Georgia,serif' font-size='52' font-style='italic' fill='%23e8ff47'%3EATP%3C/text%3E%3Ctext x='90' y='112' text-anchor='middle' font-family='Georgia,serif' font-size='18' fill='%238890a8'%3EControl%3C/text%3E%3Ctext x='90' y='134' text-anchor='middle' font-family='Georgia,serif' font-size='18' fill='%238890a8'%3Ede Costes%3C/text%3E%3C/svg%3E">
 <title>ATP Control de Costes 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Epilogue:wght@400;500;700;900&display=swap" rel="stylesheet">
+
 <style>
 :root{--bg:#0a0b0f;--s1:#12141a;--s2:#1a1d26;--bd:#252836;--ac:#e8ff47;--ac2:#47c8ff;--ac4:#b47fff;--tx:#f0f2ff;--tx2:#8890a8;--tx3:#555d75;--gr:#3dffa0;--rd:#ff4d6d;--or:#ffaa47}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Epilogue,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;min-height:-webkit-fill-available;overflow-x:hidden;font-size:14px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;min-height:-webkit-fill-available;overflow-x:hidden;font-size:14px}
 .sb{padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(12px,env(safe-area-inset-bottom))}
 .main{padding-top:max(16px,calc(env(safe-area-inset-top) + 8px));padding-bottom:max(16px,env(safe-area-inset-bottom));padding-left:max(18px,env(safe-area-inset-right))}
 /* SIDEBAR */
 .sb{position:fixed;left:0;top:0;bottom:0;width:58px;background:var(--s1);border-right:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:3px;z-index:100}
-.logo{font-family:"DM Serif Display",serif;font-size:14px;color:var(--ac);margin-bottom:12px;writing-mode:vertical-rl;transform:rotate(180deg);text-transform:uppercase}
+.logo{font-family:Georgia,'Times New Roman',serif;font-size:14px;color:var(--ac);margin-bottom:12px;writing-mode:vertical-rl;transform:rotate(180deg);text-transform:uppercase}
 .nb{width:36px;height:36px;border-radius:8px;border:none;background:transparent;color:var(--tx3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;position:relative;flex-shrink:0;transition:all .2s}
 .nb:hover,.nb.on{background:var(--s2);color:var(--ac)}
 .nb.on::before{content:"";position:absolute;left:-1px;width:3px;height:14px;background:var(--ac);border-radius:0 2px 2px 0}
@@ -30,35 +30,35 @@ body{font-family:Epilogue,sans-serif;background:var(--bg);color:var(--tx);min-he
 .main{margin-left:58px;padding:16px 18px;min-height:100vh}
 /* HEADER */
 .hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:8px;flex-wrap:wrap}
-.hdr h1{font-family:"DM Serif Display",serif;font-size:20px;font-weight:400}
+.hdr h1{font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:400}
 .hdr h1 span{color:var(--ac);font-style:italic}
-.hdr p{color:var(--tx2);font-size:9px;margin-top:2px;font-family:"DM Mono",monospace}
+.hdr p{color:var(--tx2);font-size:9px;margin-top:2px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace}
 .hdr-r{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
 /* FILTER BAR */
 .fbar{display:flex;align-items:center;gap:7px;background:var(--s1);border:1px solid var(--bd);border-radius:11px;padding:8px 12px;margin-bottom:12px;flex-wrap:wrap}
-.fbar label{font-size:8px;font-family:"DM Mono",monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;white-space:nowrap}
-.fsel{background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:5px 9px;border-radius:7px;font-family:Epilogue,sans-serif;font-size:11px;cursor:pointer;outline:none}
-.fpill{padding:4px 12px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--tx2);font-family:Epilogue,sans-serif;font-size:11px;cursor:pointer;transition:all .2s}
+.fbar label{font-size:8px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;white-space:nowrap}
+.fsel{background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:5px 9px;border-radius:7px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:11px;cursor:pointer;outline:none}
+.fpill{padding:4px 12px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--tx2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:11px;cursor:pointer;transition:all .2s}
 .fpill.on{background:var(--ac);color:#0a0b0f;border-color:var(--ac);font-weight:700}
 .fsep{width:1px;height:16px;background:var(--bd);flex-shrink:0}
-.fbadge{font-size:8px;font-family:"DM Mono",monospace;padding:2px 7px;border-radius:20px;background:rgba(232,255,71,.1);color:var(--ac);border:1px solid rgba(232,255,71,.2);white-space:nowrap}
-.btn-filter{background:var(--ac);color:#0a0b0f;border:none;padding:5px 14px;border-radius:8px;font-family:Epilogue,sans-serif;font-weight:700;font-size:11px;cursor:pointer;transition:transform .1s}
+.fbadge{font-size:8px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;padding:2px 7px;border-radius:20px;background:rgba(232,255,71,.1);color:var(--ac);border:1px solid rgba(232,255,71,.2);white-space:nowrap}
+.btn-filter{background:var(--ac);color:#0a0b0f;border:none;padding:5px 14px;border-radius:8px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-weight:700;font-size:11px;cursor:pointer;transition:transform .1s}
 .btn-filter:active{transform:scale(.96)}
 /* TABS */
 .tabs{display:flex;gap:2px;background:var(--s1);border-radius:10px;padding:3px;margin-bottom:12px;border:1px solid var(--bd);flex-wrap:wrap}
-.tab{padding:5px 11px;border-radius:7px;border:none;background:transparent;color:var(--tx2);font-family:Epilogue,sans-serif;font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .2s}
+.tab{padding:5px 11px;border-radius:7px;border:none;background:transparent;color:var(--tx2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .2s}
 .tab.on{background:var(--s2);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.4)}
 .view{display:none}.view.on{display:block}
 /* CARDS */
 .card{background:var(--s1);border:1px solid var(--bd);border-radius:13px;padding:14px;margin-bottom:10px}
-.ctitle{font-size:9px;font-family:"DM Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--tx2);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.ctitle{font-size:9px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;letter-spacing:1px;text-transform:uppercase;color:var(--tx2);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
 /* KPI GRID */
 .kg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
 .kc{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:13px;transition:border-color .2s}
 .kc:hover{border-color:var(--tx3)}
-.klbl{font-size:8px;font-family:"DM Mono",monospace;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx3);margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.klbl{font-size:8px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx3);margin-bottom:5px;display:flex;align-items:center;gap:4px}
 .kdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-.kval{font-family:"DM Serif Display",serif;font-size:20px;letter-spacing:-1px;line-height:1;margin-bottom:3px}
+.kval{font-family:Georgia,'Times New Roman',serif;font-size:20px;letter-spacing:-1px;line-height:1;margin-bottom:3px}
 .kval .cur{font-size:11px;opacity:.6}
 .ksub{font-size:9px;color:var(--tx2)}
 .kbar{margin-top:7px;height:3px;background:var(--bd);border-radius:2px;overflow:hidden}
@@ -66,19 +66,19 @@ body{font-family:Epilogue,sans-serif;background:var(--bg);color:var(--tx);min-he
 /* ACUM ROW */
 .arow{display:flex;gap:14px;flex-wrap:wrap;padding:9px 0;border-bottom:1px solid var(--bd);margin-bottom:10px}
 .ait{display:flex;flex-direction:column;gap:1px}
-.albl{font-size:7px;font-family:"DM Mono",monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase}
-.aval{font-family:"DM Serif Display",serif;font-size:16px;letter-spacing:-.5px}
+.albl{font-size:7px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase}
+.aval{font-family:Georgia,'Times New Roman',serif;font-size:16px;letter-spacing:-.5px}
 /* TABLE */
 .tbl{width:100%;border-collapse:collapse}
-.tbl th{font-size:7px;font-family:"DM Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);padding:0 0 7px;text-align:left;border-bottom:1px solid var(--bd)}
+.tbl th{font-size:7px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);padding:0 0 7px;text-align:left;border-bottom:1px solid var(--bd)}
 .tbl td{padding:6px 0;border-bottom:1px solid rgba(37,40,54,.5);font-size:10px;vertical-align:middle}
 .tbl tr:last-child td{border-bottom:none}
 .tbl tr:hover td{background:rgba(255,255,255,.01)}
 .cb{display:inline-flex;align-items:center;gap:3px;background:var(--s2);border-radius:4px;padding:2px 5px;font-size:8px;color:var(--tx2)}
 .cdot{width:4px;height:4px;border-radius:50%;flex-shrink:0}
-.mono{font-family:"DM Mono",monospace;font-size:9px;font-weight:500}
+.mono{font-family:'SF Mono',SFMono-Regular,Consolas,monospace;font-size:9px;font-weight:500}
 .neg{color:var(--rd)}.pos{color:var(--gr)}
-.bb{display:inline-flex;padding:1px 4px;border-radius:3px;font-size:7px;font-family:"DM Mono",monospace;font-weight:600}
+.bb{display:inline-flex;padding:1px 4px;border-radius:3px;font-size:7px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;font-weight:600}
 .b-bbva{background:rgba(0,75,155,.2);color:#5599ee;border:1px solid rgba(0,75,155,.3)}
 .b-unicaja{background:rgba(0,168,80,.15);color:#4dcc80;border:1px solid rgba(0,168,80,.25)}
 .b-revolut{background:rgba(108,71,255,.2);color:#a07fff;border:1px solid rgba(108,71,255,.3)}
@@ -89,7 +89,7 @@ body{font-family:Epilogue,sans-serif;background:var(--bg);color:var(--tx);min-he
 .mb{width:7px;border-radius:2px 2px 0 0;min-height:2px;cursor:pointer;transition:opacity .2s}
 .mb.inc{background:var(--gr);opacity:.45}.mb.exp{background:var(--rd);opacity:.45}
 .mb.hl{opacity:.95}
-.mblbl{font-size:7px;color:var(--tx3);font-family:"DM Mono",monospace}
+.mblbl{font-size:7px;color:var(--tx3);font-family:'SF Mono',SFMono-Regular,Consolas,monospace}
 /* DONUT */
 .dw{display:flex;flex-direction:column;align-items:center;gap:10px}
 .leg{width:100%}
@@ -99,23 +99,23 @@ body{font-family:Epilogue,sans-serif;background:var(--bg);color:var(--tx);min-he
 .lc{width:7px;height:7px;border-radius:2px;flex-shrink:0}
 /* PRESUPUESTO */
 .bud-section{margin-bottom:14px}
-.bud-section-title{font-size:9px;font-family:"DM Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--ac);padding:6px 0;border-bottom:1px solid var(--bd);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.bud-section-title{font-size:9px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;letter-spacing:1px;text-transform:uppercase;color:var(--ac);padding:6px 0;border-bottom:1px solid var(--bd);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
 .bud-row{display:grid;grid-template-columns:1fr 80px 90px 90px 70px 28px;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid rgba(37,40,54,.35)}
 .bud-row:last-child{border-bottom:none}
 .bud-row.sub{padding-left:14px;opacity:.85}
 .bud-row.sub .bud-name{font-size:10px;color:var(--tx2)}
 .bud-name{font-size:11px;font-weight:500}
-.bud-inp{background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:4px 7px;color:var(--tx);font-family:"DM Mono",monospace;font-size:11px;width:100%;outline:none;text-align:right}
+.bud-inp{background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:4px 7px;color:var(--tx);font-family:'SF Mono',SFMono-Regular,Consolas,monospace;font-size:11px;width:100%;outline:none;text-align:right}
 .bud-inp:focus{border-color:var(--ac)}
-.bud-real{font-family:"DM Mono",monospace;font-size:10px;text-align:right;color:var(--tx2)}
-.bud-diff{font-family:"DM Mono",monospace;font-size:9px;text-align:right;padding:2px 4px;border-radius:4px}
+.bud-real{font-family:'SF Mono',SFMono-Regular,Consolas,monospace;font-size:10px;text-align:right;color:var(--tx2)}
+.bud-diff{font-family:'SF Mono',SFMono-Regular,Consolas,monospace;font-size:9px;text-align:right;padding:2px 4px;border-radius:4px}
 .bud-hdr{display:grid;grid-template-columns:1fr 80px 90px 90px 70px 28px;gap:6px;padding:0 0 7px;border-bottom:1px solid var(--bd);margin-bottom:4px}
-.bud-hdr span{font-size:7px;font-family:"DM Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);text-align:right}
+.bud-hdr span{font-size:7px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;letter-spacing:1px;text-transform:uppercase;color:var(--tx3);text-align:right}
 .bud-hdr span:first-child{text-align:left}
 .inc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
 .inc-card{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px}
-.inc-label{font-size:8px;font-family:"DM Mono",monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:5px}
-.inc-inp{background:transparent;border:none;border-bottom:1px solid var(--bd);color:var(--ac);font-family:"DM Serif Display",serif;font-size:20px;width:100%;outline:none;padding:2px 0;letter-spacing:-1px}
+.inc-label{font-size:8px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:5px}
+.inc-inp{background:transparent;border:none;border-bottom:1px solid var(--bd);color:var(--ac);font-family:Georgia,'Times New Roman',serif;font-size:20px;width:100%;outline:none;padding:2px 0;letter-spacing:-1px}
 .inc-inp:focus{border-color:var(--ac)}
 .inc-note{font-size:9px;color:var(--tx3);margin-top:4px}
 .budget-total-bar{background:var(--s2);border-radius:10px;padding:12px;border:1px solid var(--bd);margin-bottom:12px}
@@ -133,14 +133,14 @@ body{font-family:Epilogue,sans-serif;background:var(--bg);color:var(--tx);min-he
 .bvr-bg{position:absolute;top:0;left:0;height:100%;opacity:.18}
 .bvr-fill{position:absolute;top:2px;left:0;height:9px;border-radius:2px;opacity:.9;transition:width .5s}
 .bvr-hdr{display:grid;grid-template-columns:110px 1fr 55px 55px 48px;gap:7px;padding:0 0 6px;border-bottom:1px solid var(--bd);margin-bottom:2px}
-.bvr-hdr span{font-size:7px;font-family:"DM Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--tx3)}
+.bvr-hdr span{font-size:7px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;letter-spacing:1px;text-transform:uppercase;color:var(--tx3)}
 .bvr-hdr span:nth-child(n+3){text-align:right}
 /* ANNUAL */
 .agrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .ann-it{background:var(--s2);border-radius:9px;padding:10px;display:flex;align-items:center;gap:8px;border:1px solid var(--bd);cursor:pointer;transition:border-color .2s}
 .ann-it:hover{border-color:var(--tx3)}
-.ann-mo{min-width:32px;height:32px;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:7px;font-family:"DM Mono",monospace;flex-shrink:0;padding:0 4px}
-.ann-mo .mn{font-family:"DM Serif Display",serif;font-size:12px;line-height:1}
+.ann-mo{min-width:32px;height:32px;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:7px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;flex-shrink:0;padding:0 4px}
+.ann-mo .mn{font-family:Georgia,'Times New Roman',serif;font-size:12px;line-height:1}
 .ann-in{flex:1;min-width:0}
 .ann-nm{font-size:10px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ann-mt{font-size:8px;color:var(--tx2);margin-top:2px;display:flex;gap:4px;align-items:center;flex-wrap:wrap}
@@ -153,14 +153,14 @@ body{font-family:Epilogue,sans-serif;background:var(--bg);color:var(--tx);min-he
 .tb{flex:1}
 .tt2{font-size:11px;font-weight:700;margin-bottom:2px}
 .td2{font-size:10px;color:var(--tx2);line-height:1.5}
-.tsav{margin-top:5px;font-family:"DM Mono",monospace;font-size:9px;color:var(--gr);background:rgba(61,255,160,.07);padding:2px 7px;border-radius:4px;display:inline-block}
+.tsav{margin-top:5px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;font-size:9px;color:var(--gr);background:rgba(61,255,160,.07);padding:2px 7px;border-radius:4px;display:inline-block}
 .tacts{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
-.tbtn{font-size:9px;padding:2px 7px;border-radius:5px;border:1px solid var(--bd);background:transparent;color:var(--tx2);cursor:pointer;font-family:Epilogue,sans-serif;transition:all .2s}
+.tbtn{font-size:9px;padding:2px 7px;border-radius:5px;border:1px solid var(--bd);background:transparent;color:var(--tx2);cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;transition:all .2s}
 .tbtn:hover{border-color:var(--ac);color:var(--ac)}
 .tbtn.done{background:rgba(61,255,160,.1);border-color:var(--gr);color:var(--gr)}
 /* IMPORT */
 .bank-tabs{display:flex;gap:5px;margin-bottom:10px}
-.btab{flex:1;padding:6px;border-radius:7px;border:1px solid var(--bd);background:var(--s2);color:var(--tx2);font-family:Epilogue,sans-serif;font-size:10px;cursor:pointer;text-align:center;font-weight:600;transition:all .2s}
+.btab{flex:1;padding:6px;border-radius:7px;border:1px solid var(--bd);background:var(--s2);color:var(--tx2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:10px;cursor:pointer;text-align:center;font-weight:600;transition:all .2s}
 .btab.on{border-color:var(--ac);color:var(--ac);background:rgba(232,255,71,.06)}
 .drop-zone{border:2px dashed var(--bd);border-radius:9px;padding:20px;text-align:center;cursor:pointer;position:relative;transition:all .2s}
 .drop-zone:hover,.drop-zone.drag{border-color:var(--ac);background:rgba(232,255,71,.03)}
@@ -168,27 +168,27 @@ body{font-family:Epilogue,sans-serif;background:var(--bg);color:var(--tx);min-he
 .imp-row{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid rgba(37,40,54,.4);font-size:9px}
 .imp-row:last-child{border-bottom:none}
 .imp-check{width:13px;height:13px;accent-color:var(--ac);cursor:pointer;flex-shrink:0}
-.imp-cat{background:var(--s2);border:1px solid var(--bd);border-radius:4px;padding:1px 4px;color:var(--tx);font-size:8px;outline:none;font-family:"DM Mono",monospace}
+.imp-cat{background:var(--s2);border:1px solid var(--bd);border-radius:4px;padding:1px 4px;color:var(--tx);font-size:8px;outline:none;font-family:'SF Mono',SFMono-Regular,Consolas,monospace}
 /* MODAL */
 .mo{position:fixed;inset:0;background:rgba(10,11,15,.9);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .2s}
 .mo.on{opacity:1;pointer-events:all}
 .mbox{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:20px;width:420px;max-width:95vw;transform:translateY(10px);transition:transform .2s;max-height:88vh;overflow-y:auto}
 .mo.on .mbox{transform:translateY(0)}
-.mtit{font-family:"DM Serif Display",serif;font-size:17px;margin-bottom:3px}
+.mtit{font-family:Georgia,'Times New Roman',serif;font-size:17px;margin-bottom:3px}
 .msub{font-size:9px;color:var(--tx2);margin-bottom:14px}
 .fl{margin-bottom:10px}
-.fl label{font-size:8px;font-family:"DM Mono",monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:3px;display:block}
-.fi,.fs{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:7px 10px;color:var(--tx);font-family:Epilogue,sans-serif;font-size:12px;outline:none;appearance:none}
+.fl label{font-size:8px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:3px;display:block}
+.fi,.fs{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:7px 10px;color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:12px;outline:none;appearance:none}
 .fi:focus,.fs:focus{border-color:var(--ac)}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
 .brow{display:flex;gap:6px;margin-top:12px}
-.bc{flex:1;padding:7px;background:var(--s2);border:1px solid var(--bd);border-radius:7px;color:var(--tx2);font-family:Epilogue,sans-serif;font-size:11px;cursor:pointer}
-.bs{flex:2;padding:7px;background:var(--ac);border:none;border-radius:7px;color:#0a0b0f;font-family:Epilogue,sans-serif;font-size:11px;font-weight:700;cursor:pointer}
-.bdel{flex:1;padding:7px;background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.3);border-radius:7px;color:var(--rd);font-family:Epilogue,sans-serif;font-size:11px;cursor:pointer}
-.bp{background:var(--ac);color:#0a0b0f;border:none;padding:5px 12px;border-radius:7px;font-family:Epilogue,sans-serif;font-weight:700;font-size:10px;cursor:pointer;transition:opacity .2s}
+.bc{flex:1;padding:7px;background:var(--s2);border:1px solid var(--bd);border-radius:7px;color:var(--tx2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:11px;cursor:pointer}
+.bs{flex:2;padding:7px;background:var(--ac);border:none;border-radius:7px;color:#0a0b0f;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:11px;font-weight:700;cursor:pointer}
+.bdel{flex:1;padding:7px;background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.3);border-radius:7px;color:var(--rd);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:11px;cursor:pointer}
+.bp{background:var(--ac);color:#0a0b0f;border:none;padding:5px 12px;border-radius:7px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-weight:700;font-size:10px;cursor:pointer;transition:opacity .2s}
 .bp:hover{opacity:.85}
-.bs2{background:var(--s2);color:var(--tx2);border:1px solid var(--bd);padding:5px 10px;border-radius:7px;font-family:Epilogue,sans-serif;font-size:10px;cursor:pointer;transition:border-color .2s}
+.bs2{background:var(--s2);color:var(--tx2);border:1px solid var(--bd);padding:5px 10px;border-radius:7px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:10px;cursor:pointer;transition:border-color .2s}
 .bs2:hover{border-color:var(--tx3);color:var(--tx)}
 /* TOAST */
 .toast{position:fixed;bottom:16px;right:16px;background:var(--s1);border:1px solid var(--bd);border-radius:9px;padding:8px 13px;font-size:10px;z-index:300;transform:translateY(60px);transition:transform .3s;display:flex;align-items:center;gap:6px;max-width:260px}
@@ -203,7 +203,7 @@ body.light .tab{color:var(--tx2)}
 body.light .tbl td{color:var(--tx)}
 body.light .bud-inp{color:var(--tx)}
 body.light .fi,.light .fs{color:var(--tx)}
-.theme-toggle{background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:4px 10px;font-size:11px;cursor:pointer;color:var(--tx2);font-family:Epilogue,sans-serif;transition:all .2s}
+.theme-toggle{background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:4px 10px;font-size:11px;cursor:pointer;color:var(--tx2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;transition:all .2s}
 
 /* TREND ARROWS */
 .trend-up{color:var(--rd);font-size:10px}
@@ -211,21 +211,21 @@ body.light .fi,.light .fs{color:var(--tx)}
 .trend-eq{color:var(--tx3);font-size:10px}
 
 /* ALERT BADGE */
-.alert-badge{display:inline-flex;align-items:center;gap:3px;background:rgba(255,77,109,.15);color:var(--rd);border:1px solid rgba(255,77,109,.3);border-radius:5px;padding:1px 6px;font-size:8px;font-family:"DM Mono",monospace;font-weight:600}
+.alert-badge{display:inline-flex;align-items:center;gap:3px;background:rgba(255,77,109,.15);color:var(--rd);border:1px solid rgba(255,77,109,.3);border-radius:5px;padding:1px 6px;font-size:8px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;font-weight:600}
 .warn-badge{background:rgba(255,170,71,.15);color:var(--or);border:1px solid rgba(255,170,71,.3)}
 
 /* PROJECTION CARD */
 .proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
 .proj-item{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px}
-.proj-cat{font-size:9px;font-family:"DM Mono",monospace;color:var(--tx3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
-.proj-val{font-family:"DM Serif Display",serif;font-size:18px;letter-spacing:-0.5px;margin-bottom:2px}
+.proj-cat{font-size:9px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;color:var(--tx3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.proj-val{font-family:Georgia,'Times New Roman',serif;font-size:18px;letter-spacing:-0.5px;margin-bottom:2px}
 .proj-bar{height:4px;background:var(--bd);border-radius:2px;overflow:hidden;margin-top:6px}
 .proj-fill{height:100%;border-radius:2px}
 
 /* SIMULATOR */
 .sim-card{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:10px}
 .sim-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
-.sim-inp{background:var(--s1);border:1px solid var(--bd);border-radius:7px;padding:6px 10px;color:var(--tx);font-family:"DM Mono",monospace;font-size:13px;width:100px;outline:none;text-align:right}
+.sim-inp{background:var(--s1);border:1px solid var(--bd);border-radius:7px;padding:6px 10px;color:var(--tx);font-family:'SF Mono',SFMono-Regular,Consolas,monospace;font-size:13px;width:100px;outline:none;text-align:right}
 .sim-result{background:rgba(61,255,160,.07);border:1px solid rgba(61,255,160,.2);border-radius:10px;padding:12px;text-align:center}
 
 /* EMERGENCY FUND */
@@ -246,7 +246,7 @@ body.light .fi,.light .fs{color:var(--tx)}
 .drill-panel{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:10px;margin-top:6px;margin-bottom:4px}
 .drill-row{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid rgba(37,40,54,.4);font-size:10px}
 .drill-row:last-child{border-bottom:none}
-.cat-sel-mini{background:var(--s1);border:1px solid var(--bd);border-radius:5px;padding:2px 5px;color:var(--tx);font-size:8px;outline:none;font-family:'DM Mono',monospace;cursor:pointer}
+.cat-sel-mini{background:var(--s1);border:1px solid var(--bd);border-radius:5px;padding:2px 5px;color:var(--tx);font-size:8px;outline:none;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;cursor:pointer}
 </style>
 </head>
 <body>
@@ -273,6 +273,7 @@ body.light .fi,.light .fs{color:var(--tx)}
   </div>
   <div class="hdr-r">
     <button class="bs2" onclick="gv(4)">Importar mes</button>
+    <button class="bs2" onclick="resetState()" style="font-size:9px;color:var(--rd);border-color:rgba(255,77,109,.3)" title="Borrar todo el historial manual y volver al estado original">&#8635; Reset</button>
     <button class="bp" onclick="exportExcel()">Exportar Excel</button>
     <button class="bp" onclick="openAddG()">+ Gasto</button>
   </div>
@@ -316,9 +317,7 @@ body.light .fi,.light .fs{color:var(--tx)}
     <button class="tab" onclick="gv(3)">Bancos</button>
     <button class="tab" onclick="gv(4)">Importar</button>
     <button class="tab" onclick="gv(5)">Anuales</button>
-    <button class="tab" onclick="gv(6)">Ahorro</button>
-    <button class="tab" onclick="gv(7)">Ticket</button>
-    <button class="tab" onclick="gv(8)">Analisis</button>
+    <button class="tab" onclick="gv(6)">Ahorro / Analisis</button>
   </div>
   <div class="arow" id="acumRow"></div>
   <div class="kg" id="kpiGrid"></div>
@@ -354,9 +353,7 @@ body.light .fi,.light .fs{color:var(--tx)}
     <button class="tab" onclick="gv(3)">Bancos</button>
     <button class="tab" onclick="gv(4)">Importar</button>
     <button class="tab" onclick="gv(5)">Anuales</button>
-    <button class="tab" onclick="gv(6)">Ahorro</button>
-    <button class="tab" onclick="gv(7)">Ticket</button>
-    <button class="tab" onclick="gv(8)">Analisis</button>
+    <button class="tab" onclick="gv(6)">Ahorro / Analisis</button>
   </div>
 
   <!-- Ingresos por mes -->
@@ -367,9 +364,9 @@ body.light .fi,.light .fs{color:var(--tx)}
     </div>
     <div class="inc-grid" id="incGrid"></div>
     <div style="display:flex;gap:16px;padding-top:8px;border-top:1px solid var(--bd);margin-top:4px;flex-wrap:wrap">
-      <div><div class="albl">TOTAL INGRESOS PERIODO</div><div style="font-family:'DM Serif Display',serif;font-size:18px;color:var(--gr)" id="incTotal">&#8364;0</div></div>
-      <div><div class="albl">PRESUPUESTO ASIGNADO</div><div style="font-family:'DM Serif Display',serif;font-size:18px;color:var(--or)" id="budAssigned">&#8364;0</div></div>
-      <div><div class="albl">SIN ASIGNAR</div><div style="font-family:'DM Serif Display',serif;font-size:18px" id="budFree">&#8364;0</div></div>
+      <div><div class="albl">TOTAL INGRESOS PERIODO</div><div style="font-family:Georgia,'Times New Roman',serif;font-size:18px;color:var(--gr)" id="incTotal">&#8364;0</div></div>
+      <div><div class="albl">PRESUPUESTO ASIGNADO</div><div style="font-family:Georgia,'Times New Roman',serif;font-size:18px;color:var(--or)" id="budAssigned">&#8364;0</div></div>
+      <div><div class="albl">SIN ASIGNAR</div><div style="font-family:Georgia,'Times New Roman',serif;font-size:18px" id="budFree">&#8364;0</div></div>
     </div>
   </div>
 
@@ -377,7 +374,7 @@ body.light .fi,.light .fs{color:var(--tx)}
   <div class="budget-total-bar">
     <div class="bt-row">
       <span style="font-size:9px;color:var(--tx2)">Presupuesto usado vs ingresos</span>
-      <span style="font-family:'DM Mono',monospace;font-size:9px" id="budPct">0%</span>
+      <span style="font-family:'SF Mono',SFMono-Regular,Consolas,monospace;font-size:9px" id="budPct">0%</span>
     </div>
     <div class="bt-track"><div class="bt-fill" id="budBar" style="background:var(--ac)"></div></div>
   </div>
@@ -421,9 +418,7 @@ body.light .fi,.light .fs{color:var(--tx)}
     <button class="tab" onclick="gv(3)">Bancos</button>
     <button class="tab" onclick="gv(4)">Importar</button>
     <button class="tab" onclick="gv(5)">Anuales</button>
-    <button class="tab" onclick="gv(6)">Ahorro</button>
-    <button class="tab" onclick="gv(7)">Ticket</button>
-    <button class="tab" onclick="gv(8)">Analisis</button>
+    <button class="tab" onclick="gv(6)">Ahorro / Analisis</button>
   </div>
   <!-- BUSCADOR -->
   <div style="display:flex;gap:7px;margin-bottom:8px;align-items:center">
@@ -434,10 +429,10 @@ body.light .fi,.light .fs{color:var(--tx)}
   </div>
   <!-- FILTROS -->
   <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px;align-items:center">
-    <span style="font-size:8px;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:1px">BANCO:</span>
+    <span style="font-size:8px;color:var(--tx3);font-family:'SF Mono',SFMono-Regular,Consolas,monospace;letter-spacing:1px">BANCO:</span>
     <div id="movBankF" style="display:flex;gap:4px;flex-wrap:wrap"></div>
     <div class="fsep"></div>
-    <span style="font-size:8px;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:1px">CAT:</span>
+    <span style="font-size:8px;color:var(--tx3);font-family:'SF Mono',SFMono-Regular,Consolas,monospace;letter-spacing:1px">CAT:</span>
     <div id="movCatF" style="display:flex;gap:4px;flex-wrap:wrap"></div>
   </div>
   <div class="card">
@@ -458,9 +453,7 @@ body.light .fi,.light .fs{color:var(--tx)}
     <button class="tab on" onclick="gv(3)">Bancos</button>
     <button class="tab" onclick="gv(4)">Importar</button>
     <button class="tab" onclick="gv(5)">Anuales</button>
-    <button class="tab" onclick="gv(6)">Ahorro</button>
-    <button class="tab" onclick="gv(7)">Ticket</button>
-    <button class="tab" onclick="gv(8)">Analisis</button>
+    <button class="tab" onclick="gv(6)">Ahorro / Analisis</button>
   </div>
   <div class="kg" style="grid-template-columns:repeat(3,1fr)" id="bkKpis"></div>
   <div id="bkSections"></div>
@@ -475,9 +468,7 @@ body.light .fi,.light .fs{color:var(--tx)}
     <button class="tab" onclick="gv(3)">Bancos</button>
     <button class="tab on" onclick="gv(4)">Importar</button>
     <button class="tab" onclick="gv(5)">Anuales</button>
-    <button class="tab" onclick="gv(6)">Ahorro</button>
-    <button class="tab" onclick="gv(7)">Ticket</button>
-    <button class="tab" onclick="gv(8)">Analisis</button>
+    <button class="tab" onclick="gv(6)">Ahorro / Analisis</button>
   </div>
   <div class="card" style="border-color:rgba(232,255,71,.15);margin-bottom:9px">
     <div class="ctitle">COMO EXPORTAR CADA MES</div>
@@ -512,6 +503,32 @@ body.light .fi,.light .fs{color:var(--tx)}
       <div id="impPrev" style="font-size:9px;color:var(--tx3);text-align:center;padding:20px 0">Sube un archivo para previsualizar</div>
     </div>
   </div>
+  <!-- ANADIR GASTO MANUAL -->
+  <div class="card" style="margin-top:9px;border-color:rgba(232,255,71,.2)">
+    <div class="ctitle"><span>&#9998; ANADIR GASTO MANUAL</span><span style="font-size:8px;color:var(--tx2)">Efectivo, ticket, anotacion</span></div>
+    <div style="font-size:9px;color:var(--tx2);margin-bottom:10px">Para gastos en efectivo, tickets, o cualquier coste que no aparezca en tus extractos bancarios.</div>
+    <div class="fg">
+      <div class="fl"><label>Concepto</label><input class="fi" id="mCon" placeholder="ej. Casa rural, cena, gasoil..."></div>
+      <div class="fl"><label>Importe &#8364;</label><input class="fi" id="mImp" type="number" step="0.01" placeholder="0.00" min="0"></div>
+    </div>
+    <div class="fg">
+      <div class="fl"><label>Fecha</label><input class="fi" id="mFec" type="date"></div>
+      <div class="fl"><label>Forma de pago</label>
+        <select class="fs" id="mBan">
+          <option value="efectivo">Efectivo / Cash</option>
+          <option value="bbva">BBVA</option>
+          <option value="unicaja">UNICAJA</option>
+          <option value="revolut">REVOLUT</option>
+        </select>
+      </div>
+    </div>
+    <div class="fl"><label>Partida del presupuesto</label>
+      <select class="fs" id="mBline"></select>
+    </div>
+    <button class="bp" onclick="saveManualGasto()" style="width:100%;padding:10px;font-size:12px;margin-top:4px">&#10003; Registrar gasto</button>
+    <div id="mResult" style="margin-top:8px;font-size:10px;color:var(--gr);display:none"></div>
+  </div>
+
   <div class="card" style="margin-top:9px">
     <div class="ctitle"><span>HISTORIAL</span><span id="histC" style="font-size:7px;color:var(--tx3)">0 importaciones</span></div>
     <div id="histL" style="font-size:9px;color:var(--tx3);text-align:center;padding:14px">Sin importaciones</div>
@@ -527,9 +544,7 @@ body.light .fi,.light .fs{color:var(--tx)}
     <button class="tab" onclick="gv(3)">Bancos</button>
     <button class="tab" onclick="gv(4)">Importar</button>
     <button class="tab on" onclick="gv(5)">Anuales</button>
-    <button class="tab" onclick="gv(6)">Ahorro</button>
-    <button class="tab" onclick="gv(7)">Ticket</button>
-    <button class="tab" onclick="gv(8)">Analisis</button>
+    <button class="tab" onclick="gv(6)">Ahorro / Analisis</button>
   </div>
   <div class="kg">
     <div class="kc"><div class="klbl"><div class="kdot" style="background:var(--ac4)"></div>TOTAL ANUAL</div><div class="kval" style="color:var(--ac4)"><span class="cur">&#8364;</span><span id="annT">0</span></div></div>
@@ -542,7 +557,7 @@ body.light .fi,.light .fs{color:var(--tx)}
   </div>
 </div>
 
-<!-- ═══ AHORRO ═══ -->
+<!-- AHORRO + ANALISIS (COMBINADO) -->
 <div class="view" id="v6">
   <div class="tabs">
     <button class="tab" onclick="gv(0)">Dashboard</button>
@@ -552,157 +567,24 @@ body.light .fi,.light .fs{color:var(--tx)}
     <button class="tab" onclick="gv(4)">Importar</button>
     <button class="tab" onclick="gv(5)">Anuales</button>
     <button class="tab on" onclick="gv(6)">Ahorro</button>
-    <button class="tab" onclick="gv(7)">Ticket</button>
-    <button class="tab" onclick="gv(8)">Analisis</button>
   </div>
+
+  <!-- KPIs DINAMICOS -->
   <div class="kg" id="ahorroKpis"></div>
+
+  <!-- SUGERENCIAS -->
   <div class="card">
     <div class="ctitle"><span>SUGERENCIAS DE AHORRO</span><button class="bp" onclick="openAddTip()" style="font-size:8px">+ Nueva</button></div>
     <div class="tlist" id="tipL"></div>
   </div>
-</div>
 
-
-<!-- TICKET / FOTO / TEXTO -->
-<div class="view" id="v7">
-  <div class="tabs">
-    <button class="tab" onclick="gv(0)">Dashboard</button>
-    <button class="tab" onclick="gv(1)">Presupuesto</button>
-    <button class="tab" onclick="gv(2)">Movimientos</button>
-    <button class="tab" onclick="gv(3)">Bancos</button>
-    <button class="tab" onclick="gv(4)">Importar</button>
-    <button class="tab" onclick="gv(5)">Anuales</button>
-    <button class="tab" onclick="gv(6)">Ahorro</button>
-    <button class="tab on" onclick="gv(7)">Ticket</button>
-    <button class="tab" onclick="gv(8)">Analisis</button>
-  </div>
-
-  <!-- MODO: camara / galeria / texto -->
-  <div class="card" style="margin-bottom:10px">
-    <div class="ctitle">COMO QUIERES REGISTRAR EL GASTO</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-
-      <!-- CAMARA -->
-      <div style="position:relative">
-        <input type="file" accept="image/*" capture="camera" id="tkInputCam"
-               onchange="handleTicket(event,'cam')"
-               style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2">
-        <div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:16px 10px;text-align:center;cursor:pointer;transition:border-color .2s" id="btnCam">
-          <div style="font-size:26px;margin-bottom:5px">&#128247;</div>
-          <div style="font-size:11px;font-weight:700">Camara</div>
-          <div style="font-size:9px;color:var(--tx2);margin-top:2px">Foto ahora</div>
-        </div>
-      </div>
-
-      <!-- GALERIA -->
-      <div style="position:relative">
-        <input type="file" accept="image/*" id="tkInputGal"
-               onchange="handleTicket(event,'gal')"
-               style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2">
-        <div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:16px 10px;text-align:center;cursor:pointer;transition:border-color .2s" id="btnGal">
-          <div style="font-size:26px;margin-bottom:5px">&#128444;</div>
-          <div style="font-size:11px;font-weight:700">Galeria</div>
-          <div style="font-size:9px;color:var(--tx2);margin-top:2px">Elegir foto</div>
-        </div>
-      </div>
-
-      <!-- TEXTO LIBRE -->
-      <div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:16px 10px;text-align:center;cursor:pointer;transition:border-color .2s" onclick="showTextMode()" id="btnTxt">
-        <div style="font-size:26px;margin-bottom:5px">&#9998;</div>
-        <div style="font-size:11px;font-weight:700">Anotar</div>
-        <div style="font-size:9px;color:var(--tx2);margin-top:2px">Escribir gasto</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODO TEXTO LIBRE -->
-  <div class="card" id="textModeCard" style="display:none;margin-bottom:10px">
-    <div class="ctitle"><span>ANOTAR GASTO EN TEXTO LIBRE</span></div>
-    <div style="font-size:9px;color:var(--tx2);margin-bottom:8px;line-height:1.6">
-      Escribe el gasto con tus palabras. Ejemplos:<br>
-      <span style="color:var(--ac)">"casa rural 350 euros abril efectivo"</span><br>
-      <span style="color:var(--ac)">"cena restaurante 45 eur ayer revolut"</span><br>
-      <span style="color:var(--ac)">"gasoil 80 bbva 15 mayo"</span>
-    </div>
-    <textarea class="fi" id="tkFreeText" rows="3" placeholder="Escribe el gasto aqui..." style="resize:none;margin-bottom:8px"></textarea>
-    <button class="bp" onclick="analyzeText()" style="width:100%">&#129302; Analizar con IA</button>
-  </div>
-
-  <!-- PREVIEW IMAGEN -->
-  <div id="ticketImgWrap" style="display:none;margin-bottom:10px">
-    <div class="card">
-      <div class="ctitle"><span>IMAGEN CARGADA</span><button class="bs2" onclick="resetTicket()" style="font-size:9px">Cambiar</button></div>
-      <img id="ticketPreviewImg" class="ticket-preview" style="max-height:180px;width:auto;margin:0 auto;display:block;border-radius:8px">
-      <div id="ticketReading" style="display:none;text-align:center;padding:14px;font-size:11px;color:var(--tx2)">
-        <div style="font-size:22px;margin-bottom:6px">&#8987;</div>Analizando con IA...
-      </div>
-    </div>
-  </div>
-
-  <!-- FORMULARIO CONFIRMACION -->
-  <div class="card" id="ticketForm" style="display:none">
-    <div class="ctitle"><span>CONFIRMAR Y REGISTRAR</span><button class="bs2" onclick="resetTicket()" style="font-size:9px">Cancelar</button></div>
-    <div id="ticketResult" style="background:rgba(61,255,160,.07);border:1px solid rgba(61,255,160,.2);border-radius:9px;padding:10px;margin-bottom:12px;font-size:10px;color:var(--tx2)"></div>
-    <div class="fg">
-      <div class="fl"><label>Concepto</label><input class="fi" id="tkCon" placeholder="Nombre o descripcion"></div>
-      <div class="fl"><label>Importe &#8364;</label><input class="fi" id="tkImp" type="number" step="0.01" placeholder="0.00" min="0"></div>
-    </div>
-    <div class="fg">
-      <div class="fl"><label>Fecha</label><input class="fi" id="tkFec" type="date"></div>
-      <div class="fl"><label>Forma de pago</label>
-        <select class="fs" id="tkBan">
-          <option value="efectivo">Efectivo</option>
-          <option value="bbva">BBVA</option>
-          <option value="unicaja">UNICAJA</option>
-          <option value="revolut">REVOLUT</option>
-        </select>
-      </div>
-    </div>
-    <div class="fl"><label>Categoria</label>
-      <select class="fs" id="tkCat">
-        <option value="hogar">&#127968; Hogar</option>
-        <option value="suministros">&#128161; Suministros</option>
-        <option value="alimentacion">&#128722; Supermercado</option>
-        <option value="restaurantes">&#127829; Restaurantes</option>
-        <option value="transporte">&#128663; Transporte</option>
-        <option value="salud">&#127973; Salud</option>
-        <option value="compras">&#128717; Compras</option>
-        <option value="actividades">&#127921; Actividades</option>
-        <option value="ocio_varios">&#127916; Ocio varios</option>
-        <option value="suscripciones">&#128241; Suscripciones</option>
-        <option value="seguros">&#128737; Seguros</option>
-        <option value="educacion">&#128218; Educacion</option>
-        <option value="efectivo">&#128181; Efectivo/Cash</option>
-        <option value="otros">&#128204; Otros</option>
-      </select>
-    </div>
-    <button class="bp" onclick="saveTicket()" style="width:100%;margin-top:6px;padding:10px">&#10003; Registrar gasto</button>
-  </div>
-
-  <!-- LISTA TICKETS -->
-  <div class="card" style="margin-top:10px">
-    <div class="ctitle"><span>GASTOS REGISTRADOS MANUALMENTE</span><span id="tkCount" style="font-size:8px;color:var(--tx3)"></span></div>
-    <div id="ticketList" style="font-size:10px;color:var(--tx3);text-align:center;padding:14px">Sin gastos registrados aun</div>
-  </div>
-</div>
-
-<!-- ANALISIS -->
-<div class="view" id="v8">
-  <div class="tabs">
-    <button class="tab" onclick="gv(0)">Dashboard</button>
-    <button class="tab" onclick="gv(1)">Presupuesto</button>
-    <button class="tab" onclick="gv(2)">Movimientos</button>
-    <button class="tab" onclick="gv(3)">Bancos</button>
-    <button class="tab" onclick="gv(4)">Importar</button>
-    <button class="tab" onclick="gv(5)">Anuales</button>
-    <button class="tab" onclick="gv(6)">Ahorro</button>
-    <button class="tab" onclick="gv(7)">Ticket</button>
-    <button class="tab on" onclick="gv(8)">Analisis</button>
-  </div>
-
-  <!-- OBJETIVO AHORRO -->
+  <!-- OBJETIVO DE AHORRO -->
   <div class="card">
-    <div class="ctitle"><span>OBJETIVO DE AHORRO MENSUAL</span><span class="info-tip" onclick="showInfo('savgoal')">&#9432;</span><div class="info-box" id="info-savgoal" style="display:none">Define cuanto quieres ahorrar cada mes. La app calcula si es posible con tu ingreso y gasto actual, y cuanto acumularias en un ano.</div></span></div>
+    <div class="ctitle">
+      <span>OBJETIVO DE AHORRO MENSUAL</span>
+      <span class="info-tip" onclick="showInfo('savgoal')">&#9432;</span>
+      <div class="info-box" id="info-savgoal" style="display:none">Define cuanto quieres ahorrar cada mes. La app calcula si es posible con tu ingreso y gasto actual, y cuanto acumularias en un ano.</div>
+    </div>
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">
       <div>
         <div class="albl">QUIERO AHORRAR</div>
@@ -719,7 +601,12 @@ body.light .fi,.light .fs{color:var(--tx)}
 
   <!-- FONDO EMERGENCIA -->
   <div class="card">
-    <div class="ctitle"><span>FONDO DE EMERGENCIA</span><span class="info-tip" onclick="showInfo('emerg')">&#9432;</span><div class="info-box" id="info-emerg" style="display:none">Introduce cuanto tienes ahorrado. La recomendacion financiera es tener 6 meses de gastos cubiertos. La barra muestra que porcentaje del objetivo tienes alcanzado.</div></span><span style="font-size:8px;color:var(--tx3)">Recomendado: 6 meses de gastos</span></div>
+    <div class="ctitle">
+      <span>FONDO DE EMERGENCIA</span>
+      <span class="info-tip" onclick="showInfo('emerg')">&#9432;</span>
+      <div class="info-box" id="info-emerg" style="display:none">Introduce cuanto tienes ahorrado. La recomendacion es tener 6 meses de gastos cubiertos.</div>
+      <span style="font-size:8px;color:var(--tx3)">Objetivo: 6 meses gastos</span>
+    </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;align-items:flex-end">
       <div>
         <div class="albl">TENGO AHORRADO</div>
@@ -738,12 +625,10 @@ body.light .fi,.light .fs{color:var(--tx)}
     <div class="ctitle">
       <span>SIMULADOR DE AHORRO</span>
       <span class="info-tip" onclick="showInfo('sim')">&#9432;</span>
-    </div>
-    <div class="info-box" id="info-sim" style="display:none">
-      Selecciona varias categorias y define cuanto reduces en cada una. El total muestra el ahorro combinado mensual y anual que conseguirias si aplicas todos los cambios.
+      <div class="info-box" id="info-sim" style="display:none">Selecciona varias categorias y define cuanto reduces en cada una. El total muestra el ahorro combinado mensual y anual.</div>
     </div>
     <div class="sim-card">
-      <div style="font-size:10px;color:var(--tx2);margin-bottom:10px">Anade categorias y define cuanto puedes reducir en cada una:</div>
+      <div style="font-size:10px;color:var(--tx2);margin-bottom:10px">Anade categorias y define cuanto puedes reducir:</div>
       <div id="simLines" style="margin-bottom:10px"></div>
       <button class="bs2" onclick="addSimLine()" style="font-size:10px;width:100%;margin-bottom:10px">+ Anadir categoria</button>
       <div class="sim-result" id="simResult"></div>
@@ -752,22 +637,36 @@ body.light .fi,.light .fs{color:var(--tx)}
 
   <!-- PROYECCION ANUAL -->
   <div class="card">
-    <div class="ctitle"><span>PROYECCION CIERRE DE ANO 2026</span><span class="info-tip" onclick="showInfo('proj')">&#9432;</span><div class="info-box" id="info-proj" style="display:none">Calcula tu gasto medio mensual del periodo seleccionado y lo proyecta a 12 meses. En rojo significa que a ese ritmo superaras el presupuesto anual. El balance es ingresos anuales menos gasto proyectado.</div></span><span style="font-size:8px;color:var(--tx3)">Basada en media actual</span></div>
+    <div class="ctitle">
+      <span>PROYECCION CIERRE DE ANO 2026</span>
+      <span class="info-tip" onclick="showInfo('proj')">&#9432;</span>
+      <div class="info-box" id="info-proj" style="display:none">Calcula tu gasto medio mensual y lo proyecta a 12 meses. En rojo significa que superaras el presupuesto anual a este ritmo.</div>
+      <span style="font-size:8px;color:var(--tx3)">Basada en media actual</span>
+    </div>
     <div id="projGrid" class="proj-grid"></div>
   </div>
 
   <!-- TENDENCIAS -->
   <div class="card">
-    <div class="ctitle">TENDENCIA POR CATEGORIA (mes a mes)</div>
+    <div class="ctitle">
+      <span>TENDENCIA MES A MES</span>
+      <span class="info-tip" onclick="showInfo('trend')">&#9432;</span>
+      <div class="info-box" id="info-trend" style="display:none">Flecha roja hacia arriba = gastas mas que el mes anterior. Flecha verde hacia abajo = gastas menos.</div>
+    </div>
     <div id="trendGrid"></div>
   </div>
 
   <!-- ALERTAS -->
   <div class="card">
-    <div class="ctitle">ALERTAS DE DESVIACION</div>
+    <div class="ctitle">
+      <span>ALERTAS DE DESVIACION</span>
+      <span class="info-tip" onclick="showInfo('alert')">&#9432;</span>
+      <div class="info-box" id="info-alert" style="display:none">ALERTA = llevas mas del 90% del presupuesto. SUPERADO = has sobrepasado el 100%.</div>
+    </div>
     <div id="alertGrid"></div>
   </div>
 </div>
+>
 </main>
 
 <!-- MODAL GASTO -->
@@ -869,6 +768,36 @@ body.light .fi,.light .fs{color:var(--tx)}
 </div></div>
 
 <div class="toast" id="toast"><div class="tdot"></div><span id="tmsg"></span></div>
+
+<!-- MODAL EDITAR MOVIMIENTO -->
+<div class="mo" id="moEditTx" onclick="if(event.target===this)cm(this)"><div class="mbox">
+  <div class="mtit">Editar movimiento</div>
+  <div class="msub">Modifica o elimina este gasto</div>
+  <input type="hidden" id="etIdx">
+  <div class="fl"><label>Concepto</label><input class="fi" id="etCon"></div>
+  <div class="fg">
+    <div class="fl"><label>Importe &#8364;</label><input class="fi" id="etImp" type="number" step="0.01" min="0"></div>
+    <div class="fl"><label>Fecha</label><input class="fi" id="etFec" type="date"></div>
+  </div>
+  <div class="fg">
+    <div class="fl"><label>Banco / Forma pago</label>
+      <select class="fs" id="etBan">
+        <option value="efectivo">Efectivo</option>
+        <option value="bbva">BBVA</option>
+        <option value="unicaja">UNICAJA</option>
+        <option value="revolut">REVOLUT</option>
+      </select>
+    </div>
+    <div class="fl"><label>Partida presupuesto</label>
+      <select class="fs" id="etBline"></select>
+    </div>
+  </div>
+  <div class="brow">
+    <button class="bc" onclick="cm(document.getElementById('moEditTx'))">Cancelar</button>
+    <button class="bdel" onclick="confirmDeleteTx()">Eliminar</button>
+    <button class="bs" onclick="saveEditTx()">Guardar</button>
+  </div>
+</div></div>
 
 <script>
 var TX=[{"f":"2026-06-06","m":6,"d":"MERCADONA AGUILAR DE LA FAGUILAR DE","i":33.56,"b":"bbva","c":"alimentacion"},{"f":"2026-06-05","m":6,"d":"ADEUDO EXCMO. AYUNTAMIENTO DE MALAG","i":132.65,"b":"bbva","c":"impuestos"},{"f":"2026-06-05","m":6,"d":"ADEUDO EXCMO. AYUNTAMIENTO DE MALAG","i":9.88,"b":"bbva","c":"impuestos"},{"f":"2026-06-04","m":6,"d":"BIZUM","i":100.0,"b":"bbva","c":"compras"},{"f":"2026-06-02","m":6,"d":"ADEUDO PayPal Europe S.a.r.l. et Ci","i":18.15,"b":"bbva","c":"suscripciones"},{"f":"2026-06-02","m":6,"d":"ADEUDO PayPal Europe S.a.r.l. et Ci","i":28.98,"b":"bbva","c":"suscripciones"},{"f":"2026-05-30","m":5,"d":"VARIOS SERVICIO C. LOTERIAS","i":4.0,"b":"bbva","c":"tabaco_loteria"},{"f":"2026-05-29","m":5,"d":"ADEUDO ORANGE-FRANCE TELECOM","i":80.74,"b":"bbva","c":"suscripciones"},{"f":"2026-05-27","m":5,"d":"BIZUM","i":40.0,"b":"bbva","c":"otros"},{"f":"2026-05-16","m":5,"d":"WERKHAUS SL SCS","i":11.48,"b":"bbva","c":"hogar"},{"f":"2026-05-16","m":5,"d":"SERRANO","i":29.95,"b":"bbva","c":"compras"},{"f":"2026-05-16","m":5,"d":"VARIOS SERVICIO C. LOTERIAS","i":2.0,"b":"bbva","c":"tabaco_loteria"},{"f":"2026-05-15","m":5,"d":"EL CORTE INGLES-DEPARTAM.","i":39.99,"b":"bbva","c":"compras"},{"f":"2026-05-14","m":5,"d":"BIZUM","i":278.89,"b":"bbva","c":"educacion"},{"f":"2026-05-09","m":5,"d":"APPLE.COM/BILL","i":2.99,"b":"bbva","c":"suscripciones"},{"f":"2026-05-11","m":5,"d":"LOG287 H MATERNO INFANTIL","i":9.6,"b":"bbva","c":"salud"},{"f":"2026-05-09","m":5,"d":"SERRANO","i":60.05,"b":"bbva","c":"compras"},{"f":"2026-04-30","m":4,"d":"SMILE DENTAL 2010,SL","i":100.0,"b":"bbva","c":"salud"},{"f":"2026-05-04","m":5,"d":"ADEUDO PayPal Europe S.a.r.l. et Ci","i":25.98,"b":"bbva","c":"suscripciones"},{"f":"2026-05-01","m":5,"d":"RAIN FOREST","i":1.7,"b":"bbva","c":"restaurantes"},{"f":"2026-05-01","m":5,"d":"RAIN FOREST","i":4.5,"b":"bbva","c":"restaurantes"},{"f":"2026-05-01","m":5,"d":"RAIN FOREST","i":26.55,"b":"bbva","c":"restaurantes"},{"f":"2026-05-01","m":5,"d":"BIOPARC FUENGIROLA","i":95.0,"b":"bbva","c":"actividades"},{"f":"2026-04-30","m":4,"d":"COLOSO CHURRIANA         MALAGA  CH","i":68.88,"b":"bbva","c":"transporte"},{"f":"2026-04-30","m":4,"d":"BIZUM","i":100.0,"b":"bbva","c":"compras"},{"f":"2026-04-30","m":4,"d":"ADEUDO ORANGE-FRANCE TELECOM","i":80.74,"b":"bbva","c":"suscripciones"},{"f":"2026-04-29","m":4,"d":"BIZUM","i":22.0,"b":"bbva","c":"ocio_varios"},{"f":"2026-04-27","m":4,"d":"CAPUCHINOS PARK","i":12.0,"b":"bbva","c":"restaurantes"},{"f":"2026-04-27","m":4,"d":"BAR SEGALERVA","i":9.4,"b":"bbva","c":"restaurantes"},{"f":"2026-04-22","m":4,"d":"DELIKIA SP","i":1.1,"b":"bbva","c":"alimentacion"},{"f":"2026-04-23","m":4,"d":"BIZUM","i":56.0,"b":"bbva","c":"transporte"},{"f":"2026-04-23","m":4,"d":"AREA SANTA ANA S.L.","i":50.3,"b":"bbva","c":"transporte"},{"f":"2026-04-23","m":4,"d":"BIZUM","i":100.0,"b":"bbva","c":"transporte"},{"f":"2026-04-20","m":4,"d":"ALIMENTACION PEYMA","i":13.48,"b":"bbva","c":"alimentacion"},{"f":"2026-04-20","m":4,"d":"COLOSO CHURRIANA         MALAGA  CH","i":30.0,"b":"bbva","c":"transporte"},{"f":"2026-04-18","m":4,"d":"BIZUM","i":8.0,"b":"bbva","c":"restaurantes"},{"f":"2026-04-18","m":4,"d":"CHIRINGUITO OASIS","i":138.05,"b":"bbva","c":"restaurantes"},{"f":"2026-04-17","m":4,"d":"LA BARBERIA DE CHURRIANA","i":25.0,"b":"bbva","c":"estetica"},{"f":"2026-04-10","m":4,"d":"MORROFINO","i":63.6,"b":"bbva","c":"restaurantes"},{"f":"2026-04-09","m":4,"d":"APPLE.COM/BILL","i":2.99,"b":"bbva","c":"suscripciones"},{"f":"2026-04-13","m":4,"d":"MIRAVIA","i":47.99,"b":"bbva","c":"compras"},{"f":"2026-04-06","m":4,"d":"BIZUM","i":30.0,"b":"bbva","c":"actividades"},{"f":"2026-04-06","m":4,"d":"BIZUM","i":278.89,"b":"bbva","c":"educacion"},{"f":"2026-04-01","m":4,"d":"RET. EFECTIVO  A DEBITO CON TARJ. E","i":100.0,"b":"bbva","c":"efectivo"},{"f":"2026-04-01","m":4,"d":"MERCADONA AGUILAR DE LA F","i":68.23,"b":"bbva","c":"alimentacion"},{"f":"2026-03-31","m":3,"d":"ADEUDO PayPal Europe S.a.r.l. et Ci","i":25.98,"b":"bbva","c":"suscripciones"},{"f":"2026-03-31","m":3,"d":"ADEUDO ORANGE-FRANCE TELECOM","i":75.19,"b":"bbva","c":"suscripciones"},{"f":"2026-03-30","m":3,"d":"MERCADONA AGUILAR DE LA F","i":97.56,"b":"bbva","c":"alimentacion"},{"f":"2026-03-29","m":3,"d":"RET. EFECTIVO  A DEBITO CON TARJ. E","i":150.0,"b":"bbva","c":"efectivo"},{"f":"2026-03-27","m":3,"d":"BIZUM","i":49.9,"b":"bbva","c":"actividades"},{"f":"2026-03-27","m":3,"d":"COLOSO CHURRIANA         MALAGA  CH","i":55.01,"b":"bbva","c":"transporte"},{"f":"2026-03-27","m":3,"d":"LA BARBERIA DE CHURRIANA","i":11.0,"b":"bbva","c":"estetica"},{"f":"2026-03-27","m":3,"d":"BIZUM","i":27.0,"b":"bbva","c":"ocio_varios"},{"f":"2026-03-23","m":3,"d":"SMILE DENTAL 2010,SL","i":190.0,"b":"bbva","c":"salud"},{"f":"2026-03-25","m":3,"d":"FCIA MIGUEL RIVAS CABRERA","i":5.63,"b":"bbva","c":"salud"},{"f":"2026-03-14","m":3,"d":"E.S COLOSO CHURRIANA II  CHURRIANA ","i":66.54,"b":"bbva","c":"transporte"},{"f":"2026-03-14","m":3,"d":"FCIA MIGUEL RIVAS CABRERA","i":17.95,"b":"bbva","c":"salud"},{"f":"2026-03-11","m":3,"d":"TRANSFERENCIA REALIZADA","i":50.0,"b":"bbva","c":"alimentacion"},{"f":"2026-03-09","m":3,"d":"APPLE.COM/BILL","i":2.99,"b":"bbva","c":"suscripciones"},{"f":"2026-03-10","m":3,"d":"FCIA MIGUEL RIVAS CABRERA","i":32.54,"b":"bbva","c":"salud"},{"f":"2026-03-06","m":3,"d":"BIZUM","i":278.89,"b":"bbva","c":"educacion"},{"f":"2026-03-03","m":3,"d":"ADEUDO PayPal Europe S.a.r.l. et Ci","i":25.98,"b":"bbva","c":"suscripciones"},{"f":"2026-03-02","m":3,"d":"COLOSO CHURRIANA         MALAGA  CH","i":80.15,"b":"bbva","c":"transporte"},{"f":"2026-02-28","m":2,"d":"BIZUM","i":60.0,"b":"bbva","c":"ocio_varios"},{"f":"2026-02-28","m":2,"d":"BIZUM","i":118.0,"b":"bbva","c":"ocio_varios"},{"f":"2026-02-27","m":2,"d":"ADEUDO ORANGE-FRANCE TELECOM","i":79.69,"b":"bbva","c":"suscripciones"},{"f":"2026-02-22","m":2,"d":"FARMACIA AIDA LOPEZ CANO","i":12.26,"b":"bbva","c":"salud"},{"f":"2026-02-20","m":2,"d":"MERCADONA LAS ESTEaUELAS","i":5.71,"b":"bbva","c":"alimentacion"},{"f":"2026-02-20","m":2,"d":"MERCADONA LAS ESTEaUELAS","i":13.55,"b":"bbva","c":"alimentacion"},{"f":"2026-02-20","m":2,"d":"DECATHLON GUADALMAR","i":238.89,"b":"bbva","c":"compras"},{"f":"2026-02-12","m":2,"d":"BIZUM","i":15.0,"b":"bbva","c":"ocio_varios"},{"f":"2026-02-09","m":2,"d":"APPLE.COM/BILL","i":2.99,"b":"bbva","c":"suscripciones"},{"f":"2026-02-10","m":2,"d":"LA BARBERIA DE CHURRIANA","i":14.0,"b":"bbva","c":"estetica"},{"f":"2026-02-09","m":2,"d":"ITV EL VISO - MALAGA","i":48.62,"b":"bbva","c":"transporte"},{"f":"2026-02-08","m":2,"d":"PETROPRIX LICURGO        TOLEDO    ","i":48.63,"b":"bbva","c":"transporte"},{"f":"2026-02-05","m":2,"d":"TRANSFERENCIA REALIZADA","i":96.0,"b":"bbva","c":"hogar"},{"f":"2026-02-03","m":2,"d":"BIZUM","i":26.0,"b":"bbva","c":"ocio_varios"},{"f":"2026-02-03","m":2,"d":"BIZUM","i":278.89,"b":"bbva","c":"educacion"},{"f":"2026-02-02","m":2,"d":"ADEUDO PayPal Europe S.a.r.l. et Ci","i":25.98,"b":"bbva","c":"suscripciones"},{"f":"2026-01-30","m":1,"d":"ADEUDO ORANGE-FRANCE TELECOM","i":74.69,"b":"bbva","c":"suscripciones"},{"f":"2026-01-25","m":1,"d":"Vueling AirlJLS62A","i":145.98,"b":"bbva","c":"transporte"},{"f":"2026-01-22","m":1,"d":"COLOSO CHURRIANA         MALAGA  CH","i":50.0,"b":"bbva","c":"transporte"},{"f":"2026-01-17","m":1,"d":"ZARA MALAGA CC LARIOS","i":60.05,"b":"bbva","c":"compras"},{"f":"2026-01-17","m":1,"d":"SPRINGFIELD","i":12.99,"b":"bbva","c":"compras"},{"f":"2026-01-15","m":1,"d":"ADEUDO PayPal Europe S.a.r.l. et Ci","i":18.15,"b":"bbva","c":"suscripciones"},{"f":"2026-01-13","m":1,"d":"RET. EFECTIVO  A DEBITO CON TARJ. E","i":80.0,"b":"bbva","c":"efectivo"},{"f":"2026-01-09","m":1,"d":"APPLE.COM/BILL","i":2.99,"b":"bbva","c":"suscripciones"},{"f":"2026-01-11","m":1,"d":"BIZUM","i":15.0,"b":"bbva","c":"ocio_varios"},{"f":"2026-01-07","m":1,"d":"BIZUM","i":186.89,"b":"bbva","c":"educacion"},{"f":"2026-01-04","m":1,"d":"BIZUM","i":10.0,"b":"bbva","c":"tabaco_loteria"},{"f":"2026-01-02","m":1,"d":"FCIA MIGUEL RIVAS CABRERA","i":7.42,"b":"bbva","c":"salud"},{"f":"2026-06-03","m":6,"d":"C.P. RESID Comunidad","i":79.02,"b":"unicaja","c":"hogar"},{"f":"2026-06-01","m":6,"d":"Prosegur Alarma","i":46.22,"b":"unicaja","c":"seguros"},{"f":"2026-06-01","m":6,"d":"CUOTA MAYO PLAN UNI SEGUR","i":85.01,"b":"unicaja","c":"seguros"},{"f":"2026-05-28","m":5,"d":"Comida junio","i":400.0,"b":"unicaja","c":"alimentacion"},{"f":"2026-05-15","m":5,"d":"NATURGYC Gas","i":47.93,"b":"unicaja","c":"suministros"},{"f":"2026-05-15","m":5,"d":"SEG.CDTO Seguro credito hipoteca","i":323.24,"b":"unicaja","c":"hogar"},{"f":"2026-05-14","m":5,"d":"Comida mes mayo","i":150.0,"b":"unicaja","c":"alimentacion"},{"f":"2026-05-13","m":5,"d":"PRESTAMO Hipoteca","i":607.43,"b":"unicaja","c":"hogar"},{"f":"2026-05-08","m":5,"d":"GANA ENERG Agua","i":28.89,"b":"unicaja","c":"suministros"},{"f":"2026-05-05","m":5,"d":"C.P. RESID Comunidad","i":79.02,"b":"unicaja","c":"hogar"},{"f":"2026-05-01","m":5,"d":"CUOTA ABRIL PLAN UNI SEGUR","i":77.44,"b":"unicaja","c":"seguros"},{"f":"2026-04-30","m":4,"d":"Comida mes","i":400.0,"b":"unicaja","c":"alimentacion"},{"f":"2026-04-30","m":4,"d":"Prosegur Alarma","i":46.22,"b":"unicaja","c":"seguros"},{"f":"2026-04-21","m":4,"d":"Comida mes","i":150.0,"b":"unicaja","c":"alimentacion"},{"f":"2026-04-16","m":4,"d":"NATURGYC Gas","i":73.01,"b":"unicaja","c":"suministros"},{"f":"2026-04-13","m":4,"d":"PRESTAMO Hipoteca","i":607.43,"b":"unicaja","c":"hogar"},{"f":"2026-04-08","m":4,"d":"EMASA Agua","i":69.48,"b":"unicaja","c":"suministros"},{"f":"2026-04-07","m":4,"d":"C.P. RESID Comunidad","i":79.02,"b":"unicaja","c":"hogar"},{"f":"2026-04-01","m":4,"d":"CUOTA MARZO PLAN UNI SEGUR","i":77.28,"b":"unicaja","c":"seguros"},{"f":"2026-03-31","m":3,"d":"Prosegur Alarma","i":34.9,"b":"unicaja","c":"seguros"},{"f":"2026-03-29","m":3,"d":"Comida abril","i":450.0,"b":"unicaja","c":"alimentacion"},{"f":"2026-03-13","m":3,"d":"PRESTAMO Hipoteca","i":607.43,"b":"unicaja","c":"hogar"},{"f":"2026-03-13","m":3,"d":"NATURGYC Gas","i":73.43,"b":"unicaja","c":"suministros"},{"f":"2026-03-04","m":3,"d":"C.P. RESID Comunidad","i":79.02,"b":"unicaja","c":"hogar"},{"f":"2026-03-02","m":3,"d":"Prosegur Alarma","i":34.9,"b":"unicaja","c":"seguros"},{"f":"2026-03-02","m":3,"d":"GANA ENERG Agua","i":30.53,"b":"unicaja","c":"suministros"},{"f":"2026-03-01","m":3,"d":"CUOTA FEBRERO PLAN UNI SEGUR","i":77.28,"b":"unicaja","c":"seguros"},{"f":"2026-02-26","m":2,"d":"Comida marzo","i":450.0,"b":"unicaja","c":"alimentacion"},{"f":"2026-02-18","m":2,"d":"NATURGYC Gas","i":105.09,"b":"unicaja","c":"suministros"},{"f":"2026-02-13","m":2,"d":"PRESTAMO Hipoteca","i":607.43,"b":"unicaja","c":"hogar"},{"f":"2026-02-10","m":2,"d":"EMASA Agua","i":70.78,"b":"unicaja","c":"suministros"},{"f":"2026-02-03","m":2,"d":"C.P. RESID Comunidad","i":79.02,"b":"unicaja","c":"hogar"},{"f":"2026-02-03","m":2,"d":"Comida febrero","i":450.0,"b":"unicaja","c":"alimentacion"},{"f":"2026-02-02","m":2,"d":"Prosegur Alarma","i":34.9,"b":"unicaja","c":"seguros"},{"f":"2026-02-01","m":2,"d":"CUOTA ENERO PLAN UNI SEGUR","i":77.28,"b":"unicaja","c":"seguros"},{"f":"2026-01-19","m":1,"d":"GANA ENERG Agua","i":23.66,"b":"unicaja","c":"suministros"},{"f":"2026-01-19","m":1,"d":"NATURGYC Gas","i":85.73,"b":"unicaja","c":"suministros"},{"f":"2026-01-13","m":1,"d":"PRESTAMO Hipoteca","i":607.43,"b":"unicaja","c":"hogar"},{"f":"2026-01-02","m":1,"d":"C.P. RESID Comunidad","i":79.02,"b":"unicaja","c":"hogar"},{"f":"2026-01-01","m":1,"d":"CUOTA DICIEMBRE PLAN UNI SEGU","i":77.28,"b":"unicaja","c":"seguros"},{"f":"2026-01-03","m":1,"d":"Jin Peng","i":12.95,"b":"revolut","c":"restaurantes"},{"f":"2026-01-06","m":1,"d":"Bk Chu","i":36.58,"b":"revolut","c":"restaurantes"},{"f":"2026-01-07","m":1,"d":"Restaurante Ruance","i":11.0,"b":"revolut","c":"restaurantes"},{"f":"2026-01-10","m":1,"d":"Kebab Iftikhar","i":38.5,"b":"revolut","c":"restaurantes"},{"f":"2026-01-10","m":1,"d":"Tabacos","i":7.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-01-10","m":1,"d":"Bar Plaza","i":21.0,"b":"revolut","c":"restaurantes"},{"f":"2026-01-12","m":1,"d":"Mni*lopez Fernandez Cr","i":29.0,"b":"revolut","c":"otros"},{"f":"2026-01-12","m":1,"d":"El Pikon","i":12.0,"b":"revolut","c":"restaurantes"},{"f":"2026-01-15","m":1,"d":"Apple","i":9.99,"b":"revolut","c":"suscripciones"},{"f":"2026-01-15","m":1,"d":"Bk Chu","i":24.53,"b":"revolut","c":"restaurantes"},{"f":"2026-01-16","m":1,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-01-16","m":1,"d":"La Barberia De Churriana","i":25.0,"b":"revolut","c":"estetica"},{"f":"2026-01-16","m":1,"d":"Administracion De Loteria","i":1.0,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-01-16","m":1,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-01-19","m":1,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-01-21","m":1,"d":"Bk Chu","i":38.3,"b":"revolut","c":"restaurantes"},{"f":"2026-01-22","m":1,"d":"Amazon Prime","i":4.99,"b":"revolut","c":"suscripciones"},{"f":"2026-01-24","m":1,"d":"Fiti Lucena","i":53.7,"b":"revolut","c":"actividades"},{"f":"2026-01-25","m":1,"d":"New Multimon","i":4.5,"b":"revolut","c":"otros"},{"f":"2026-01-27","m":1,"d":"Hospital Materno-Infantil","i":10.65,"b":"revolut","c":"salud"},{"f":"2026-01-29","m":1,"d":"Just Eat","i":31.0,"b":"revolut","c":"restaurantes"},{"f":"2026-01-31","m":1,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-02-01","m":2,"d":"Alliance Vending","i":2.0,"b":"revolut","c":"restaurantes"},{"f":"2026-02-01","m":2,"d":"Alliance Vending","i":2.0,"b":"revolut","c":"restaurantes"},{"f":"2026-02-01","m":2,"d":"Alliance Vending","i":0.75,"b":"revolut","c":"restaurantes"},{"f":"2026-02-02","m":2,"d":"Jin Peng","i":11.95,"b":"revolut","c":"restaurantes"},{"f":"2026-02-02","m":2,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-02-03","m":2,"d":"Bar Segalerva","i":3.2,"b":"revolut","c":"restaurantes"},{"f":"2026-02-04","m":2,"d":"Tabacos","i":16.8,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-02-05","m":2,"d":"Bar Segalerva","i":5.7,"b":"revolut","c":"restaurantes"},{"f":"2026-02-05","m":2,"d":"Bk Chu","i":38.8,"b":"revolut","c":"restaurantes"},{"f":"2026-02-07","m":2,"d":"Saba","i":2.7,"b":"revolut","c":"transporte"},{"f":"2026-02-09","m":2,"d":"Volotea","i":203.5,"b":"revolut","c":"transporte"},{"f":"2026-02-10","m":2,"d":"Bk Chu","i":20.18,"b":"revolut","c":"restaurantes"},{"f":"2026-02-12","m":2,"d":"The Irish Corner","i":18.0,"b":"revolut","c":"ocio"},{"f":"2026-02-13","m":2,"d":"Telepizza","i":26.85,"b":"revolut","c":"restaurantes"},{"f":"2026-02-14","m":2,"d":"Apiflora","i":17.0,"b":"revolut","c":"salud"},{"f":"2026-02-15","m":2,"d":"Apple","i":7.99,"b":"revolut","c":"suscripciones"},{"f":"2026-02-16","m":2,"d":"Bar Segalerva","i":7.8,"b":"revolut","c":"restaurantes"},{"f":"2026-02-16","m":2,"d":"La Goleta Bar Cafe","i":11.0,"b":"revolut","c":"restaurantes"},{"f":"2026-02-20","m":2,"d":"La Barberia De Churriana","i":11.0,"b":"revolut","c":"estetica"},{"f":"2026-02-20","m":2,"d":"Administracion De Loteria","i":1.0,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-02-20","m":2,"d":"Tabacos","i":11.2,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-02-21","m":2,"d":"TuLotero","i":5.0,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-02-22","m":2,"d":"Viaducto de Lindabarcas","i":13.99,"b":"revolut","c":"viajes"},{"f":"2026-02-22","m":2,"d":"Panaderia Espana","i":19.6,"b":"revolut","c":"restaurantes"},{"f":"2026-02-22","m":2,"d":"El Ancla De Luarca","i":110.0,"b":"revolut","c":"restaurantes"},{"f":"2026-02-22","m":2,"d":"De Leo","i":12.0,"b":"revolut","c":"restaurantes"},{"f":"2026-02-23","m":2,"d":"La Mallorquina","i":14.2,"b":"revolut","c":"restaurantes"},{"f":"2026-02-23","m":2,"d":"Sidreria Tierra Astur Parrilla","i":98.92,"b":"revolut","c":"restaurantes"},{"f":"2026-02-23","m":2,"d":"Mercadona","i":15.75,"b":"revolut","c":"alimentacion"},{"f":"2026-02-24","m":2,"d":"100 Montaditos","i":7.0,"b":"revolut","c":"restaurantes"},{"f":"2026-02-24","m":2,"d":"bp","i":55.19,"b":"revolut","c":"transporte"},{"f":"2026-02-24","m":2,"d":"Casa Tataguyo","i":140.3,"b":"revolut","c":"restaurantes"},{"f":"2026-02-25","m":2,"d":"Bk Chu","i":39.8,"b":"revolut","c":"restaurantes"},{"f":"2026-02-27","m":2,"d":"Granier","i":14.55,"b":"revolut","c":"restaurantes"},{"f":"2026-02-28","m":2,"d":"Taberna La Antigua","i":9.3,"b":"revolut","c":"restaurantes"},{"f":"2026-02-28","m":2,"d":"Tabacos","i":11.2,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-02-28","m":2,"d":"Alliance Vending","i":1.25,"b":"revolut","c":"restaurantes"},{"f":"2026-02-28","m":2,"d":"Alliance Vending","i":1.25,"b":"revolut","c":"restaurantes"},{"f":"2026-03-02","m":3,"d":"Bar Segalerva","i":3.0,"b":"revolut","c":"restaurantes"},{"f":"2026-03-03","m":3,"d":"Bar Segalerva","i":10.3,"b":"revolut","c":"restaurantes"},{"f":"2026-03-07","m":3,"d":"Quiosco La Canasta","i":8.2,"b":"revolut","c":"restaurantes"},{"f":"2026-03-07","m":3,"d":"TuLotero","i":5.0,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-03-09","m":3,"d":"Hospital Materno-Infantil","i":7.05,"b":"revolut","c":"salud"},{"f":"2026-03-09","m":3,"d":"La Goleta Bar Cafe","i":11.0,"b":"revolut","c":"restaurantes"},{"f":"2026-03-10","m":3,"d":"Cafeteria Martin","i":7.1,"b":"revolut","c":"restaurantes"},{"f":"2026-03-10","m":3,"d":"Bk Chu","i":27.3,"b":"revolut","c":"restaurantes"},{"f":"2026-03-11","m":3,"d":"Baston Pub","i":22.5,"b":"revolut","c":"restaurantes"},{"f":"2026-03-11","m":3,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-03-11","m":3,"d":"Uber","i":12.94,"b":"revolut","c":"transporte"},{"f":"2026-03-12","m":3,"d":"Serrano","i":30.4,"b":"revolut","c":"compras"},{"f":"2026-03-15","m":3,"d":"Apple","i":7.99,"b":"revolut","c":"suscripciones"},{"f":"2026-03-14","m":3,"d":"Alliance Vending","i":0.75,"b":"revolut","c":"restaurantes"},{"f":"2026-03-16","m":3,"d":"Kebap Los Rosales","i":8.5,"b":"revolut","c":"restaurantes"},{"f":"2026-03-16","m":3,"d":"Bk Chu","i":27.24,"b":"revolut","c":"restaurantes"},{"f":"2026-03-21","m":3,"d":"Alimentacion Peyma","i":10.15,"b":"revolut","c":"alimentacion"},{"f":"2026-03-21","m":3,"d":"Estanco","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-03-22","m":3,"d":"The Burger Prime","i":31.2,"b":"revolut","c":"restaurantes"},{"f":"2026-03-23","m":3,"d":"La Cocina De Emi","i":9.0,"b":"revolut","c":"restaurantes"},{"f":"2026-03-23","m":3,"d":"Coviran","i":1.97,"b":"revolut","c":"alimentacion"},{"f":"2026-03-24","m":3,"d":"PadThaiWok","i":29.5,"b":"revolut","c":"restaurantes"},{"f":"2026-03-25","m":3,"d":"La Barberia De Churriana","i":14.0,"b":"revolut","c":"estetica"},{"f":"2026-03-27","m":3,"d":"Parking Central","i":2.3,"b":"revolut","c":"transporte"},{"f":"2026-03-27","m":3,"d":"Chvt Cakes","i":6.95,"b":"revolut","c":"restaurantes"},{"f":"2026-03-28","m":3,"d":"Alimentacion Peyma","i":5.73,"b":"revolut","c":"alimentacion"},{"f":"2026-03-29","m":3,"d":"Andorrano Joyeria","i":1133.39,"b":"revolut","c":"compras"},{"f":"2026-03-31","m":3,"d":"Estanco","i":16.8,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-03-31","m":3,"d":"Vueling","i":12.0,"b":"revolut","c":"transporte"},{"f":"2026-04-01","m":4,"d":"Helados Galiana","i":15.9,"b":"revolut","c":"restaurantes"},{"f":"2026-04-02","m":4,"d":"Lc Taxi 22","i":18.36,"b":"revolut","c":"transporte"},{"f":"2026-04-03","m":4,"d":"Meson Da Estrada","i":38.3,"b":"revolut","c":"restaurantes"},{"f":"2026-04-03","m":4,"d":"Teleclub","i":24.0,"b":"revolut","c":"suscripciones"},{"f":"2026-04-03","m":4,"d":"Gutrei Galicia","i":104.5,"b":"revolut","c":"restaurantes"},{"f":"2026-04-04","m":4,"d":"Vueling","i":11.0,"b":"revolut","c":"transporte"},{"f":"2026-04-05","m":4,"d":"Aelia Duty Free","i":15.7,"b":"revolut","c":"transporte"},{"f":"2026-04-05","m":4,"d":"A Tenda Do Colmado","i":1.9,"b":"revolut","c":"restaurantes"},{"f":"2026-04-05","m":4,"d":"The Burger Prime","i":31.8,"b":"revolut","c":"restaurantes"},{"f":"2026-04-09","m":4,"d":"Bar Segalerva","i":15.4,"b":"revolut","c":"restaurantes"},{"f":"2026-04-09","m":4,"d":"Rest Bar Ruance","i":11.0,"b":"revolut","c":"restaurantes"},{"f":"2026-04-10","m":4,"d":"Hospital Materno-Infantil","i":11.35,"b":"revolut","c":"salud"},{"f":"2026-04-10","m":4,"d":"Maria De Los Angeles","i":11.2,"b":"revolut","c":"salud"},{"f":"2026-04-11","m":4,"d":"Muelle Uno","i":10.1,"b":"revolut","c":"restaurantes"},{"f":"2026-04-15","m":4,"d":"Apple","i":7.99,"b":"revolut","c":"suscripciones"},{"f":"2026-04-14","m":4,"d":"Bk Chu","i":26.35,"b":"revolut","c":"restaurantes"},{"f":"2026-04-17","m":4,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-04-18","m":4,"d":"Malaga-Costa del Sol Airport","i":10.0,"b":"revolut","c":"transporte"},{"f":"2026-04-21","m":4,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-04-22","m":4,"d":"Delikia","i":1.1,"b":"revolut","c":"alimentacion"},{"f":"2026-04-22","m":4,"d":"Sojo Mercado","i":25.5,"b":"revolut","c":"restaurantes"},{"f":"2026-04-24","m":4,"d":"La Bremen","i":35.0,"b":"revolut","c":"restaurantes"},{"f":"2026-04-25","m":4,"d":"Estanco","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-05-02","m":5,"d":"ONCE","i":2.0,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-05-04","m":5,"d":"El Pikon","i":13.0,"b":"revolut","c":"restaurantes"},{"f":"2026-05-04","m":5,"d":"Bar Segalerva","i":10.9,"b":"revolut","c":"restaurantes"},{"f":"2026-05-05","m":5,"d":"Estanco","i":6.3,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-05-07","m":5,"d":"Bk Chu","i":22.3,"b":"revolut","c":"restaurantes"},{"f":"2026-05-10","m":5,"d":"Vueling","i":321.76,"b":"revolut","c":"transporte"},{"f":"2026-05-10","m":5,"d":"Vueling","i":20.0,"b":"revolut","c":"transporte"},{"f":"2026-05-15","m":5,"d":"Apple","i":7.99,"b":"revolut","c":"suscripciones"},{"f":"2026-05-20","m":5,"d":"La Barberia De Churriana","i":15.0,"b":"revolut","c":"estetica"},{"f":"2026-05-21","m":5,"d":"Faunia","i":52.9,"b":"revolut","c":"actividades"},{"f":"2026-05-21","m":5,"d":"Faunia","i":23.95,"b":"revolut","c":"actividades"},{"f":"2026-05-21","m":5,"d":"Sports Direct","i":45.0,"b":"revolut","c":"compras"},{"f":"2026-05-22","m":5,"d":"Selecta","i":2.9,"b":"revolut","c":"otros"},{"f":"2026-05-22","m":5,"d":"Faunia","i":5.0,"b":"revolut","c":"actividades"},{"f":"2026-05-22","m":5,"d":"Mercadona","i":16.0,"b":"revolut","c":"alimentacion"},{"f":"2026-05-22","m":5,"d":"Gestion Parque Ani El Ro","i":11.1,"b":"revolut","c":"actividades"},{"f":"2026-05-23","m":5,"d":"Plenergy","i":18.0,"b":"revolut","c":"transporte"},{"f":"2026-05-23","m":5,"d":"Tabacos","i":5.6,"b":"revolut","c":"tabaco_loteria"},{"f":"2026-05-24","m":5,"d":"ALDI","i":16.97,"b":"revolut","c":"alimentacion"},{"f":"2026-05-25","m":5,"d":"Taxi Lic.235 Malaga","i":12.78,"b":"revolut","c":"transporte"},{"f":"2026-05-26","m":5,"d":"Caseta Abril","i":10.0,"b":"revolut","c":"actividades"},{"f":"2026-05-26","m":5,"d":"Caseta La Despecha","i":21.0,"b":"revolut","c":"actividades"},{"f":"2026-05-26","m":5,"d":"Caseta Abril","i":15.0,"b":"revolut","c":"actividades"},{"f":"2026-05-26","m":5,"d":"Caseta La Despecha","i":42.0,"b":"revolut","c":"actividades"},{"f":"2026-05-29","m":5,"d":"Leroy Merlin","i":309.26,"b":"revolut","c":"hogar"},{"f":"2026-05-31","m":5,"d":"Restaurante La Benevolenc","i":56.8,"b":"revolut","c":"restaurantes"},{"f":"2026-06-01","m":6,"d":"Capuchinos Park","i":15.0,"b":"revolut","c":"restaurantes"},{"f":"2026-06-02","m":6,"d":"Bambu Lab","i":848.75,"b":"revolut","c":"compras"},{"f":"2026-06-02","m":6,"d":"Amazon","i":36.98,"b":"revolut","c":"suscripciones"},{"f":"2026-06-04","m":6,"d":"Bk Chu","i":29.9,"b":"revolut","c":"restaurantes"},{"f":"2026-06-05","m":6,"d":"Apple","i":22.0,"b":"revolut","c":"suscripciones"},{"f":"2026-06-05","m":6,"d":"ONCE","i":3.0,"b":"revolut","c":"tabaco_loteria"}];
@@ -1273,7 +1202,7 @@ function renderPresupuesto(){
           (b.kw&&b.kw.length?'<span style="font-size:7px;color:var(--tx3);display:block;margin-top:1px">&#128269; '+(b.kw.slice(0,3).join(', '))+(b.kw.length>3?'...':'')+'</span>':'')+
         '</div>'+
         '<input class="bud-inp" type="number" value="'+b.mes+'" onchange="updBline('+b.id+',this.value)" title="EUR por mes">'+
-        '<div class="bud-real" style="color:var(--or);text-align:right;font-family:DM Mono,monospace;font-size:10px">&#8364;'+fmt(budgTotal)+'</div>'+
+        '<div class="bud-real" style="color:var(--or);text-align:right;font-family:monospace;font-size:10px">&#8364;'+fmt(budgTotal)+'</div>'+
         '<div class="bud-real" style="color:var(--ac2);cursor:pointer;text-decoration:underline dotted" '+
           'data-bid="'+b.id+'" onclick="toggleDrill(parseInt(this.dataset.bid))" '+
           'title="&#128269; Ver movimientos detallados">&#8364;'+fmt(real)+'</div>'+
@@ -1289,11 +1218,11 @@ function renderPresupuesto(){
   var sdiff=sumTotal-sumReal;
   var sclr=sdiff<0?'var(--rd)':'var(--gr)';
   html+='<div style="display:grid;grid-template-columns:1fr 80px 90px 90px 70px 28px;gap:6px;padding:10px 0 4px;border-top:2px solid var(--bd);margin-top:8px">'+
-    '<div style="font-size:10px;font-weight:700;font-family:DM Mono,monospace;letter-spacing:1px;color:var(--tx2)">SUBTOTAL ('+mos+' mes'+(mos>1?'es':'')+')</div>'+
-    '<div style="font-family:DM Mono,monospace;font-size:10px;font-weight:700;text-align:right;color:var(--tx)">&#8364;'+fmt(sumMes)+'</div>'+
-    '<div style="font-family:DM Mono,monospace;font-size:10px;font-weight:700;text-align:right;color:var(--or)">&#8364;'+fmt(sumTotal)+'</div>'+
-    '<div style="font-family:DM Mono,monospace;font-size:10px;font-weight:700;text-align:right;color:var(--ac2)">&#8364;'+fmt(sumReal)+'</div>'+
-    '<div style="font-family:DM Mono,monospace;font-size:10px;font-weight:700;text-align:right;padding:2px 5px;border-radius:5px;background:'+(sdiff<0?'rgba(255,77,109,.12)':'rgba(61,255,160,.1)')+';color:'+sclr+'">'+(sdiff>=0?'+':'')+fmt(sdiff)+'</div>'+
+    '<div style="font-size:10px;font-weight:700;font-family:monospace;letter-spacing:1px;color:var(--tx2)">SUBTOTAL ('+mos+' mes'+(mos>1?'es':'')+')</div>'+
+    '<div style="font-family:monospace;font-size:10px;font-weight:700;text-align:right;color:var(--tx)">&#8364;'+fmt(sumMes)+'</div>'+
+    '<div style="font-family:monospace;font-size:10px;font-weight:700;text-align:right;color:var(--or)">&#8364;'+fmt(sumTotal)+'</div>'+
+    '<div style="font-family:monospace;font-size:10px;font-weight:700;text-align:right;color:var(--ac2)">&#8364;'+fmt(sumReal)+'</div>'+
+    '<div style="font-family:monospace;font-size:10px;font-weight:700;text-align:right;padding:2px 5px;border-radius:5px;background:'+(sdiff<0?'rgba(255,77,109,.12)':'rgba(61,255,160,.1)')+';color:'+sclr+'">'+(sdiff>=0?'+':'')+fmt(sdiff)+'</div>'+
     '<div></div>'+
   '</div>';
 
@@ -1306,6 +1235,7 @@ function updInc(m,val){
   INGRESOS[m]={base:n,extra:0};
   renderPresupuesto();
   renderAll();
+  saveState();
 }
 
 function updBline(id,val){
@@ -1354,6 +1284,7 @@ function saveBudLine(){
   renderPresupuesto();
   renderAll();
   renderUnmatched();
+  saveState();
   tt('Partida guardada y recalculada');
 }
 
@@ -1443,7 +1374,7 @@ function renderBancos(){
     var bk=BK[b];
     var items=txns.filter(function(t){return t.b===b;}).sort(function(a,c){return c.f<a.f?-1:1;});
     if(!items.length)return '';
-    return '<div class="card"><div class="bank-section-title"><span class="bb '+bk.cls+'" style="font-size:10px;padding:3px 8px">'+bk.l+'</span><span style="font-family:DM Mono,monospace;font-size:11px;color:'+bk.c+'">&#8364;'+fmt(bt[b])+'</span><span style="font-size:9px;color:var(--tx3)">'+items.length+' mov.</span></div>'+
+    return '<div class="card"><div class="bank-section-title"><span class="bb '+bk.cls+'" style="font-size:10px;padding:3px 8px">'+bk.l+'</span><span style="font-family:monospace;font-size:11px;color:'+bk.c+'">&#8364;'+fmt(bt[b])+'</span><span style="font-size:9px;color:var(--tx3)">'+items.length+' mov.</span></div>'+
       '<table class="tbl"><thead><tr><th>FECHA</th><th>CONCEPTO</th><th>CATEGORIA</th><th>&#8364;</th></tr></thead><tbody>'+
       items.map(function(t){
         var cat=CATS[t.c]||{l:t.c,c:'#888'};
@@ -1494,6 +1425,7 @@ function openAddAnn(){
   document.getElementById('aMesF').value='1';
   document.getElementById('aNot').value='';
   document.getElementById('aDel').style.display='none';
+  document.getElementById('aBline').innerHTML=buildBlineOpts('');
   om('moAnn');
 }
 function openEditAnn(id){
@@ -1507,7 +1439,7 @@ function openEditAnn(id){
   document.getElementById('aBan').value=e.banco;
   document.getElementById('aFrec').value=e.frec;
   document.getElementById('aPag').value=String(e.pag);
-  document.getElementById('aCat').value=e.cat;
+  document.getElementById('aBline').innerHTML=buildBlineOpts(e.blineId||'');
   document.getElementById('aNot').value=e.not||'';
   document.getElementById('aDel').style.display='block';
   om('moAnn');
@@ -1521,17 +1453,19 @@ function saveAnn(){
   var banco=document.getElementById('aBan').value;
   var frec=document.getElementById('aFrec').value;
   var pag=document.getElementById('aPag').value==='true';
-  var cat=document.getElementById('aCat').value;
+  var blineId=parseInt(document.getElementById('aBline').value)||0;
+  var targetLine=BLINES.find(function(b){return b.id===blineId;})||{cat:'otros'};
+  var cat=targetLine.cat;
   var not=document.getElementById('aNot').value.trim();
   if(!c){tt('Anade concepto');return;}
   if(id){
     var e=annuals.find(function(x){return x.id===id;});
-    if(e){e.c=c;e.imp=imp;e.mesI=mesI;e.mesF=mesF;e.banco=banco;e.frec=frec;e.pag=pag;e.cat=cat;e.not=not;}
+    if(e){e.c=c;e.imp=imp;e.mesI=mesI;e.mesF=mesF;e.banco=banco;e.frec=frec;e.pag=pag;e.cat=cat;e.blineId=blineId;e.not=not;}
   } else {
     var newId=Math.max.apply(null,annuals.map(function(x){return x.id;}))+1;
-    annuals.push({id:newId,c:c,cat:cat,banco:banco,imp:imp,mesI:mesI,mesF:mesF,frec:frec,pag:pag,not:not});
+    annuals.push({id:newId,c:c,cat:cat,blineId:blineId,banco:banco,imp:imp,mesI:mesI,mesF:mesF,frec:frec,pag:pag,not:not});
   }
-  cm(document.getElementById('moAnn'));renderAnnuals();tt('Guardado');
+  cm(document.getElementById('moAnn'));renderAnnuals();saveState();tt('Guardado');
 }
 function delAnn(){
   annuals=annuals.filter(function(e){return e.id!==parseInt(document.getElementById('aId').value);});
@@ -1593,7 +1527,7 @@ function saveTip(){
   if(!tit){tt('Anade titulo');return;}
   if(id){var tp=tips.find(function(x){return x.id===id;});if(tp){tp.ico=ico;tp.t=tit;tp.d=des;tp.s=sav;}}
   else tips.push({id:Date.now(),ico:ico,t:tit,d:des,s:sav,done:false});
-  cm(document.getElementById('moTip'));renderTips();tt('Guardada');
+  cm(document.getElementById('moTip'));renderTips();saveState();tt('Guardada');
 }
 function delTip(){delTipI(parseInt(document.getElementById('tId').value));cm(document.getElementById('moTip'));}
 function delTipI(id){tips=tips.filter(function(t){return t.id!==id;});renderTips();tt('Eliminada');}
@@ -1616,7 +1550,7 @@ function saveG(){
   if(!con||imp<=0){tt('Rellena concepto e importe');return;}
   var mo=parseInt(fec.substring(5,7));
   TX.push({f:fec,m:mo,d:con,i:imp,b:ban,c:cat});
-  rebuildMO();cm(document.getElementById('moG'));renderAll();tt('Anadido: '+con);
+  rebuildMO();saveState();cm(document.getElementById('moG'));renderAll();tt('Anadido: '+con);
 }
 
 // ── IMPORT ────────────────────────────────────
@@ -1721,7 +1655,7 @@ function renderPrev(){
     '<div style="max-height:260px;overflow-y:auto">'+
     pend.map(function(r,i){
       var dupeStyle = r.isDupe ? 'background:rgba(255,170,71,.06);border-left:2px solid var(--or);padding-left:6px;' : '';
-    var dupeTag = r.isDupe ? '<span style="font-size:7px;color:var(--or);flex-shrink:0;white-space:nowrap;font-family:DM Mono,monospace">DUP.</span>' : '';
+    var dupeTag = r.isDupe ? '<span style="font-size:7px;color:var(--or);flex-shrink:0;white-space:nowrap;font-family:monospace">DUP.</span>' : '';
     return '<div class="imp-row" style="'+dupeStyle+'">'+
         '<input type="checkbox" class="imp-check" id="ic'+i+'" '+(r.sel?'checked':'')+' onchange="pend['+i+'].sel=this.checked">'+
         '<span style="color:'+(r.isDupe?'var(--or)':'var(--tx3)')+';width:36px;flex-shrink:0">'+r.f.slice(5)+'</span>'+
@@ -1775,9 +1709,9 @@ function showDupeModal(dupes, toAdd){
   var rows = dupes.map(function(r, i){
     return '<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(37,40,54,.4);font-size:10px">'+
       '<input type="checkbox" id="dk'+i+'" checked style="accent-color:var(--or);width:14px;height:14px;flex-shrink:0">'+
-      '<span style="color:var(--tx3);width:50px;flex-shrink:0;font-family:DM Mono,monospace">'+r.f.slice(5)+'</span>'+
+      '<span style="color:var(--tx3);width:50px;flex-shrink:0;font-family:monospace">'+r.f.slice(5)+'</span>'+
       '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+r.d+'</span>'+
-      '<span style="font-family:DM Mono,monospace;color:var(--or);flex-shrink:0">&#8364;'+r.i.toFixed(2)+'</span>'+
+      '<span style="font-family:monospace;color:var(--or);flex-shrink:0">&#8364;'+r.i.toFixed(2)+'</span>'+
       '<span style="font-size:8px;color:var(--or);flex-shrink:0;white-space:nowrap">YA EXISTE</span>'+
     '</div>';
   }).join('');
@@ -1787,7 +1721,7 @@ function showDupeModal(dupes, toAdd){
   modal.style.cssText = 'position:fixed;inset:0;background:rgba(10,11,15,.92);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)';
   modal.innerHTML =
     '<div style="background:var(--s1);border:1px solid rgba(255,170,71,.4);border-radius:16px;padding:24px;width:460px;max-width:95vw;max-height:88vh;overflow-y:auto">'+
-      '<div style="font-family:DM Serif Display,serif;font-size:18px;margin-bottom:4px">&#9888; Duplicados detectados</div>'+
+      '<div style="font-family:Georgia,serif;font-size:18px;margin-bottom:4px">&#9888; Duplicados detectados</div>'+
       '<div style="font-size:10px;color:var(--tx2);margin-bottom:14px">'+dupes.length+' movimiento'+(dupes.length>1?'s':'')+ ' ya exist'+(dupes.length>1?'en':'e')+ ' con la misma fecha e importe. Desmarca los que NO quieras volver a importar.</div>'+
       '<div style="margin-bottom:14px">'+rows+'</div>'+
       '<div style="font-size:9px;color:var(--tx2);margin-bottom:14px;padding:8px;background:var(--s2);border-radius:8px">'+
@@ -1795,9 +1729,9 @@ function showDupeModal(dupes, toAdd){
         'Los marcados en naranja ya existen — decide si importarlos igualmente.'+
       '</div>'+
       '<div style="display:flex;gap:8px">'+
-        '<button onclick="cancelDupeImport()" style="flex:1;padding:8px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--tx2);font-family:Epilogue,sans-serif;font-size:11px;cursor:pointer">Cancelar todo</button>'+
-        '<button onclick="skipDupes('+JSON.stringify([]).replace(/"/g,"'")+','+dupes.length+')" style="flex:1;padding:8px;background:rgba(255,170,71,.15);border:1px solid var(--or);border-radius:8px;color:var(--or);font-family:Epilogue,sans-serif;font-size:11px;cursor:pointer">Omitir duplicados</button>'+
-        '<button onclick="importWithSelected('+dupes.length+')" style="flex:2;padding:8px;background:var(--ac);border:none;border-radius:8px;color:#0a0b0f;font-family:Epilogue,sans-serif;font-weight:700;font-size:11px;cursor:pointer">Importar seleccion</button>'+
+        '<button onclick="cancelDupeImport()" style="flex:1;padding:8px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--tx2);font-family:sans-serif;font-size:11px;cursor:pointer">Cancelar todo</button>'+
+        '<button onclick="skipDupesClick()" style="flex:1;padding:8px;background:rgba(255,170,71,.15);border:1px solid var(--or);border-radius:8px;color:var(--or);font-family:sans-serif;font-size:11px;cursor:pointer">Omitir duplicados</button>'+
+        '<button onclick="importWithSelected('+dupes.length+')" style="flex:2;padding:8px;background:var(--ac);border:none;border-radius:8px;color:#0a0b0f;font-family:sans-serif;font-weight:700;font-size:11px;cursor:pointer">Importar seleccion</button>'+
       '</div>'+
     '</div>';
 
@@ -1813,6 +1747,14 @@ function cancelDupeImport(){
   tt('Importacion cancelada');
 }
 
+function skipDupesClick(){
+  var m = document.getElementById('dupeModal');
+  if(!m) return;
+  var toAdd = m._toAdd;
+  document.body.removeChild(m);
+  doImport(toAdd, []);
+  tt('Duplicados omitidos. Solo nuevos importados.');
+}
 function skipDupes(x, n){
   var m = document.getElementById('dupeModal');
   var toAdd = m._toAdd;
@@ -1850,6 +1792,7 @@ function doImport(toAdd, dupes){
     dupes: dupes.length,
     skipped: dupes.length - (toAdd.length - (added - (toAdd.length - dupes.length)))
   });
+  saveState();
   renderHist();
   var msg = added + ' importados';
   if(dupes.length) msg += ' · ' + dupes.length + ' duplicados gestionados';
@@ -1964,21 +1907,16 @@ function toggleDrill(budId){
   if(!bLine)return;
   var kws=bLine.kw||[];
   var cat=bLine.cat;
+  // Also include transactions pinned directly to this line
+  var pinnedIds=[];
+  ftx().forEach(function(t,i){if(t._blineId===budId)pinnedIds.push(i);});
   var el=document.getElementById('drill_'+budId);
   if(!el)return;
   if(el.style.display!=='none'){el.style.display='none';return;}
 
-  // Get matching transactions
+  // Get matching transactions using same logic as realForLine
   var txns=ftx();
-  var matched;
-  if(kws&&kws.length>0){
-    matched=txns.filter(function(t){
-      var desc=t.d.toLowerCase();
-      return kws.some(function(kw){return desc.indexOf(kw.toLowerCase())>=0;});
-    });
-  } else {
-    matched=txns.filter(function(t){return t.c===cat;});
-  }
+  var matched=txns.filter(function(t){ return txMatchesLine(t,bLine); });
   matched=matched.sort(function(a,b){return b.f<a.f?-1:1;});
 
   if(!matched.length){
@@ -2004,20 +1942,22 @@ function toggleDrill(budId){
     // Find which bline currently owns this tx
     var currentBline=BLINES.find(function(b){ return txMatchesLine(t,b); });
     var currentBid=currentBline?currentBline.id:'';
-    return '<div class="drill-row">'+
-      '<span style="color:var(--tx3);width:46px;flex-shrink:0;font-family:DM Mono,monospace">'+t.f.slice(5)+'</span>'+
-      '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+t.d+'">'+t.d+'</span>'+
+    return '<div class="drill-row" id="drow_'+idx+'">'+
+      '<span style="color:var(--tx3);width:40px;flex-shrink:0;font-family:monospace;font-size:9px">'+t.f.slice(5)+'</span>'+
+      '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px" title="'+t.d+'">'+t.d+'</span>'+
       '<span class="bb '+bk.cls+'" style="flex-shrink:0">'+bk.l+'</span>'+
-      '<select class="cat-sel-mini" data-idx="'+idx+'" onchange="moveTxToBline(this,parseInt(this.dataset.idx))" style="flex-shrink:0;min-width:130px">'+
+      '<select class="cat-sel-mini" data-idx="'+idx+'" onchange="moveTxToBline(this,parseInt(this.dataset.idx))" style="flex-shrink:0;min-width:110px">'+
         buildBlineOpts(currentBid)+
       '</select>'+
-      '<span style="font-family:DM Mono,monospace;font-size:10px;color:var(--rd);flex-shrink:0;width:54px;text-align:right">&#8364;'+t.i.toFixed(2)+'</span>'+
+      '<span style="font-family:monospace;font-size:10px;color:var(--rd);flex-shrink:0;width:50px;text-align:right">&#8364;'+t.i.toFixed(2)+'</span>'+
+      '<button data-idx="'+idx+'" onclick="editDrillTx(parseInt(this.dataset.idx))" title="Editar" style="background:none;border:none;color:var(--tx3);cursor:pointer;font-size:12px;flex-shrink:0;padding:0 3px">&#9998;</button>'+
+      '<button id="delbtn_'+idx+'" data-idx="'+idx+'" data-armed="0" onclick="deleteDrillTx(parseInt(this.dataset.idx))" title="Eliminar" style="background:none;border:none;color:var(--rd);cursor:pointer;font-size:12px;flex-shrink:0;padding:0 3px">&#128465;</button>'+
     '</div>';
   }).join('');
 
   el.innerHTML='<div class="drill-panel" style="grid-column:1/-1">'+
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'+
-      '<span style="font-size:8px;font-family:DM Mono,monospace;color:var(--tx3);letter-spacing:1px">'+matched.length+' MOVIMIENTOS · TOTAL &#8364;'+fmt(total)+'</span>'+
+      '<span style="font-size:8px;font-family:monospace;color:var(--tx3);letter-spacing:1px">'+matched.length+' MOVIMIENTOS · TOTAL &#8364;'+fmt(total)+'</span>'+
       '<span style="font-size:8px;color:var(--tx2)">Cambia la categoria si esta mal asignado</span>'+
     '</div>'+
     rows+
@@ -2032,7 +1972,7 @@ function changeTxCat(sel, txIdx){
   TX[txIdx].c=newCat;
 
   // Full global refresh — order matters
-  rebuildMO();        // 1. Recalc monthly totals from TX
+  rebuildMO();saveState();        // 1. Recalc monthly totals from TX
   renderAll();        // 2. Dashboard KPIs, charts, donut
   renderPresupuesto(); // 3. Budget table with new real amounts
   renderUnmatched();  // 4. Unmatched list (item disappears)
@@ -2072,6 +2012,7 @@ function validateUnmatched(txIdx){
       renderPresupuesto();
       renderUnmatched();
       renderMov();
+      saveState();
     }, 300);
   } else {
     rebuildMO();
@@ -2112,7 +2053,7 @@ function moveTxToBline(sel, txIdx){
   renderPresupuesto();
   renderUnmatched();
   renderMov();
-  // Close drill panels
+  saveState();
   document.querySelectorAll('[id^="drill_"]').forEach(function(el){el.style.display='none';});
   tt('&#10003; Asignado a: '+targetLine.nom);
 }
@@ -2132,6 +2073,160 @@ function buildBlineOpts(selectedId){
     });
   });
   return result;
+}
+
+// ═══════════════════════════════════
+// GASTO MANUAL
+// ═══════════════════════════════════
+function populateManualBline(){
+  var sel = document.getElementById('mBline');
+  if(!sel) return;
+  sel.innerHTML = buildBlineOpts('');
+  // Set today's date
+  var fd = document.getElementById('mFec');
+  if(fd && !fd.value) fd.value = new Date().toISOString().slice(0,10);
+}
+
+function saveManualGasto(){
+  var con = (document.getElementById('mCon').value||'').trim();
+  var imp = parseFloat(document.getElementById('mImp').value)||0;
+  var fec = document.getElementById('mFec').value||new Date().toISOString().slice(0,10);
+  var ban = document.getElementById('mBan').value;
+  var blineId = parseInt(document.getElementById('mBline').value);
+
+  if(!con){ tt('Escribe un concepto'); return; }
+  if(imp <= 0){ tt('El importe debe ser mayor que 0'); return; }
+  if(!blineId){ tt('Selecciona una partida del presupuesto'); return; }
+
+  var targetLine = BLINES.find(function(b){ return b.id === blineId; });
+  if(!targetLine){ tt('Partida no encontrada'); return; }
+
+  var mo = parseInt(fec.substring(5,7));
+  var yr = parseInt(fec.substring(0,4));
+  var bkStore = ban === 'efectivo' ? 'efectivo' : ban;
+
+  var tx = {
+    f: fec, m: mo, year: yr,
+    d: con, i: imp,
+    b: bkStore, c: targetLine.cat,
+    manual: true, _validated: true, _blineId: blineId
+  };
+  TX.push(tx);
+  tickets.unshift({tx:tx, img:null, source:'manual', date:fec});
+
+  rebuildMO();
+  renderAll();
+  renderPresupuesto();
+  renderUnmatched();
+  saveState();
+
+  // Clear form
+  document.getElementById('mCon').value = '';
+  document.getElementById('mImp').value = '';
+  document.getElementById('mFec').value = new Date().toISOString().slice(0,10);
+
+  var res = document.getElementById('mResult');
+  res.style.display = 'block';
+  res.innerHTML = '&#10003; Registrado: <b>'+con+'</b> &#8364;'+imp.toFixed(2)+' en '+targetLine.nom+' ('+fec+')';
+  setTimeout(function(){ res.style.display='none'; }, 4000);
+  tt('&#10003; '+con+' &#8364;'+imp.toFixed(2)+' registrado en '+targetLine.nom);
+}
+
+// ═══════════════════════════════════
+// EDITAR / ELIMINAR MOVIMIENTO
+// ═══════════════════════════════════
+function editDrillTx(txIdx){
+  var t = TX[txIdx]; if(!t) return;
+  document.getElementById('etIdx').value = txIdx;
+  document.getElementById('etCon').value = t.d;
+  document.getElementById('etImp').value = t.i;
+  document.getElementById('etFec').value = t.f;
+  document.getElementById('etBan').value = t.b||'efectivo';
+  // Populate bline selector
+  var sel = document.getElementById('etBline');
+  sel.innerHTML = buildBlineOpts(t._blineId||'');
+  om('moEditTx');
+}
+
+function saveEditTx(){
+  var idx = parseInt(document.getElementById('etIdx').value);
+  var t = TX[idx]; if(!t) return;
+  var con = document.getElementById('etCon').value.trim();
+  var imp = parseFloat(document.getElementById('etImp').value)||0;
+  var fec = document.getElementById('etFec').value||t.f;
+  var ban = document.getElementById('etBan').value;
+  var blineId = parseInt(document.getElementById('etBline').value);
+  var targetLine = BLINES.find(function(b){ return b.id===blineId; });
+
+  if(!con||imp<=0){ tt('Rellena concepto e importe'); return; }
+
+  t.d = con;
+  t.i = imp;
+  t.f = fec;
+  t.m = parseInt(fec.substring(5,7));
+  t.year = parseInt(fec.substring(0,4));
+  t.b = ban;
+  if(targetLine){ t.c = targetLine.cat; t._blineId = blineId; t._validated = true; }
+
+  cm(document.getElementById('moEditTx'));
+  rebuildMO(); renderAll(); renderPresupuesto(); renderUnmatched(); renderMov();
+  saveState();
+  // Close all drill panels
+  document.querySelectorAll('[id^="drill_"]').forEach(function(el){el.style.display='none';});
+  tt('&#10003; Movimiento actualizado');
+}
+
+var _delArmed = false;
+function confirmDeleteTx(){
+  var idx = parseInt(document.getElementById('etIdx').value);
+  var t = TX[idx]; if(!t) return;
+  var btn = document.querySelector('#moEditTx .bdel');
+  if(!_delArmed){
+    _delArmed = true;
+    if(btn){ btn.textContent='Confirmar borrado'; btn.style.background='rgba(255,77,109,.4)'; }
+    setTimeout(function(){
+      _delArmed=false;
+      if(btn){ btn.textContent='Eliminar'; btn.style.background=''; }
+    }, 3000);
+    return;
+  }
+  _delArmed = false;
+  if(btn){ btn.textContent='Eliminar'; btn.style.background=''; }
+  TX.splice(idx, 1);
+  if(t.manual) tickets = tickets.filter(function(tk){ return tk.tx !== t; });
+  cm(document.getElementById('moEditTx'));
+  rebuildMO(); renderAll(); renderPresupuesto(); renderUnmatched(); renderMov();
+  saveState();
+  document.querySelectorAll('[id^="drill_"]').forEach(function(el){el.style.display='none';});
+  tt('Movimiento eliminado');
+}
+
+function deleteDrillTx(txIdx){
+  var t = TX[txIdx]; if(!t) return;
+  // Double-tap to confirm - no confirm() dialog needed
+  var btn = document.getElementById('delbtn_'+txIdx);
+  if(!btn){ doDeleteTx(txIdx); return; }
+  if(btn.dataset.armed === '1'){
+    doDeleteTx(txIdx);
+  } else {
+    btn.dataset.armed = '1';
+    btn.textContent = '!';
+    btn.style.color = 'var(--or)';
+    btn.title = 'Pulsa de nuevo para confirmar';
+    setTimeout(function(){ 
+      if(btn){ btn.dataset.armed='0'; btn.textContent='\uD83D\uDDD1'; btn.style.color='var(--rd)'; btn.title='Eliminar'; }
+    }, 2500);
+  }
+}
+
+function doDeleteTx(txIdx){
+  var t = TX[txIdx]; if(!t) return;
+  TX.splice(txIdx, 1);
+  if(t.manual) tickets = tickets.filter(function(tk){ return tk.tx !== t; });
+  rebuildMO(); renderAll(); renderPresupuesto(); renderUnmatched(); renderMov();
+  saveState();
+  document.querySelectorAll('[id^="drill_"]').forEach(function(el){el.style.display='none';});
+  tt('Eliminado: '+t.d);
 }
 
 function showInfo(key){
@@ -2209,11 +2304,86 @@ function quickAssign(desc, cat){
   tt('Sugiero la clave "'+firstWord+'" - ajusta y guarda');
 }
 
+// ═══════════════════════════════════
+// PERSISTENCIA
+// ═══════════════════════════════════
+function saveState(){
+  try{
+    var state={
+      version: STATE_VERSION,
+      TX: TX,
+      BLINES: BLINES,
+      INGRESOS: INGRESOS,
+      annuals: annuals,
+      tips: tips,
+      tickets: tickets
+    };
+    localStorage.setItem('atp_state', JSON.stringify(state));
+  }catch(e){ console.warn('No se pudo guardar:', e); }
+}
+
+var STATE_VERSION = '2026v3';
+function loadState(){
+  try{
+    var raw = localStorage.getItem('atp_state');
+    if(!raw) return;
+    var state = JSON.parse(raw);
+    // Version check - if old format, discard
+    if(state.version !== STATE_VERSION){
+      console.log('Estado antiguo descartado, usando datos originales');
+      localStorage.removeItem('atp_state');
+      return;
+    }
+    // Sanity check: TX shouldn't be more than 10x the embedded data
+    if(state.TX && state.TX.length && state.TX.length < 5000) TX = state.TX;
+    if(state.BLINES && state.BLINES.length) BLINES = state.BLINES;
+    if(state.INGRESOS) INGRESOS = state.INGRESOS;
+    if(state.annuals && state.annuals.length) annuals = state.annuals;
+    if(state.tips && state.tips.length) tips = state.tips;
+    if(state.tickets && state.tickets.length) tickets = state.tickets;
+    rebuildMO();
+  }catch(e){ 
+    console.warn('No se pudo cargar estado:', e);
+    localStorage.removeItem('atp_state');
+  }
+}
+
+var _resetArmed = false;
+function resetState(){
+  if(!_resetArmed){
+    _resetArmed = true;
+    tt('Pulsa Reset de nuevo para confirmar borrado total');
+    setTimeout(function(){ _resetArmed = false; }, 3000);
+    return;
+  }
+  _resetArmed = false;
+  localStorage.removeItem('atp_state');
+  location.reload();
+}
+
+// Remove only manual/ticket entries keeping original bank data
+function cleanManualEntries(){
+  var before = TX.length;
+  TX = TX.filter(function(t){ return !t.manual; });
+  tickets = [];
+  var removed = before - TX.length;
+  rebuildMO();
+  renderAll();
+  renderPresupuesto();
+  renderUnmatched();
+  renderMov();
+  renderTicketList();
+  saveState();
+  tt('Eliminados '+removed+' gastos manuales. Datos bancarios intactos.');
+}
+
 document.addEventListener('DOMContentLoaded',function(){
+  loadState();
   document.getElementById('fMde').value=1;
   document.getElementById('fMha').value=6;
   applyF();
   renderSimLines();
+  renderTicketList();
 });
 
 // ═══════════════════════════════════════
@@ -2241,8 +2411,8 @@ gv=function(n){
   if(n===3){renderBancos();}
   if(n===5){renderAnnuals();}
   if(n===6){renderTips();}
-  if(n===7){renderTicketList();}
-  if(n===8){renderAnalisis();}
+  if(n===4){populateManualBline();}
+  if(n===7){renderAnalisis();}
 };
 
 // ═══════════════════════════════════════
@@ -2281,74 +2451,44 @@ function handleTicket(ev, mode){
   reader.readAsDataURL(f);
 }
 
-function analyzeTicketImage(imgData){
-  var b64=imgData.split(',')[1];
-  var mediaType=imgData.split(';')[0].split(':')[1];
-  var today=new Date().toISOString().slice(0,10);
-
-  fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens:400,
-      messages:[{
-        role:'user',
-        content:[
-          {type:'image',source:{type:'base64',media_type:mediaType,data:b64}},
-          {type:'text',text:'Eres un asistente de gastos personales. Analiza esta imagen: puede ser un ticket de compra, recibo, anotacion manuscrita o cualquier justificante de gasto. Extrae la informacion y responde SOLO con JSON valido sin markdown ni explicacion: {"comercio":"nombre del establecimiento o descripcion del gasto","importe":numero_decimal_sin_simbolo,"fecha":"YYYY-MM-DD si se ve, sino fecha de hoy '+today+'","categoria":"una de: hogar/suministros/alimentacion/restaurantes/transporte/salud/compras/actividades/suscripciones/seguros/educacion/efectivo/otros","formapago":"efectivo si se ve en cash o efectivo, sino tarjeta","notas":"cualquier informacion adicional relevante"}'}
-        ]
-      }]
-    })
-  })
-  .then(function(r){return r.json();})
-  .then(function(data){
-    document.getElementById('ticketReading').style.display='none';
-    try{
-      var txt=data.content[0].text.replace(/```json|```/g,'').trim();
-      var p=JSON.parse(txt);
-      fillTicketForm(p, 'imagen');
-    }catch(e){
-      fillTicketForm(null, 'imagen');
-    }
-  })
-  .catch(function(){
-    document.getElementById('ticketReading').style.display='none';
-    fillTicketForm(null, 'imagen');
-  });
-}
-
 function analyzeText(){
   var txt=document.getElementById('tkFreeText').value.trim();
   if(!txt){tt('Escribe el gasto primero');return;}
+  // Parse text manually: look for numbers (amount), month names, bank names
+  var p = parseTextGasto(txt);
+  document.getElementById('textModeCard').style.display='none';
+  fillTicketForm(p, 'texto');
+}
 
-  fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens:400,
-      messages:[{
-        role:'user',
-        content:'Eres un asistente de gastos personales. El usuario describe un gasto con sus palabras: "'+txt+'". Interpreta la descripcion y responde SOLO con JSON valido sin markdown: {"comercio":"descripcion clara del gasto","importe":numero_decimal,"fecha":"YYYY-MM-DD interpretando el mes o dia mencionado (ano 2026)","categoria":"una de: hogar/suministros/alimentacion/restaurantes/transporte/salud/compras/actividades/suscripciones/seguros/educacion/efectivo/otros","formapago":"efectivo si menciona efectivo o cash, bbva si menciona bbva, unicaja si menciona unicaja, revolut si menciona revolut, sino efectivo","notas":"lo que sea relevante"}. Ejemplo: si dice gastos casa rural 350 euros abril efectivo, responde {"comercio":"Casa rural","importe":350,"fecha":"2026-04-01","categoria":"hogar","formapago":"efectivo","notas":"pago en efectivo"}'
-      }]
-    })
-  })
-  .then(function(r){return r.json();})
-  .then(function(data){
-    try{
-      var txt2=data.content[0].text.replace(/```json|```/g,'').trim();
-      var p=JSON.parse(txt2);
-      document.getElementById('textModeCard').style.display='none';
-      fillTicketForm(p, 'texto');
-    }catch(e){
-      fillTicketForm(null, 'texto');
-    }
-  })
-  .catch(function(){
-    fillTicketForm(null, 'texto');
-  });
-  tt('Analizando...');
+function parseTextGasto(txt){
+  var lower = txt.toLowerCase();
+  // Extract amount - find first number
+  var impMatch = lower.match(/(\d+[.,]?\d*)\s*(euros?|eur|e|€)?/);
+  var importe = impMatch ? parseFloat(impMatch[1].replace(',','.')) : 0;
+  // Extract month
+  var months = {enero:1,febrero:2,marzo:3,abril:4,mayo:5,junio:6,julio:7,agosto:8,septiembre:9,octubre:10,noviembre:11,diciembre:12};
+  var mes = new Date().getMonth()+1;
+  Object.keys(months).forEach(function(m){ if(lower.indexOf(m)>=0) mes=months[m]; });
+  var fecha = '2026-'+String(mes).padStart(2,'0')+'-01';
+  // Extract bank
+  var banco = 'efectivo';
+  if(lower.indexOf('bbva')>=0) banco='bbva';
+  else if(lower.indexOf('unicaja')>=0) banco='unicaja';
+  else if(lower.indexOf('revolut')>=0) banco='revolut';
+  // Extract concept - first meaningful words before the number
+  var concepto = txt.replace(/\d+[.,]?\d*/,'').replace(/euros?|eur|€/gi,'').replace(/bbva|unicaja|revolut|efectivo/gi,'');
+  Object.keys(months).forEach(function(m){ concepto = concepto.replace(new RegExp(m,'gi'),''); });
+  concepto = concepto.replace(/\s+/g,' ').trim() || 'Gasto manual';
+  // Detect category
+  var cat = 'otros';
+  if(/restaurante|cena|comida|cafe|bar/.test(lower)) cat='restaurantes';
+  else if(/mercadona|super|carrefour|lidl/.test(lower)) cat='alimentacion';
+  else if(/gasoil|gasolina|gasolinera/.test(lower)) cat='transporte';
+  else if(/farmacia|medico|dentista/.test(lower)) cat='salud';
+  else if(/luz|gas|agua|electricidad/.test(lower)) cat='suministros';
+  else if(/hotel|casa rural|alojamiento|viaje/.test(lower)) cat='hogar';
+  else if(/ropa|zara|amazon|compra/.test(lower)) cat='compras';
+  return {comercio:concepto, importe:importe, fecha:fecha, categoria:cat, formapago:banco, notas:''};
 }
 
 function fillTicketForm(p, source){
@@ -2395,6 +2535,7 @@ function saveTicket(){
   resetTicket();
   renderAll();
   renderTicketList();
+  saveState();
   // Force update presupuesto if open
   if(document.getElementById('v1') && document.getElementById('v1').className.indexOf('on')>=0){
     renderPresupuesto();renderUnmatched();
@@ -2447,7 +2588,7 @@ function renderTicketList(){
         '</div>'+
       '</div>'+
       '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">'+
-        '<span style="font-family:DM Mono,monospace;font-size:12px;color:var(--rd)">&#8364;'+tk.tx.i.toFixed(2)+'</span>'+
+        '<span style="font-family:monospace;font-size:12px;color:var(--rd)">&#8364;'+tk.tx.i.toFixed(2)+'</span>'+
         '<button onclick="deleteTicket('+i+')" style="background:none;border:none;color:var(--tx3);cursor:pointer;font-size:10px">&#128465;</button>'+
       '</div>'+
     '</div>';
@@ -2504,7 +2645,7 @@ function renderSavGoal(){
   var pct=Math.min(100,Math.round((available/goal)*100));
   document.getElementById('savGoalResult').innerHTML=
     '<div style="font-size:10px;color:var(--tx2)">Capacidad actual de ahorro</div>'+
-    '<div style="font-family:DM Serif Display,serif;font-size:20px;color:'+(ok?'var(--gr)':'var(--rd)')+'">&#8364;'+fmt(available)+'/mes</div>'+
+    '<div style="font-family:Georgia,serif;font-size:20px;color:'+(ok?'var(--gr)':'var(--rd)')+'">&#8364;'+fmt(available)+'/mes</div>'+
     '<div style="font-size:9px;color:'+(ok?'var(--gr)':'var(--rd)')+'">'+
       (ok?'&#10003; Objetivo alcanzable. Sobrarian &#8364;'+fmt(available-goal)+'/mes':'&#10007; Te faltan &#8364;'+fmt(goal-available)+'/mes para el objetivo')+
     '</div>'+
@@ -2524,7 +2665,7 @@ function renderEmerg(){
   var pct=Math.min(100,Math.round((fund/target)*100));
   document.getElementById('emergResult').innerHTML=
     '<div style="font-size:10px;color:var(--tx2)">Meses cubiertos</div>'+
-    '<div style="font-family:DM Serif Display,serif;font-size:20px;color:'+(months>=6?'var(--gr)':months>=3?'var(--or)':'var(--rd)')+'">'+months.toFixed(1)+' meses</div>'+
+    '<div style="font-family:Georgia,serif;font-size:20px;color:'+(months>=6?'var(--gr)':months>=3?'var(--or)':'var(--rd)')+'">'+months.toFixed(1)+' meses</div>'+
     '<div style="font-size:9px;color:var(--tx2)">Objetivo: &#8364;'+fmt(target)+' (6 meses de gastos)</div>'+
     '<div style="font-size:9px;color:'+(months>=6?'var(--gr)':'var(--or)')+'">'+
       (months>=6?'&#10003; Fondo de emergencia cubierto':months>=3?'&#9651; Parcialmente cubierto':'&#10007; Por debajo del minimo recomendado')+
@@ -2580,9 +2721,9 @@ function renderSim(){
   document.getElementById('simResult').innerHTML=
     '<div style="margin-bottom:8px">'+details+'</div>'+
     '<div style="border-top:1px solid rgba(37,40,54,.5);padding-top:8px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap">'+
-      '<div style="text-align:center"><div style="font-size:8px;color:var(--tx3);letter-spacing:1px;font-family:DM Mono,monospace">AHORRO/MES</div><div style="font-family:DM Serif Display,serif;font-size:22px;color:var(--gr)">&#8364;'+fmt(totalRed)+'</div></div>'+
-      '<div style="text-align:center"><div style="font-size:8px;color:var(--tx3);letter-spacing:1px;font-family:DM Mono,monospace">EN 6 MESES</div><div style="font-family:DM Serif Display,serif;font-size:22px;color:var(--ac2)">&#8364;'+fmt(totalRed*6)+'</div></div>'+
-      '<div style="text-align:center"><div style="font-size:8px;color:var(--tx3);letter-spacing:1px;font-family:DM Mono,monospace">EN 12 MESES</div><div style="font-family:DM Serif Display,serif;font-size:22px;color:var(--ac)">&#8364;'+fmt(totalRed*12)+'</div></div>'+
+      '<div style="text-align:center"><div style="font-size:8px;color:var(--tx3);letter-spacing:1px;font-family:monospace">AHORRO/MES</div><div style="font-family:Georgia,serif;font-size:22px;color:var(--gr)">&#8364;'+fmt(totalRed)+'</div></div>'+
+      '<div style="text-align:center"><div style="font-size:8px;color:var(--tx3);letter-spacing:1px;font-family:monospace">EN 6 MESES</div><div style="font-family:Georgia,serif;font-size:22px;color:var(--ac2)">&#8364;'+fmt(totalRed*6)+'</div></div>'+
+      '<div style="text-align:center"><div style="font-size:8px;color:var(--tx3);letter-spacing:1px;font-family:monospace">EN 12 MESES</div><div style="font-family:Georgia,serif;font-size:22px;color:var(--ac)">&#8364;'+fmt(totalRed*12)+'</div></div>'+
     '</div>';
 }
 
@@ -2599,9 +2740,9 @@ function renderProjection(){
   var projBal=incAnual-proj12;
 
   var html='<div style="background:var(--s2);border-radius:9px;padding:12px;margin-bottom:10px;display:flex;gap:16px;flex-wrap:wrap">'+
-    '<div><div style="font-size:8px;color:var(--tx3);font-family:DM Mono,monospace;letter-spacing:1px">GASTO PROYECTADO</div><div style="font-family:DM Serif Display,serif;font-size:20px;color:var(--rd)">&#8364;'+fmt(proj12)+'</div></div>'+
-    '<div><div style="font-size:8px;color:var(--tx3);font-family:DM Mono,monospace;letter-spacing:1px">INGRESOS ANUALES</div><div style="font-family:DM Serif Display,serif;font-size:20px;color:var(--gr)">&#8364;'+fmt(incAnual)+'</div></div>'+
-    '<div><div style="font-size:8px;color:var(--tx3);font-family:DM Mono,monospace;letter-spacing:1px">BALANCE AÑO</div><div style="font-family:DM Serif Display,serif;font-size:20px;color:'+(projBal>=0?'var(--ac)':'var(--rd)')+'">&#8364;'+fmt(projBal)+'</div></div>'+
+    '<div><div style="font-size:8px;color:var(--tx3);font-family:monospace;letter-spacing:1px">GASTO PROYECTADO</div><div style="font-family:Georgia,serif;font-size:20px;color:var(--rd)">&#8364;'+fmt(proj12)+'</div></div>'+
+    '<div><div style="font-size:8px;color:var(--tx3);font-family:monospace;letter-spacing:1px">INGRESOS ANUALES</div><div style="font-family:Georgia,serif;font-size:20px;color:var(--gr)">&#8364;'+fmt(incAnual)+'</div></div>'+
+    '<div><div style="font-size:8px;color:var(--tx3);font-family:monospace;letter-spacing:1px">BALANCE AÑO</div><div style="font-family:Georgia,serif;font-size:20px;color:'+(projBal>=0?'var(--ac)':'var(--rd)')+'">&#8364;'+fmt(projBal)+'</div></div>'+
   '</div>';
 
   html+=cats.map(function(cat){
@@ -2613,7 +2754,7 @@ function renderProjection(){
     var pct=budg>0?Math.min(100,Math.round((proj/budg)*100)):0;
     return '<div class="proj-item">'+
       '<div class="proj-cat">'+co.l+'</div>'+
-      '<div class="proj-val" style="color:'+co.c+'">&#8364;'+fmt(proj)+'<span style="font-size:10px;color:var(--tx3);font-family:Epilogue,sans-serif;font-weight:400"> / ano</span></div>'+
+      '<div class="proj-val" style="color:'+co.c+'">&#8364;'+fmt(proj)+'<span style="font-size:10px;color:var(--tx3);font-family:sans-serif;font-weight:400"> / ano</span></div>'+
       '<div style="font-size:9px;color:var(--tx2)">&#8364;'+fmt(avgCat)+'/mes media</div>'+
       (budg>0?'<div style="font-size:9px;color:'+(over?'var(--rd)':'var(--gr)')+'">Presup: &#8364;'+fmt(budg)+'/ano '+(over?'&#9650; +&#8364;'+fmt(proj-budg):'&#10003; -&#8364;'+fmt(budg-proj))+'</div>':'')+
       '<div class="proj-bar"><div class="proj-fill" style="width:'+(pct||50)+'%;background:'+co.c+'"></div></div>'+
@@ -2640,9 +2781,9 @@ function renderTrends(){
     html+='<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(37,40,54,.4)">'+
       '<div class="lc" style="background:'+co.c+'"></div>'+
       '<div style="flex:1;font-size:11px">'+co.l+'</div>'+
-      '<div style="font-family:DM Mono,monospace;font-size:10px;color:var(--tx2)">&#8364;'+fmt(vPrev)+'</div>'+
+      '<div style="font-family:monospace;font-size:10px;color:var(--tx2)">&#8364;'+fmt(vPrev)+'</div>'+
       '<div style="font-size:10px;color:'+clr+';width:50px;text-align:right">'+arrow+' '+(pct!==0?Math.abs(pct)+'%':'=')+'</div>'+
-      '<div style="font-family:DM Mono,monospace;font-size:10px;font-weight:600;color:'+clr+';width:60px;text-align:right">'+(diff>0?'+':'')+fmt(diff)+'</div>'+
+      '<div style="font-family:monospace;font-size:10px;font-weight:600;color:'+clr+';width:60px;text-align:right">'+(diff>0?'+':'')+fmt(diff)+'</div>'+
     '</div>';
   });
   document.getElementById('trendGrid').innerHTML=hasTrend?html:
@@ -2687,7 +2828,7 @@ function renderAlerts(){
         '</div>'+
       '</div>'+
       '<div style="flex-shrink:0;text-align:right">'+
-        '<div style="font-size:10px;font-family:DM Mono,monospace;font-weight:700;color:'+clr+'">'+a.pct+'%</div>'+
+        '<div style="font-size:10px;font-family:monospace;font-weight:700;color:'+clr+'">'+a.pct+'%</div>'+
         '<span class="'+(over?'alert-badge':'alert-badge warn-badge')+'">'+(over?'SUPERADO':'ALERTA')+'</span>'+
         (over?'<div style="font-size:8px;color:var(--rd);margin-top:2px">+&#8364;'+fmt(a.real-a.budgTotal)+'</div>':
                '<div style="font-size:8px;color:var(--or);margin-top:2px">Quedan &#8364;'+fmt(a.budgTotal-a.real)+'</div>')+
@@ -2696,12 +2837,12 @@ function renderAlerts(){
   }).join('');
 
   var okHtml=ok.length?'<div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--bd)">'+
-    '<div style="font-size:8px;font-family:DM Mono,monospace;color:var(--tx3);letter-spacing:1px;margin-bottom:6px">DENTRO DEL PRESUPUESTO ('+ok.length+')</div>'+
+    '<div style="font-size:8px;font-family:monospace;color:var(--tx3);letter-spacing:1px;margin-bottom:6px">DENTRO DEL PRESUPUESTO ('+ok.length+')</div>'+
     ok.map(function(a){
       return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:10px">'+
         '<div style="flex:1">'+a.name+'</div>'+
-        '<div style="font-family:DM Mono,monospace;font-size:9px;color:var(--tx2)">&#8364;'+fmt(a.real)+' / &#8364;'+fmt(a.budgTotal)+'</div>'+
-        '<div style="font-family:DM Mono,monospace;font-size:9px;color:var(--gr)">'+a.pct+'%</div>'+
+        '<div style="font-family:monospace;font-size:9px;color:var(--tx2)">&#8364;'+fmt(a.real)+' / &#8364;'+fmt(a.budgTotal)+'</div>'+
+        '<div style="font-family:monospace;font-size:9px;color:var(--gr)">'+a.pct+'%</div>'+
       '</div>';
     }).join('')+'</div>':'';
 
