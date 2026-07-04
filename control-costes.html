@@ -255,7 +255,6 @@ body.light .fi,.light .fs{color:var(--tx)}
   <button class="nb on" onclick="gv(0)" title="Dashboard">&#9783;</button>
   <button class="nb" onclick="gv(1)" title="Presupuesto">&#9632;</button>
   <button class="nb" onclick="gv(2)" title="Movimientos">&#9783;</button>
-  <button class="nb" onclick="gv(3)" title="Bancos">&#9827;</button>
   <button class="nb" onclick="gv(4)" title="Importar">&#8659;</button>
   <button class="nb" onclick="gv(5)" title="Anuales">&#9776;</button>
   <button class="nb" onclick="gv(6)" title="Ahorro">&#9788;</button>
@@ -280,6 +279,25 @@ body.light .fi,.light .fs{color:var(--tx)}
 </div>
 
 <!-- FILTER BAR -->
+
+<!-- RESUMEN RAPIDO -->
+<div id="quickWidget" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px">
+  <div style="background:var(--s1);border:1px solid var(--bd);border-radius:11px;padding:12px;text-align:center">
+    <div style="font-size:7px;font-family:monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:4px">Esta semana</div>
+    <div style="font-family:Georgia,serif;font-size:18px;color:var(--rd)" id="wkSpent">-</div>
+    <div style="font-size:8px;color:var(--tx3)" id="wkCount">- mov.</div>
+  </div>
+  <div style="background:var(--s1);border:1px solid var(--bd);border-radius:11px;padding:12px;text-align:center">
+    <div style="font-size:7px;font-family:monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:4px">Este mes</div>
+    <div style="font-family:Georgia,serif;font-size:18px;color:var(--ac2)" id="moSpent">-</div>
+    <div style="font-size:8px;color:var(--tx3)" id="moCount">- mov.</div>
+  </div>
+  <div style="background:var(--s1);border:1px solid var(--bd);border-radius:11px;padding:12px;text-align:center">
+    <div style="font-size:7px;font-family:monospace;letter-spacing:1px;color:var(--tx3);text-transform:uppercase;margin-bottom:4px">Disponible</div>
+    <div style="font-family:Georgia,serif;font-size:18px" id="moAvail">-</div>
+    <div style="font-size:8px;color:var(--tx3)" id="moDays">- dias</div>
+  </div>
+</div>
 <div class="fbar">
   <label>Año</label>
   <select class="fsel" id="fY">
@@ -314,7 +332,6 @@ body.light .fi,.light .fs{color:var(--tx)}
     <button class="tab on" onclick="gv(0)">Dashboard</button>
     <button class="tab" onclick="gv(1)">Presupuesto</button>
     <button class="tab" onclick="gv(2)">Movimientos</button>
-    <button class="tab" onclick="gv(3)">Bancos</button>
     <button class="tab" onclick="gv(4)">Importar</button>
     <button class="tab" onclick="gv(5)">Anuales</button>
     <button class="tab" onclick="gv(6)">Ahorro / Analisis</button>
@@ -350,7 +367,6 @@ body.light .fi,.light .fs{color:var(--tx)}
     <button class="tab" onclick="gv(0)">Dashboard</button>
     <button class="tab on" onclick="gv(1)">Presupuesto</button>
     <button class="tab" onclick="gv(2)">Movimientos</button>
-    <button class="tab" onclick="gv(3)">Bancos</button>
     <button class="tab" onclick="gv(4)">Importar</button>
     <button class="tab" onclick="gv(5)">Anuales</button>
     <button class="tab" onclick="gv(6)">Ahorro / Analisis</button>
@@ -415,7 +431,6 @@ body.light .fi,.light .fs{color:var(--tx)}
     <button class="tab" onclick="gv(0)">Dashboard</button>
     <button class="tab" onclick="gv(1)">Presupuesto</button>
     <button class="tab on" onclick="gv(2)">Movimientos</button>
-    <button class="tab" onclick="gv(3)">Bancos</button>
     <button class="tab" onclick="gv(4)">Importar</button>
     <button class="tab" onclick="gv(5)">Anuales</button>
     <button class="tab" onclick="gv(6)">Ahorro / Analisis</button>
@@ -444,28 +459,11 @@ body.light .fi,.light .fs{color:var(--tx)}
   </div>
 </div>
 
-<!-- ═══ BANCOS ═══ -->
-<div class="view" id="v3">
-  <div class="tabs">
-    <button class="tab" onclick="gv(0)">Dashboard</button>
-    <button class="tab" onclick="gv(1)">Presupuesto</button>
-    <button class="tab" onclick="gv(2)">Movimientos</button>
-    <button class="tab on" onclick="gv(3)">Bancos</button>
-    <button class="tab" onclick="gv(4)">Importar</button>
-    <button class="tab" onclick="gv(5)">Anuales</button>
-    <button class="tab" onclick="gv(6)">Ahorro / Analisis</button>
-  </div>
-  <div class="kg" style="grid-template-columns:repeat(3,1fr)" id="bkKpis"></div>
-  <div id="bkSections"></div>
-</div>
-
-<!-- ═══ IMPORTAR ═══ -->
 <div class="view" id="v4">
   <div class="tabs">
     <button class="tab" onclick="gv(0)">Dashboard</button>
     <button class="tab" onclick="gv(1)">Presupuesto</button>
     <button class="tab" onclick="gv(2)">Movimientos</button>
-    <button class="tab" onclick="gv(3)">Bancos</button>
     <button class="tab on" onclick="gv(4)">Importar</button>
     <button class="tab" onclick="gv(5)">Anuales</button>
     <button class="tab" onclick="gv(6)">Ahorro / Analisis</button>
@@ -541,7 +539,6 @@ body.light .fi,.light .fs{color:var(--tx)}
     <button class="tab" onclick="gv(0)">Dashboard</button>
     <button class="tab" onclick="gv(1)">Presupuesto</button>
     <button class="tab" onclick="gv(2)">Movimientos</button>
-    <button class="tab" onclick="gv(3)">Bancos</button>
     <button class="tab" onclick="gv(4)">Importar</button>
     <button class="tab on" onclick="gv(5)">Anuales</button>
     <button class="tab" onclick="gv(6)">Ahorro / Analisis</button>
@@ -563,7 +560,6 @@ body.light .fi,.light .fs{color:var(--tx)}
     <button class="tab" onclick="gv(0)">Dashboard</button>
     <button class="tab" onclick="gv(1)">Presupuesto</button>
     <button class="tab" onclick="gv(2)">Movimientos</button>
-    <button class="tab" onclick="gv(3)">Bancos</button>
     <button class="tab" onclick="gv(4)">Importar</button>
     <button class="tab" onclick="gv(5)">Anuales</button>
     <button class="tab on" onclick="gv(6)">Ahorro</button>
@@ -991,7 +987,7 @@ function gv(n){
   document.querySelectorAll('.nb').forEach(function(b,i){b.className='nb'+(i===n?' on':'');});
   if(n===1){renderPresupuesto();renderUnmatched();}
   if(n===2){renderMov();}
-  if(n===3){renderBancos();}
+  if(n===3){gv(4);return;} // bancos removed
   if(n===5){renderAnnuals();}
   if(n===6){renderTips();renderAnalisis();renderSimLines();}
 }
@@ -1001,11 +997,12 @@ function fmtD(n){return n.toFixed(2);}
 
 // -- RENDER ALL --------------------------------
 function renderAll(){
-  renderAcum();
-  renderKPIs();
-  renderDash();
-  renderDonut();
-  renderBar();
+  try{ renderAcum(); }catch(e){}
+  try{ renderKPIs(); }catch(e){}
+  try{ renderDash(); }catch(e){}
+  try{ renderDonut(); }catch(e){}
+  try{ renderBar(); }catch(e){}
+  try{ renderWidget(); }catch(e){}
 }
 
 // -- ACUM ROW ----------------------------------
@@ -1348,38 +1345,7 @@ function setMBF(b){MBF=b;renderMov();}
 function setMCF(c){MCF=c;renderMov();}
 
 // -- BANCOS ------------------------------------
-function renderBancos(){
-  var txns=ftx();
-  var banks=['bbva','unicaja','revolut','efectivo'];
-  var bt={bbva:0,unicaja:0,revolut:0,efectivo:0};
-  txns.forEach(function(t){
-    var bk=t.b||'otros';
-    if(bt[bk]!==undefined)bt[bk]+=t.i;
-    else if(bt.otros!==undefined)bt.otros+=t.i;
-  });
-  document.getElementById('bkKpis').innerHTML=banks.filter(function(b){return bt[b]>0;}).map(function(b){
-    var bk=BK[b]||{l:b,c:'#888'};
-    return '<div class="kc" style="border-color:'+bk.c+'33">'+
-      '<div class="klbl"><div class="kdot" style="background:'+bk.c+'"></div>'+bk.l+'</div>'+
-      '<div class="kval" style="color:'+bk.c+'"><span class="cur">&#8364;</span>'+fmt(bt[b])+'</div>'+
-      '<div class="ksub">'+txns.filter(function(t){return t.b===b;}).length+' mov.</div></div>';
-  }).join('');
-  document.getElementById('bkSections').innerHTML=banks.map(function(b){
-    var bk=BK[b];
-    var items=txns.filter(function(t){return t.b===b;}).sort(function(a,c){return c.f<a.f?-1:1;});
-    if(!items.length)return '';
-    return '<div class="card"><div class="bank-section-title"><span class="bb '+bk.cls+'" style="font-size:10px;padding:3px 8px">'+bk.l+'</span><span style="font-family:monospace;font-size:11px;color:'+bk.c+'">&#8364;'+fmt(bt[b])+'</span><span style="font-size:9px;color:var(--tx3)">'+items.length+' mov.</span></div>'+
-      '<table class="tbl"><thead><tr><th>FECHA</th><th>CONCEPTO</th><th>CATEGORIA</th><th>&#8364;</th></tr></thead><tbody>'+
-      items.map(function(t){
-        var cat=CATS[t.c]||{l:t.c,c:'#888'};
-        return '<tr><td class="mono" style="color:var(--tx3)">'+t.f+'</td>'+
-          '<td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+t.d+'</td>'+
-          '<td><span class="cb"><span class="cdot" style="background:'+cat.c+'"></span>'+cat.l+'</span></td>'+
-          '<td><span class="mono neg">&#8364;'+t.i.toFixed(2)+'</span></td></tr>';
-      }).join('')+
-      '</tbody></table></div>';
-  }).join('');
-}
+
 
 // -- ANUALES -----------------------------------
 function renderAnnuals(){
@@ -2033,9 +1999,30 @@ function validateUnmatched(txIdx){
   var targetLine = BLINES.find(function(b){ return b.id===blineId; });
   if(!targetLine) return;
   var oldCat = TX[txIdx].c;
+  var concept = TX[txIdx].d;
+
+  // Find all unvalidated TX with same concept (first 6+ chars match)
+  var conceptKey = concept.toLowerCase().slice(0,10).trim();
+  var sameGroup = TX.filter(function(t,i){
+    return i!==txIdx && !t._validated &&
+           t.d.toLowerCase().slice(0,10).trim() === conceptKey;
+  });
+
+  // Apply to this transaction
   TX[txIdx].c = targetLine.cat;
   TX[txIdx]._validated = true;
   TX[txIdx]._blineId = blineId;
+
+  // Auto-apply to same concept group
+  var autoChanged = 0;
+  if(sameGroup.length > 0){
+    sameGroup.forEach(function(t){
+      t.c = targetLine.cat;
+      t._validated = true;
+      t._blineId = blineId;
+      autoChanged++;
+    });
+  }
 
   // Animate row out
   var row = document.getElementById('umrow_'+txIdx);
@@ -2059,7 +2046,9 @@ function validateUnmatched(txIdx){
   }
 
   var newL = targetLine?targetLine.nom:(CATS[TX[txIdx].c]?CATS[TX[txIdx].c].l:TX[txIdx].c);
-  tt('&#10003; Asignado a '+newL+' y eliminado de la lista');
+  var msg = '&#10003; Asignado a '+newL;
+  if(autoChanged > 0) msg += ' + '+autoChanged+' iguales cambiados automaticamente';
+  tt(msg);
 }
 
 
@@ -2265,6 +2254,64 @@ function doDeleteTx(txIdx){
   tt('Eliminado: '+t.d);
 }
 
+// ═══════════════════════════════════
+// QUICK WIDGET - semana / mes / disponible
+// ═══════════════════════════════════
+function renderWidget(){
+  var now = new Date();
+  var todayStr = now.toISOString().slice(0,10);
+  var curYear = now.getFullYear();
+  var curMonth = now.getMonth()+1;
+  var curDay = now.getDate();
+
+  // Start of current week (Monday)
+  var dayOfWeek = now.getDay() || 7; // 1=Mon ... 7=Sun
+  var weekStart = new Date(now);
+  weekStart.setDate(curDay - dayOfWeek + 1);
+  weekStart.setHours(0,0,0,0);
+  var weekStartStr = weekStart.toISOString().slice(0,10);
+
+  // This week's transactions
+  var weekTx = TX.filter(function(t){
+    return t.f >= weekStartStr && t.f <= todayStr && t.i > 0;
+  });
+  var weekTotal = weekTx.reduce(function(s,t){return s+t.i;},0);
+
+  // This month's transactions
+  var monthTx = TX.filter(function(t){
+    if(!t.f) return false;
+    var yr = parseInt(t.f.substring(0,4));
+    var mo = parseInt(t.f.substring(5,7));
+    return yr === curYear && mo === curMonth && t.i > 0;
+  });
+  var monthTotal = monthTx.reduce(function(s,t){return s+t.i;},0);
+
+  // Monthly income and budget
+  var monthInc = incMes(curMonth);
+  var available = monthInc - monthTotal;
+
+  // Days left in month
+  var daysInMonth = new Date(curYear, curMonth, 0).getDate();
+  var daysLeft = daysInMonth - curDay;
+
+  // Update widget
+  var wkEl = document.getElementById('wkSpent');
+  var moEl = document.getElementById('moSpent');
+  var avEl = document.getElementById('moAvail');
+  if(wkEl) wkEl.innerHTML = '&#8364;'+fmt(weekTotal);
+  if(moEl) moEl.innerHTML = '&#8364;'+fmt(monthTotal);
+  if(avEl){
+    avEl.innerHTML = (available>=0?'+':'-')+'&#8364;'+fmt(Math.abs(available));
+    avEl.style.color = available>=0?'var(--gr)':'var(--rd)';
+  }
+  var wkC=document.getElementById('wkCount');
+  var moC=document.getElementById('moCount');
+  var moD=document.getElementById('moDays');
+  if(wkC) wkC.textContent = weekTx.length+' mov.';
+  if(moC) moC.textContent = monthTx.length+' mov.';
+  if(moD) moD.textContent = daysLeft+' dias restantes';
+}
+
 function showInfo(key){
   var el=document.getElementById('info-'+key);
   if(el)el.style.display=el.style.display==='none'?'block':'none';
@@ -2276,15 +2323,17 @@ function showInfo(key){
 // Smart bline guesser based on transaction description
 function guessBline(t){
   var d = t.d.toLowerCase();
-  var c = t.c; // auto-detected category
 
-  // Try to find by keyword match first
+  // First: re-detect category from description (more reliable than stored t.c)
+  var c = smartCat(d);
+
+  // Try to find by BLINE keyword match first
   var kwMatch = BLINES.find(function(b){
     return b.kw && b.kw.some(function(kw){ return kw && d.indexOf(kw.toLowerCase()) >= 0; });
   });
   if(kwMatch) return kwMatch.id;
 
-  // Map category to best bline
+  // Map re-detected category to best bline
   var catMap = {
     'hogar': function(d){
       if(/hipoteca|prestamo/.test(d)) return 1;
@@ -2295,9 +2344,9 @@ function guessBline(t){
     'suministros': function(d){
       if(/gas|naturgy/.test(d)) return 5;
       if(/agua|emasa/.test(d)) return 6;
-      return 4; // luz by default
+      return 4;
     },
-    'seguros': function(d){ return 7; },
+    'seguros': function(){ return 7; },
     'suscripciones': function(d){
       if(/orange/.test(d)) return 9;
       if(/apple/.test(d)) return 10;
@@ -2308,29 +2357,31 @@ function guessBline(t){
     },
     'educacion': function(d){
       if(/guarder|roi|obelleiro/.test(d)) return 14;
-      if(/ingles|academia/.test(d)) return 15;
-      return 14;
+      return 15;
     },
-    'alimentacion': function(d){ return 17; }, // supermercado
+    'alimentacion': function(){ return 17; },
     'salud': function(d){
       if(/farmacia|fcia/.test(d)) return 19;
       if(/dental|dentista/.test(d)) return 21;
       return 19;
     },
-    'transporte': function(d){ return 22; }, // gasoil
-    'restaurantes': function(d){ return 24; },
-    'compras': function(d){
-      if(/amazon|online/.test(d)) return 26;
-      return 25; // ropa
+    'transporte': function(d){
+      if(/parking|taxi|uber|vueling|volotea/.test(d)) return 27;
+      return 22;
     },
-    'estetica': function(d){ return 25; },
-    'actividades': function(d){ return 28; },
-    'ocio_varios': function(d){ return 28; },
-    'tabaco_loteria': function(d){ return 28; },
-    'efectivo': function(d){ return 28; },
-    'inversion': function(d){ return 29; },
-    'ahorro': function(d){ return 30; },
-    'otros': function(d){ return 28; }
+    'restaurantes': function(){ return 24; },
+    'compras': function(d){
+      if(/amazon/.test(d)) return 26;
+      return 25;
+    },
+    'estetica': function(){ return 25; },
+    'actividades': function(){ return 28; },
+    'ocio_varios': function(){ return 28; },
+    'tabaco_loteria': function(){ return 28; },
+    'efectivo': function(){ return 28; },
+    'inversion': function(){ return 29; },
+    'ahorro': function(){ return 30; },
+    'otros': function(){ return 28; }
   };
 
   if(catMap[c]){
@@ -2339,9 +2390,31 @@ function guessBline(t){
     if(found) return found.id;
   }
 
-  // Fallback: first parent line with matching cat
   var catLine = BLINES.find(function(b){ return b.parent===0 && b.cat===c; });
   return catLine ? catLine.id : BLINES.filter(function(b){return b.parent===0;})[0].id;
+}
+
+// Detect category from description text
+function smartCat(d){
+  if(/hipoteca|prestamo|comunidad|resid|chalet|leroy|werkhaus/.test(d)) return 'hogar';
+  if(/naturgy|endesa|iberdrola|gana energ|emasa|agua/.test(d)) return 'suministros';
+  if(/seguro|caser|prosegur|plan uni/.test(d)) return 'seguros';
+  if(/mercadona|carrefour|lidl|aldi|coviran|peyma/.test(d)) return 'alimentacion';
+  if(/restaurante|segalerva|kebab|just eat|telepizza|burger|morrofino|chiringuito|meson|cocina|montaditos|taberna|baston|cafeteria|panaderia|jin peng|bar |100 montaditos|pikon|viaducto|de leo|rain forest|capuchinos/.test(d)) return 'restaurantes';
+  if(/gasoil|gasolina|petroprix|repsol|cepsa|plenergy/.test(d)) return 'transporte';
+  if(/parking|taxi|uber|saba|vueling|volotea|aelia/.test(d)) return 'transporte';
+  if(/farmacia|fcia|dental|dentista|hospital|medic|clinica|materno/.test(d)) return 'salud';
+  if(/orange|apple|netflix|spotify|chatgpt|claude|openai/.test(d)) return 'suscripciones';
+  if(/guarder|mensualidad roi|obelleiro|ingles|academia/.test(d)) return 'educacion';
+  if(/zara|springfield|decathlon|el corte|miravia|sports direct|amazon|bambu/.test(d)) return 'compras';
+  if(/barberia|peluquer|multimon/.test(d)) return 'estetica';
+  if(/tabacos|estanco|tabaco|tulotero|loteria|once/.test(d)) return 'tabaco_loteria';
+  if(/faunia|bioparc|caseta|titanitos|padel|gym|gimnasio|parque|faunia|new multimon/.test(d)) return 'actividades';
+  if(/hotel|booking|airbnb|lindabarcas/.test(d)) return 'viajes';
+  if(/ayuntamiento|aeat|irpf|adeudo excmo/.test(d)) return 'impuestos';
+  if(/bizum|chvt|varios servicio/.test(d)) return 'ocio_varios';
+  if(/cajero|efectivo/.test(d)) return 'efectivo';
+  return 'otros';
 }
 
 function renderUnmatched(){
@@ -2382,9 +2455,9 @@ function renderUnmatched(){
           buildBlineOpts(guessBline(t))+
         '</select>'+
       '</td>'+
-      '<td>'+
+      '<td style="white-space:nowrap">'+
         '<button data-idx="'+txIdx+'" onclick="validateUnmatched(parseInt(this.dataset.idx))" '+
-          'style="background:rgba(61,255,160,.15);border:1px solid var(--gr);color:var(--gr);border-radius:5px;padding:3px 9px;font-size:10px;cursor:pointer;font-weight:700;white-space:nowrap">'+
+          'style="background:rgba(61,255,160,.15);border:1px solid var(--gr);color:var(--gr);border-radius:5px;padding:3px 9px;font-size:10px;cursor:pointer;font-weight:700">'+
           '&#10003; OK'+
         '</button>'+
       '</td>'+
@@ -2531,7 +2604,7 @@ gv=function(n){
   document.querySelectorAll('.nb').forEach(function(b,i){b.className='nb'+(i===n?' on':'');});
   if(n===1){renderPresupuesto();renderUnmatched();}
   if(n===2){renderMov();}
-  if(n===3){renderBancos();}
+  if(n===3){gv(4);return;} // bancos removed
   if(n===5){renderAnnuals();}
   if(n===6){renderTips();renderAnalisis();renderSimLines();}
   if(n===4){populateManualBline();}
