@@ -2273,6 +2273,77 @@ function showInfo(key){
 // =======================================
 // MOVIMIENTOS SIN ASIGNAR A PRESUPUESTO
 // =======================================
+// Smart bline guesser based on transaction description
+function guessBline(t){
+  var d = t.d.toLowerCase();
+  var c = t.c; // auto-detected category
+
+  // Try to find by keyword match first
+  var kwMatch = BLINES.find(function(b){
+    return b.kw && b.kw.some(function(kw){ return kw && d.indexOf(kw.toLowerCase()) >= 0; });
+  });
+  if(kwMatch) return kwMatch.id;
+
+  // Map category to best bline
+  var catMap = {
+    'hogar': function(d){
+      if(/hipoteca|prestamo/.test(d)) return 1;
+      if(/comunidad|resid/.test(d)) return 2;
+      if(/prosegur|alarma/.test(d)) return 3;
+      return 1;
+    },
+    'suministros': function(d){
+      if(/gas|naturgy/.test(d)) return 5;
+      if(/agua|emasa/.test(d)) return 6;
+      return 4; // luz by default
+    },
+    'seguros': function(d){ return 7; },
+    'suscripciones': function(d){
+      if(/orange/.test(d)) return 9;
+      if(/apple/.test(d)) return 10;
+      if(/chat|openai/.test(d)) return 11;
+      if(/claude/.test(d)) return 12;
+      if(/netflix/.test(d)) return 13;
+      return 9;
+    },
+    'educacion': function(d){
+      if(/guarder|roi|obelleiro/.test(d)) return 14;
+      if(/ingles|academia/.test(d)) return 15;
+      return 14;
+    },
+    'alimentacion': function(d){ return 17; }, // supermercado
+    'salud': function(d){
+      if(/farmacia|fcia/.test(d)) return 19;
+      if(/dental|dentista/.test(d)) return 21;
+      return 19;
+    },
+    'transporte': function(d){ return 22; }, // gasoil
+    'restaurantes': function(d){ return 24; },
+    'compras': function(d){
+      if(/amazon|online/.test(d)) return 26;
+      return 25; // ropa
+    },
+    'estetica': function(d){ return 25; },
+    'actividades': function(d){ return 28; },
+    'ocio_varios': function(d){ return 28; },
+    'tabaco_loteria': function(d){ return 28; },
+    'efectivo': function(d){ return 28; },
+    'inversion': function(d){ return 29; },
+    'ahorro': function(d){ return 30; },
+    'otros': function(d){ return 28; }
+  };
+
+  if(catMap[c]){
+    var bid = catMap[c](d);
+    var found = BLINES.find(function(b){ return b.id === bid; });
+    if(found) return found.id;
+  }
+
+  // Fallback: first parent line with matching cat
+  var catLine = BLINES.find(function(b){ return b.parent===0 && b.cat===c; });
+  return catLine ? catLine.id : BLINES.filter(function(b){return b.parent===0;})[0].id;
+}
+
 function renderUnmatched(){
   var txns=ftx();
   var parentLines = BLINES.filter(function(b){ return b.parent === 0; });
@@ -2308,11 +2379,7 @@ function renderUnmatched(){
       '<td><span class="mono neg">&#8364;'+t.i.toFixed(2)+'</span></td>'+
       '<td>'+
         '<select class="cat-sel-mini" id="umsel_'+txIdx+'" style="min-width:130px">'+
-          (function(){
-            var currentBline=BLINES.find(function(b){ return txMatchesLine(t,b); });
-            var currentBid=currentBline?currentBline.id:'';
-            return buildBlineOpts(currentBid);
-          })()+
+          buildBlineOpts(guessBline(t))+
         '</select>'+
       '</td>'+
       '<td>'+
