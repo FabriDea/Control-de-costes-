@@ -1595,32 +1595,87 @@ function parseCSV(txt){
   pend=[];
   var lines=txt.split('\n');
   var started=false;
+  var headerCols={}; // column index map for named formats
+
   for(var i=0;i<lines.length;i++){
     var line=lines[i].trim();if(!line)continue;
     var parts=splitL(line);
     if(!started){
       var j=parts.join(' ').toLowerCase();
-      if(j.indexOf('fecha')>=0||j.indexOf('date')>=0||j.indexOf('descripci')>=0){started=true;continue;}
+      // Detect header row
+      if(j.indexOf('fecha')>=0||j.indexOf('date')>=0||j.indexOf('descripci')>=0||j.indexOf('tipo')>=0){
+        started=true;
+        // Map column names for Revolut and others
+        parts.forEach(function(col,idx){
+          var c=col.toLowerCase().replace(/[^a-z]/g,'');
+          if(c==='tipo') headerCols.tipo=idx;
+          if(c==='descripcion'||c==='description'||c.indexOf('descrip')>=0) headerCols.desc=idx;
+          if(c==='importe'||c==='amount'||c==='monto') headerCols.imp=idx;
+          if(c.indexOf('fechainicio')>=0||c.indexOf('dateinit')>=0||c.indexOf('fechavalor')>=0) headerCols.fecha=idx;
+          if(c.indexOf('fechafin')>=0||c.indexOf('fechade')>=0) headerCols.fecha2=idx;
+          if(c==='fecha'||c==='date') headerCols.fecha=idx;
+          if(c==='concepto'||c==='concept') headerCols.desc=idx;
+        });
+        continue;
+      }
       if(/^\d{2}[\/-]\d{2}[\/-]\d{4}/.test(parts[0]||''))started=true;
     }
     if(parts.length<2)continue;
-    var fecha=pDate(parts[0])||pDate(parts[1]);if(!fecha)continue;
-    var desc='',imp=0;
-    for(var k=1;k<parts.length&&k<8;k++){
-      var cl=parts[k].replace(/[^0-9,.\-]/g,'');
-      if(cl){var n=parseFloat(cl.replace(',','.'));if(!isNaN(n)&&n!==0&&Math.abs(n)<50000){imp=n;break;}}
+
+    var fecha=null, desc='', imp=0;
+
+    if(Object.keys(headerCols).length>0){
+      // Named column format (Revolut etc)
+      // Skip transfer rows for Revolut
+      if(headerCols.tipo!==undefined){
+        var tipo=(parts[headerCols.tipo]||'').toLowerCase();
+        if(tipo.indexOf('transferi')>=0) continue;
+      }
+      // Get fecha - prefer fecha de inicio (col 2 in Revolut)
+      var fIdx=headerCols.fecha!==undefined?headerCols.fecha:2;
+      fecha=pDateFull(parts[fIdx]);
+      if(!fecha && headerCols.fecha2!==undefined) fecha=pDateFull(parts[headerCols.fecha2]);
+      // Get desc
+      var dIdx=headerCols.desc!==undefined?headerCols.desc:4;
+      desc=(parts[dIdx]||'').replace(/"/g,'').trim().slice(0,40);
+      // Get importe
+      var iIdx=headerCols.imp!==undefined?headerCols.imp:5;
+      var impStr=(parts[iIdx]||'').replace(/[^0-9,.\-]/g,'');
+      imp=parseFloat(impStr.replace(',','.'))||0;
+    } else {
+      // Generic format - search for date and amount
+      fecha=pDate(parts[0])||pDate(parts[1]);
+      if(!fecha)continue;
+      for(var k=1;k<parts.length&&k<8;k++){
+        var cl=parts[k].replace(/[^0-9,.\-]/g,'');
+        if(cl){var n=parseFloat(cl.replace(',','.'));if(!isNaN(n)&&n!==0&&Math.abs(n)<50000){imp=n;break;}}
+      }
+      desc=(parts[2]||parts[1]||'').replace(/"/g,'').trim().slice(0,40);
     }
-    desc=(parts[2]||parts[1]||'').replace(/"/g,'').trim().slice(0,35);
-    if(imp>=0||!desc)continue;
+
+    if(!fecha||!desc||imp>=0||isNaN(imp))continue;
     var cat=autoCat(desc);
     if(cat==='transferencia')continue;
-    pend.push({f:fecha,d:desc,i:Math.abs(imp),b:impBk,c:cat,sel:true});
+    pend.push({f:fecha,d:desc,i:Math.abs(imp),b:impBk,c:cat,sel:true,isDupe:false});
   }
+
   if(!pend.length){setSt('Sin movimientos. Verifica banco y formato.','var(--or)');return;}
-  setSt('Detectados '+pend.length+' movimientos.','var(--gr)');
+  // Mark dupes
+  pend.forEach(function(r){r.isDupe=isDupe(r);});
+  var nDupes=pend.filter(function(r){return r.isDupe;}).length;
+  setSt('Detectados '+pend.length+' movimientos'+(nDupes?' ('+nDupes+' duplicados)':'')+'','var(--gr)');
   renderPrev();
   document.getElementById('impBtn').style.display='block';
   document.getElementById('clrBtn').style.display='block';
+}
+
+// Parse full datetime string: 2026-06-01 16:20:22 or 2026-06-01T16:20:22
+function pDateFull(s){
+  if(!s)return null;
+  s=s.replace(/"/g,'').trim();
+  var m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if(m)return m[1]+'-'+m[2]+'-'+m[3];
+  return pDate(s);
 }
 
 function splitL(l){
