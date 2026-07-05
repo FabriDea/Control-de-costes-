@@ -248,6 +248,7 @@ body.light .fi,.light .fs{color:var(--tx)}
 .drill-row:last-child{border-bottom:none}
 .cat-sel-mini{background:var(--s1);border:1px solid var(--bd);border-radius:5px;padding:2px 5px;color:var(--tx);font-size:8px;outline:none;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;cursor:pointer}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 <nav class="sb">
@@ -1584,11 +1585,31 @@ function setSt(msg,c){var el=document.getElementById('impSt');el.textContent=msg
 
 function handleF(ev){
   var f=ev.target.files[0];if(!f)return;
-  setSt('Procesando...','var(--tx2)');
-  var r=new FileReader();
-  r.onload=function(e){parseCSV(e.target.result);};
-  r.onerror=function(){setSt('Error leyendo archivo','var(--rd)');};
-  r.readAsText(f,'UTF-8');
+  setSt('Procesando '+f.name+'...','var(--tx2)');
+  var ext=f.name.split('.').pop().toLowerCase();
+  if(ext==='xlsx'||ext==='xls'){
+    // Read as Excel using SheetJS
+    var r=new FileReader();
+    r.onload=function(e){
+      try{
+        var data=new Uint8Array(e.target.result);
+        var wb=XLSX.read(data,{type:'array'});
+        var ws=wb.Sheets[wb.SheetNames[0]];
+        var csv=XLSX.utils.sheet_to_csv(ws,{FS:';'});
+        parseCSV(csv);
+      }catch(err){
+        setSt('Error leyendo Excel: '+err.message,'var(--rd)');
+      }
+    };
+    r.onerror=function(){setSt('Error leyendo archivo','var(--rd)');};
+    r.readAsArrayBuffer(f);
+  } else {
+    // Read as CSV/text
+    var r2=new FileReader();
+    r2.onload=function(e){parseCSV(e.target.result);};
+    r2.onerror=function(){setSt('Error leyendo archivo','var(--rd)');};
+    r2.readAsText(f,'UTF-8');
+  }
 }
 
 function parseCSV(txt){
@@ -1691,9 +1712,18 @@ function splitL(l){
 }
 
 function pDate(s){
-  if(!s)return null;s=s.replace(/[" ]/g,'');
-  var m=s.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})$/);if(m)return m[3]+'-'+m[2]+'-'+m[1];
+  if(!s)return null;
+  s=String(s).replace(/[" ]/g,'').trim();
+  // DD/MM/YYYY or DD-MM-YYYY (BBVA, Unicaja)
+  var m=s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+  if(m)return m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0');
+  // YYYY-MM-DD (Revolut)
   m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return m[1]+'-'+m[2]+'-'+m[3];
+  // Excel serial date number
+  if(!isNaN(s)&&parseInt(s)>40000&&parseInt(s)<50000){
+    var d=new Date(Math.round((parseInt(s)-25569)*86400*1000));
+    return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  }
   return null;
 }
 
