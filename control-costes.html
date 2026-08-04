@@ -1616,62 +1616,90 @@ function parseCSV(txt){
   pend=[];
   var lines=txt.split('\n');
   var started=false;
-  var headerCols={}; // column index map for named formats
+  var headerCols={};
 
   for(var i=0;i<lines.length;i++){
     var line=lines[i].trim();if(!line)continue;
     var parts=splitL(line);
     if(!started){
       var j=parts.join(' ').toLowerCase();
-      // Detect header row
-      if(j.indexOf('fecha')>=0||j.indexOf('date')>=0||j.indexOf('descripci')>=0||j.indexOf('tipo')>=0){
+
+      // Detect Revolut header (has 'tipo' column)
+      if(j.indexOf('tipo')>=0&&j.indexOf('fecha')>=0){
         started=true;
-        // Map column names for Revolut and others
         parts.forEach(function(col,idx){
           var c=col.toLowerCase().replace(/[^a-z]/g,'');
           if(c==='tipo') headerCols.tipo=idx;
-          if(c==='descripcion'||c==='description'||c.indexOf('descrip')>=0) headerCols.desc=idx;
-          if(c==='importe'||c==='amount'||c==='monto') headerCols.imp=idx;
-          if(c.indexOf('fechainicio')>=0||c.indexOf('dateinit')>=0||c.indexOf('fechavalor')>=0) headerCols.fecha=idx;
-          if(c.indexOf('fechafin')>=0||c.indexOf('fechade')>=0) headerCols.fecha2=idx;
+          if(c.indexOf('descrip')>=0||c==='concepto') headerCols.desc=idx;
+          if(c==='importe'||c==='amount') headerCols.imp=idx;
+          if(c.indexOf('fechainicio')>=0||c.indexOf('inicio')>=0) headerCols.fecha=idx;
           if(c==='fecha'||c==='date') headerCols.fecha=idx;
-          if(c==='concepto'||c==='concept') headerCols.desc=idx;
         });
         continue;
       }
-      if(/^\d{2}[\/-]\d{2}[\/-]\d{4}/.test(parts[0]||''))started=true;
+
+      // Detect Unicaja/BBVA header row with column names
+      // Unicaja: "Fecha de operación;Fecha valor;Concepto;Importe;Divisa;Saldo..."
+      // BBVA: "Fecha;Concepto;Importe;Saldo"
+      if((j.indexOf('concepto')>=0||j.indexOf('descripci')>=0)&&j.indexOf('importe')>=0){
+        started=true;
+        parts.forEach(function(col,idx){
+          var c=col.toLowerCase().replace(/[^a-z]/g,'');
+          if(c.indexOf('concepto')>=0||c.indexOf('descrip')>=0) headerCols.desc=idx;
+          if(c==='importe'||c==='amount') headerCols.imp=idx;
+          if(c.indexOf('fechaoper')>=0||c.indexOf('fechavalor')>=0||c==='fecha'||c==='date') {
+            if(headerCols.fecha===undefined) headerCols.fecha=idx;
+          }
+        });
+        // For Unicaja: fecha=0, desc=2, imp=3
+        if(headerCols.fecha===undefined) headerCols.fecha=0;
+        if(headerCols.desc===undefined) headerCols.desc=2;
+        if(headerCols.imp===undefined) headerCols.imp=3;
+        continue;
+      }
+
+      // Auto-detect: if first column looks like a date -> start reading
+      if(pDate(parts[0])||pDateFull(parts[0])) started=true;
+      else continue;
     }
     if(parts.length<2)continue;
 
     var fecha=null, desc='', imp=0;
 
     if(Object.keys(headerCols).length>0){
-      // Named column format (Revolut etc)
+      // Named column format (Revolut, Unicaja, BBVA with headers)
       // Skip transfer rows for Revolut
       if(headerCols.tipo!==undefined){
         var tipo=(parts[headerCols.tipo]||'').toLowerCase();
         if(tipo.indexOf('transferi')>=0) continue;
       }
-      // Get fecha - prefer fecha de inicio (col 2 in Revolut)
-      var fIdx=headerCols.fecha!==undefined?headerCols.fecha:2;
-      fecha=pDateFull(parts[fIdx]);
-      if(!fecha && headerCols.fecha2!==undefined) fecha=pDateFull(parts[headerCols.fecha2]);
+      // Skip Unicaja transfer rows (GO FIT = nomina, TRANSFERENCIA)
+      // Get fecha
+      var fIdx=headerCols.fecha!==undefined?headerCols.fecha:0;
+      fecha=pDateFull(parts[fIdx])||pDate(parts[fIdx]);
       // Get desc
-      var dIdx=headerCols.desc!==undefined?headerCols.desc:4;
+      var dIdx=headerCols.desc!==undefined?headerCols.desc:2;
       desc=(parts[dIdx]||'').replace(/"/g,'').trim().slice(0,40);
-      // Get importe
-      var iIdx=headerCols.imp!==undefined?headerCols.imp:5;
-      var impStr=(parts[iIdx]||'').replace(/[^0-9,.\-]/g,'');
-      imp=parseFloat(impStr.replace(',','.'))||0;
+      // Get importe - handle Spanish format: -40,90 or -40.90
+      var iIdx=headerCols.imp!==undefined?headerCols.imp:3;
+      var impRaw=(parts[iIdx]||'').replace(/"/g,'').trim();
+      // Spanish: 1.295,41 -> remove dots as thousands sep, replace comma with dot
+      var impStr=impRaw.replace(/\./g,'').replace(',','.');
+      imp=parseFloat(impStr)||0;
     } else {
-      // Generic format - search for date and amount
-      fecha=pDate(parts[0])||pDate(parts[1]);
+      // Generic: date in col0, try to find amount
+      fecha=pDate(parts[0])||pDateFull(parts[0]);
       if(!fecha)continue;
+      desc=(parts[2]||parts[1]||'').replace(/"/g,'').trim().slice(0,40);
+      // Find amount: look for negative number
       for(var k=1;k<parts.length&&k<8;k++){
         var cl=parts[k].replace(/[^0-9,.\-]/g,'');
-        if(cl){var n=parseFloat(cl.replace(',','.'));if(!isNaN(n)&&n!==0&&Math.abs(n)<50000){imp=n;break;}}
+        if(cl){
+          var impStr2=cl.replace(/\./g,'').replace(',','.');
+          var n=parseFloat(impStr2);
+          if(!isNaN(n)&&n!==0&&Math.abs(n)<50000){imp=n;break;}
+        }
       }
-      desc=(parts[2]||parts[1]||'').replace(/"/g,'').trim().slice(0,40);
     }
 
     if(!fecha||!desc||imp>=0||isNaN(imp))continue;
