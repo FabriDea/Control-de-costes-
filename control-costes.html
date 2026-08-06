@@ -248,7 +248,150 @@ body.light .fi,.light .fs{color:var(--tx)}
 .drill-row:last-child{border-bottom:none}
 .cat-sel-mini{background:var(--s1);border:1px solid var(--bd);border-radius:5px;padding:2px 5px;color:var(--tx);font-size:8px;outline:none;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;cursor:pointer}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+// Minimal XLS/BIFF8 reader for Unicaja BIFF8 format
+var XLSPARSER = {
+  read: function(ab){
+    var data = new Uint8Array(ab);
+    var wb = this.extractWorkbook(data);
+    if(!wb) return '';
+    var strings = this.readSST(wb);
+    var rows = this.readRows(wb, strings);
+    return rows.map(function(r){ return r.join(';'); }).join('\n');
+  },
+
+  u16: function(d,i){ return d[i]|(d[i+1]<<8); },
+  u32: function(d,i){ return d[i]|(d[i+1]<<8)|(d[i+2]<<16)|((d[i+3]||0)<<24); },
+  f64: function(d,i){
+    var b=new ArrayBuffer(8);
+    new Uint8Array(b).set(d.slice(i,i+8));
+    return new DataView(b).getFloat64(0,true);
+  },
+
+  extractWorkbook: function(data){
+    // Check OLE2 signature
+    if(data[0]!==0xD0||data[1]!==0xCF) return data; // not OLE2, return as-is
+    var SS=512;
+    var numFAT=this.u32(data,0x2C);
+    var firstDir=this.u32(data,0x30);
+    // Build FAT
+    var fat=[];
+    for(var fi=0;fi<Math.min(numFAT,109);fi++){
+      var fsid=this.u32(data,0x4C+fi*4);
+      if(fsid>=0xFFFFFFF8) break;
+      var sec=data.slice((fsid+1)*SS,(fsid+2)*SS);
+      for(var j=0;j<SS;j+=4) fat.push(this.u32(sec,j));
+    }
+    // Follow chain
+    var followChain=function(fat,start){
+      var r=[]; var sid=start;
+      while(sid<0xFFFFFFF8){ r.push(sid); if(sid>=fat.length)break; sid=fat[sid]; }
+      return r;
+    };
+    // Read directory
+    var dirData=new Uint8Array(0);
+    var tmp=[];
+    followChain(fat,firstDir).forEach(function(s){ tmp.push(data.slice((s+1)*SS,(s+2)*SS)); });
+    var dirLen=tmp.reduce(function(a,b){return a+b.length;},0);
+    dirData=new Uint8Array(dirLen);
+    var off=0;
+    tmp.forEach(function(t){ dirData.set(t,off); off+=t.length; });
+    // Find Workbook entry
+    var wbStart=0, wbSize=0;
+    for(var e=0;e<dirData.length/128;e++){
+      var entry=dirData.slice(e*128,(e+1)*128);
+      var nlen=this.u16(entry,0x40);
+      if(nlen<2)continue;
+      var name='';
+      for(var ni=0;ni<nlen-2;ni+=2) name+=String.fromCharCode(this.u16(entry,ni));
+      if(name==='Workbook'||name==='Book'){
+        wbStart=this.u32(entry,0x74);
+        wbSize=this.u32(entry,0x78);
+        break;
+      }
+    }
+    if(!wbSize) return data;
+    // Read workbook stream
+    var chain=followChain(fat,wbStart);
+    var wbArr=new Uint8Array(wbSize);
+    var woff=0;
+    chain.forEach(function(s){
+      var sec=data.slice((s+1)*SS,(s+2)*SS);
+      var take=Math.min(sec.length,wbSize-woff);
+      wbArr.set(sec.slice(0,take),woff);
+      woff+=take;
+    });
+    return wbArr;
+  },
+
+  readSST: function(wb){
+    var strings=[];
+    var i=0;
+    while(i+4<=wb.length){
+      var rt=this.u16(wb,i), rl=this.u16(wb,i+2);
+      if(rt===0x00FC){
+        var pos=i+4;
+        var unique=this.u32(wb,pos+4); pos+=8;
+        for(var s=0;s<unique&&pos<wb.length;s++){
+          if(pos+3>wb.length) break;
+          var slen=this.u16(wb,pos); pos+=2;
+          var flags=wb[pos]; pos++;
+          var isU=flags&1; var txt='';
+          for(var c=0;c<slen;c++){
+            if(isU){ if(pos+2>wb.length)break; txt+=String.fromCharCode(this.u16(wb,pos)); pos+=2; }
+            else { if(pos>=wb.length)break; txt+=String.fromCharCode(wb[pos]); pos++; }
+          }
+          strings.push(txt);
+        }
+        break;
+      }
+      i+=4+rl; if(rl===0)i++;
+    }
+    return strings;
+  },
+
+  readRows: function(wb, strings){
+    var rows={};
+    var i=0;
+    while(i+4<=wb.length){
+      var rt=this.u16(wb,i), rl=this.u16(wb,i+2);
+      // NUMBER record 0x0203: row(2)+col(2)+xf(2)+value(8) = 14 bytes
+      if(rt===0x0203&&rl===14&&i+18<=wb.length){
+        var row=this.u16(wb,i+4), col=this.u16(wb,i+6);
+        var val=this.f64(wb,i+10); // CORRECT offset: i+10 not i+12
+        if(!rows[row])rows[row]={};
+        if(val>40000&&val<55000&&col<2){
+          // Excel date serial -> YYYY-MM-DD
+          var d=new Date(Math.round((val-25569)*86400*1000));
+          rows[row][col]=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+        } else {
+          rows[row][col]=val;
+        }
+      }
+      // LABELSST 0x00FD: row(2)+col(2)+xf(2)+idx(4) = 10 bytes
+      if(rt===0x00FD&&rl>=10&&i+14<=wb.length){
+        var row=this.u16(wb,i+4), col=this.u16(wb,i+6);
+        var idx=this.u32(wb,i+10);
+        if(!rows[row])rows[row]={};
+        rows[row][col]=strings[idx]||'';
+      }
+      i+=4+rl; if(rl===0)i++;
+    }
+    // Convert to CSV rows - only rows with a valid date in col 0
+    var result=[];
+    var keys=Object.keys(rows).map(Number).sort(function(a,b){return a-b;});
+    keys.forEach(function(r){
+      var cells=rows[r];
+      var fecha=cells[0];
+      if(typeof fecha==='string'&&/^\d{4}-\d{2}-\d{2}/.test(fecha)&&cells[2]){
+        var amt=cells[3]!==undefined?cells[3]:0;
+        result.push([fecha, cells[1]||fecha, cells[2]||'', amt, cells[4]||'EUR', cells[5]||'']);
+      }
+    });
+    return result;
+  }
+};
+</script>
 </head>
 <body>
 <nav class="sb">
@@ -1592,24 +1735,97 @@ function handleF(ev){
     var r=new FileReader();
     r.onload=function(e){
       try{
-        var data=new Uint8Array(e.target.result);
-        var wb=XLSX.read(data,{type:'array'});
-        var ws=wb.Sheets[wb.SheetNames[0]];
-        var csv=XLSX.utils.sheet_to_csv(ws,{FS:';'});
-        parseCSV(csv);
+        var csv=XLSPARSER.read(e.target.result);
+        if(csv&&csv.length>10){
+          parseCSV(csv);
+        } else {
+          setSt('No se pudieron leer datos del Excel. Prueba a exportar como CSV.','var(--or)');
+        }
       }catch(err){
         setSt('Error leyendo Excel: '+err.message,'var(--rd)');
+        console.log('XLS error:',err);
       }
     };
     r.onerror=function(){setSt('Error leyendo archivo','var(--rd)');};
     r.readAsArrayBuffer(f);
   } else {
-    // Read as CSV/text
+    // Read as CSV/text or Norma43
     var r2=new FileReader();
-    r2.onload=function(e){parseCSV(e.target.result);};
+    r2.onload=function(e){
+      var txt=e.target.result;
+      // Detect Norma 43 format (starts with '11' or has '23' records)
+      var firstLine=(txt||'').substring(0,10);
+      if(firstLine.substring(0,2)==='11'||txt.indexOf('\n23')>=0||txt.indexOf('\r23')>=0){
+        parseNorma43(txt);
+      } else {
+        parseCSV(txt);
+      }
+    };
     r2.onerror=function(){setSt('Error leyendo archivo','var(--rd)');};
-    r2.readAsText(f,'UTF-8');
+    r2.readAsText(f,'latin-1');
   }
+}
+
+// AEB Norma 43 parser
+function parseNorma43(txt){
+  pend=[];
+  var lines=txt.split('\n');
+  var currentDate='', currentAmt=0, currentDesc='', currentSign='';
+  
+  lines.forEach(function(line){
+    line=line.replace(/\r/,'');
+    if(!line||line.length<2) return;
+    var tipo=line.substring(0,2);
+    
+    if(tipo==='23'){
+      // Save previous if exists
+      if(currentDate&&currentDesc&&currentAmt>0){
+        var cat=autoCat(currentDesc);
+        if(cat!=='transferencia'){
+          pend.push({f:currentDate,d:currentDesc.trim().slice(0,40),i:currentAmt,b:impBk,c:cat,sel:true,isDupe:false});
+        }
+      }
+      // Parse new movement
+      var fechaRaw=line.substring(14,20); // AAMMDD
+      var yr='20'+fechaRaw.substring(0,2);
+      var mo=fechaRaw.substring(2,4);
+      var dy=fechaRaw.substring(4,6);
+      currentDate=yr+'-'+mo+'-'+dy;
+      var impStr=line.substring(28,40); // 12 digits
+      currentAmt=parseInt(impStr)/100;
+      var signo=line.substring(40,41)||line.substring(42,43)||'1';
+      // '2' or 'D' = debit (gasto), '1' or 'H' = credit (ingreso)
+      currentSign=signo;
+      currentDesc='';
+    }
+    
+    if(tipo==='24'){
+      // Complementary concept text
+      var txt2=line.substring(4,40).trim();
+      if(txt2&&!currentDesc) currentDesc=txt2;
+      else if(txt2&&currentDesc.length<30) currentDesc+=' '+txt2;
+    }
+  });
+  
+  // Save last movement
+  if(currentDate&&currentDesc&&currentAmt>0){
+    var cat=autoCat(currentDesc);
+    if(cat!=='transferencia'){
+      pend.push({f:currentDate,d:currentDesc.trim().slice(0,40),i:currentAmt,b:impBk,c:cat,sel:true,isDupe:false});
+    }
+  }
+  
+  // Filter: only debits (gastos) - sign '2' means debit in Norma43
+  // Actually Unicaja may use different convention, so keep all negatives
+  // For now keep all and let user filter
+  
+  if(!pend.length){setSt('Sin movimientos en Norma 43. Verifica formato.','var(--or)');return;}
+  pend.forEach(function(r){r.isDupe=isDupe(r);});
+  var nDupes=pend.filter(function(r){return r.isDupe;}).length;
+  setSt('Norma 43: '+pend.length+' movimientos'+(nDupes?' ('+nDupes+' dup.)':''),'var(--gr)');
+  renderPrev();
+  document.getElementById('impBtn').style.display='block';
+  document.getElementById('clrBtn').style.display='block';
 }
 
 function parseCSV(txt){
