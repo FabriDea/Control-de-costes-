@@ -2695,6 +2695,36 @@ function renderWidget(){
   if(moD) moD.textContent = daysLeft+' dias restantes';
 }
 
+// Re-categorize ALL unmatched transactions using smartCat + guessBline
+function recatAll(){
+  var parentLines = BLINES.filter(function(b){ return b.parent === 0; });
+  var unmatched = TX.filter(function(t){
+    if(t._validated) return false;
+    return !parentLines.some(function(b){ return txMatchesLine(t, b); });
+  });
+
+  var changed = 0;
+  unmatched.forEach(function(t){
+    var newCat = smartCat(t.d.toLowerCase());
+    var blineId = guessBline({d: t.d, c: newCat});
+    var targetLine = BLINES.find(function(b){ return b.id === blineId; });
+    if(targetLine && blineId !== 1){ // don't assign to Hipoteca (id=1) as default
+      t.c = targetLine.cat;
+      t._blineId = blineId;
+      t._validated = true;
+      changed++;
+    }
+  });
+
+  rebuildMO();
+  renderAll();
+  renderPresupuesto();
+  renderUnmatched();
+  renderMov();
+  saveState();
+  tt('&#10003; ' + changed + ' movimientos re-categorizados automaticamente');
+}
+
 function showInfo(key){
   var el=document.getElementById('info-'+key);
   if(el)el.style.display=el.style.display==='none'?'block':'none';
@@ -2774,12 +2804,22 @@ function guessBline(t){
   }
 
   var catLine = BLINES.find(function(b){ return b.parent===0 && b.cat===c; });
-  return catLine ? catLine.id : BLINES.filter(function(b){return b.parent===0;})[0].id;
+  if(catLine) return catLine.id;
+  // Default to Otros ocio (id=28) not Hipoteca
+  var otrosOcio = BLINES.find(function(b){ return b.id===28; });
+  return otrosOcio ? 28 : BLINES.filter(function(b){return b.parent===0;})[0].id;
 }
 
 // Detect category from description text
 function smartCat(d){
-  if(/hipoteca|prestamo|comunidad|resid|chalet|leroy|werkhaus/.test(d)) return 'hogar';
+  if(/hipoteca|prestamo|chalet|werkhaus/.test(d)) return 'hogar';
+  if(/comunidad|resid/.test(d)) return 'hogar';
+  if(/leroy|brico|ikea|ferreteria/.test(d)) return 'compras';
+  if(/adeudo excmo|ayuntamiento|aeat|hacienda|ibicity/.test(d)) return 'impuestos';
+  if(/ret. efectivo|retirada|cajero atm/.test(d)) return 'efectivo';
+  if(/andorrano|joyeria|reloj/.test(d)) return 'compras';
+  if(/volotea|vueling|iberia|ryanair|easyjet/.test(d)) return 'transporte';
+  if(/paypal/.test(d)) return 'compras';
   if(/naturgy|endesa|iberdrola|gana energ|emasa|agua/.test(d)) return 'suministros';
   if(/seguro|caser|prosegur|plan uni/.test(d)) return 'seguros';
   if(/mercadona|carrefour|lidl|aldi|coviran|peyma/.test(d)) return 'alimentacion';
