@@ -251,7 +251,7 @@ body.light .fi,.light .fs{color:var(--tx)}
 <script>
 // Minimal XLS/BIFF8 reader for Unicaja BIFF8 format
 var XLSPARSER = {
-  read: function(ab){
+  read: async function(ab){
     var data = new Uint8Array(ab);
     var wb = this.extractWorkbook(data);
     if(!wb) return '';
@@ -1792,13 +1792,28 @@ function handleF(ev){
   if(ext==='xlsx'||ext==='xls'){
     // Read as Excel using SheetJS
     var r=new FileReader();
-    r.onload=function(e){
+    r.onload=async function(e){
       try{
-        var csv=XLSPARSER.read(e.target.result);
-        if(csv&&csv.length>10){
-          parseCSV(csv);
+        var ab=e.target.result;
+        var data=new Uint8Array(ab);
+        // Detect XLSX (ZIP) vs XLS (OLE2)
+        if(data[0]===0x50&&data[1]===0x4B){
+          // XLSX - use async parser
+          setSt('Leyendo Excel...','var(--tx2)');
+          var csv=await XLSXPARSER.read(ab);
+          if(csv&&csv.length>10){
+            parseCSVbbva(csv);
+          } else {
+            setSt('No se pudieron leer datos del XLSX.','var(--or)');
+          }
         } else {
-          setSt('No se pudieron leer datos del Excel. Prueba a exportar como CSV.','var(--or)');
+          // XLS (BIFF8/OLE2) - use sync parser
+          var csv=XLSPARSER.read(ab);
+          if(csv&&csv.length>10){
+            parseCSV(csv);
+          } else {
+            setSt('No se pudieron leer datos del Excel. Prueba a exportar como CSV.','var(--or)');
+          }
         }
       }catch(err){
         setSt('Error leyendo Excel: '+err.message,'var(--rd)');
@@ -1878,6 +1893,35 @@ function parseNorma43(txt){
   pend.forEach(function(r){r.isDupe=isDupe(r);});
   var nDupes=pend.filter(function(r){return r.isDupe;}).length;
   setSt('Norma 43: '+pend.length+' gastos detectados'+(nDupes?' ('+nDupes+' dup.)':''),'var(--gr)');
+  renderPrev();
+  document.getElementById('impBtn').style.display='block';
+  document.getElementById('clrBtn').style.display='block';
+}
+
+// Parse pre-parsed BBVA CSV: date;desc;amount
+function parseCSVbbva(txt){
+  pend=[];
+  var lines=txt.split('\n');
+  var skipDesc=['Traspaso programa tu cuenta','Transferencia realizada','Revolut'];
+  lines.forEach(function(line){
+    if(!line.trim()) return;
+    var parts=line.split(';');
+    if(parts.length<3) return;
+    var fecha=parts[0].trim();
+    var desc=parts[1].trim();
+    var imp=parseFloat(parts[2]);
+    if(!fecha||!desc||isNaN(imp)||imp<=0) return;
+    // Skip internal transfers
+    var dl=desc.toLowerCase();
+    if(dl.indexOf('traspaso')>=0||dl.indexOf('transferencia real')>=0) return;
+    if(dl.indexOf('revolut**')>=0) return;
+    var cat=autoCat(desc);
+    pend.push({f:fecha,d:desc.slice(0,40),i:imp,b:impBk,c:cat,sel:true,isDupe:false});
+  });
+  if(!pend.length){setSt('Sin movimientos en el XLSX.','var(--or)');return;}
+  pend.forEach(function(r){r.isDupe=isDupe(r);});
+  var nDupes=pend.filter(function(r){return r.isDupe;}).length;
+  setSt('BBVA: '+pend.length+' movimientos'+(nDupes?' ('+nDupes+' dup.)':''),'var(--gr)');
   renderPrev();
   document.getElementById('impBtn').style.display='block';
   document.getElementById('clrBtn').style.display='block';
