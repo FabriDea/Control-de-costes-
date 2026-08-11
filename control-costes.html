@@ -249,6 +249,122 @@ body.light .fi,.light .fs{color:var(--tx)}
 .cat-sel-mini{background:var(--s1);border:1px solid var(--bd);border-radius:5px;padding:2px 5px;color:var(--tx);font-size:8px;outline:none;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;cursor:pointer}
 </style>
 <script>
+
+// XLSX parser (modern .xlsx = ZIP + XML format used by BBVA)
+var XLSXPARSER = {
+  read: async function(ab){
+    try{
+      var data=new Uint8Array(ab);
+      if(data[0]!==0x50||data[1]!==0x4B) return null;
+      var files=await this.unzip(ab);
+      if(!files) return null;
+
+      // Read shared strings
+      var strings=[];
+      var ssXml=files['xl/sharedStrings.xml']||'';
+      var siRe=/<si>([\s\S]*?)<\/si>/g, sm;
+      while((sm=siRe.exec(ssXml))!==null){
+        strings.push(sm[1].replace(/<[^>]+>/g,'').trim());
+      }
+
+      // Read sheet
+      var sheetXml=files['xl/worksheets/sheet1.xml']||'';
+      if(!sheetXml) return null;
+
+      // Parse cells
+      var rows={};
+      var cellRe=/<c r="([A-Z]+)(\d+)"([^>]*)>([\s\S]*?)<\/c>/g, cm;
+      while((cm=cellRe.exec(sheetXml))!==null){
+        var col=cm[1],row=parseInt(cm[2]),attrs=cm[3],content=cm[4];
+        if(!rows[row]) rows[row]={};
+        var vm=content.match(/<v>([^<]*)<\/v>/);
+        if(!vm) continue;
+        if(attrs.indexOf('t="s"')>=0){
+          var idx=parseInt(vm[1]);
+          rows[row][col]=strings[idx]||'';
+        } else {
+          rows[row][col]=vm[1];
+        }
+      }
+
+      // Convert to lines: date;desc;amount
+      var isD=function(s){return /^\d{2}\/\d{2}\/\d{4}$/.test(s);};
+      var pD=function(s){var p=s.match(/(\d{2})\/(\d{2})\/(\d{4})/);return p?p[3]+'-'+p[2]+'-'+p[1]:null;};
+      var skipD=['Pago con tarjeta','Adeudo a su cargo','EUR','Adeudo de recaudacion municipal',
+                 'Adeudo orange-france telecom','Traspaso programa tu cuenta'];
+      var lines=[];
+      Object.keys(rows).map(Number).sort(function(a,b){return a-b;}).forEach(function(r){
+        if(r<6) return;
+        var cells=rows[r];
+        var imp=parseFloat(cells['F']||'');
+        if(isNaN(imp)||imp>=0) return;
+        var fecha=null;
+        ['C','B'].forEach(function(c){if(!fecha&&isD(cells[c]||''))fecha=pD(cells[c]);});
+        if(!fecha) return;
+        var desc='';
+        ['D','B','C','E'].forEach(function(c){
+          if(desc) return;
+          var v=(cells[c]||'').trim();
+          if(!v||isD(v)||skipD.indexOf(v)>=0||v.length<3) return;
+          if(!/^N \d{13}/.test(v)) desc=v;
+        });
+        if(!desc){['D','E'].forEach(function(c){if(!desc&&cells[c])desc=cells[c];});}
+        if(desc) lines.push(fecha+';'+desc+';'+Math.abs(imp).toFixed(2));
+      });
+      return lines.join('\n');
+    }catch(e){console.log('XLSX err:',e);return null;}
+  },
+
+  unzip: async function(ab){
+    var data=new Uint8Array(ab);
+    var files={};
+    var i=0;
+    while(i<data.length-4){
+      if(data[i]===0x50&&data[i+1]===0x4B&&data[i+2]===0x03&&data[i+3]===0x04){
+        var fnLen=data[i+26]|(data[i+27]<<8);
+        var extraLen=data[i+28]|(data[i+29]<<8);
+        var compSize=data[i+18]|(data[i+19]<<8)|(data[i+20]<<16)|(data[i+21]<<24);
+        var method=data[i+8]|(data[i+9]<<8);
+        var fn='';
+        for(var j=0;j<fnLen;j++) fn+=String.fromCharCode(data[i+30+j]);
+        var dataStart=i+30+fnLen+extraLen;
+        if(fn.indexOf('.xml')>=0){
+          var compressed=data.slice(dataStart,dataStart+compSize);
+          try{
+            var txt='';
+            if(method===0){
+              txt=new TextDecoder('utf-8').decode(compressed);
+            } else if(method===8){
+              txt=await this.inflateAsync(compressed);
+            }
+            if(txt) files[fn]=txt;
+          }catch(e){}
+        }
+        i=dataStart+compSize;
+      } else { i++; }
+    }
+    return Object.keys(files).length>0?files:null;
+  },
+
+  inflateAsync: async function(compressed){
+    try{
+      var ds=new DecompressionStream('deflate-raw');
+      var writer=ds.writable.getWriter();
+      writer.write(compressed);
+      writer.close();
+      var reader=ds.readable.getReader();
+      var chunks=[];
+      while(true){var res=await reader.read();if(res.done)break;chunks.push(res.value);}
+      var total=chunks.reduce(function(a,b){return a+b.length;},0);
+      var merged=new Uint8Array(total);
+      var off=0;
+      chunks.forEach(function(c){merged.set(c,off);off+=c.length;});
+      return new TextDecoder('utf-8').decode(merged);
+    }catch(e){return '';}
+  }
+};
+
+
 // Minimal XLS/BIFF8 reader for Unicaja BIFF8 format
 var XLSPARSER = {
   read: async function(ab){
