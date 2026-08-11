@@ -561,6 +561,7 @@ var XLSPARSER = {
       <span style="color:var(--or)">&#9888; MOVIMIENTOS SIN ASIGNAR A NINGUNA PARTIDA</span>
       <span id="unmatchedCount" style="font-size:8px;color:var(--or)"></span>
     </div>
+    <button onclick="recatAll()" style="width:100%;padding:9px;margin-bottom:10px;background:rgba(232,255,71,.15);border:1px solid var(--ac);color:var(--ac);border-radius:8px;font-size:11px;cursor:pointer;font-weight:700">&#9889; Auto-categorizar todos automaticamente</button>
     <div style="font-size:9px;color:var(--tx2);margin-bottom:10px;line-height:1.5">Estos movimientos no encajan con ninguna partida. Usa el selector para asignarlos a la categoria correcta. Al cambiar, desaparecen de esta lista.</div>
     <table class="tbl">
       <thead><tr><th>FECHA</th><th>CONCEPTO</th><th>BANCO</th><th>&#8364;</th><th>CATEGORIA</th><th></th></tr></thead>
@@ -969,7 +970,7 @@ var BLINES=[
   {id:12,nom:'Claude Pro',        cat:'suscripciones', banco:'revolut', mes:22,  parent:0, kw:['claude','anthropic']},
   {id:13,nom:'Netflix',           cat:'suscripciones', banco:'bbva',    mes:26,  parent:0, kw:['netflix']},
   // EDUCACION
-  {id:14,nom:'Guarderia',         cat:'educacion',     banco:'bbva',    mes:278, parent:0, kw:['guarder','mensualidad roi','obelleiro','cuota mensual roi']},
+  {id:14,nom:'Guarderia',         cat:'educacion',     banco:'bbva',    mes:278, parent:0, kw:['guarder','mensualidad roi','obelleiro','cuota mensual roi','bizum','obelleiro roi','mensualidad roi']},
   {id:15,nom:'Ingles Roi',        cat:'educacion',     banco:'bbva',    mes:70,  parent:0, kw:['ingles','ingles roi','academia']},
   // COMIDA
   {id:16,nom:'Comida total',      cat:'alimentacion',  banco:'unicaja', mes:450, parent:0, kw:['mercadona','carrefour','lidl','aldi','coviran','peyma','comida']},
