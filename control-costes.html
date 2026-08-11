@@ -1730,6 +1730,14 @@ function handleF(ev){
   var f=ev.target.files[0];if(!f)return;
   setSt('Procesando '+f.name+'...','var(--tx2)');
   var ext=f.name.split('.').pop().toLowerCase();
+  if(ext==='csb'||ext==='q43'||ext==='43'){
+    // AEB Norma 43 text format
+    var rn=new FileReader();
+    rn.onload=function(e){ parseNorma43(e.target.result); };
+    rn.onerror=function(){ setSt('Error leyendo archivo','var(--rd)'); };
+    rn.readAsText(f,'latin-1');
+    return;
+  }
   if(ext==='xlsx'||ext==='xls'){
     // Read as Excel using SheetJS
     var r=new FileReader();
@@ -1753,9 +1761,9 @@ function handleF(ev){
     var r2=new FileReader();
     r2.onload=function(e){
       var txt=e.target.result;
-      // Detect Norma 43 format (starts with '11' or has '23' records)
-      var firstLine=(txt||'').substring(0,10);
-      if(firstLine.substring(0,2)==='11'||txt.indexOf('\n23')>=0||txt.indexOf('\r23')>=0){
+      // Detect Norma 43 / CSB format
+      var first2=(txt||'').substring(0,2);
+      if(first2==='11'||txt.indexOf('\n22')>=0){
         parseNorma43(txt);
       } else {
         parseCSV(txt);
@@ -1766,63 +1774,59 @@ function handleF(ev){
   }
 }
 
-// AEB Norma 43 parser
+// AEB Norma 43 / CSB parser (Unicaja format)
+// Offsets verified against real Unicaja file:
+// [0:2]   tipo record
+// [10:16] fecha operacion AAMMDD
+// [27:28] signo: '1'=debe(gasto), '2'=haber(ingreso)
+// [28:42] importe 14 digits (last 2 = cents)
+// Record 23: [4:40] concepto1, [40:80] concepto2
 function parseNorma43(txt){
   pend=[];
-  var lines=txt.split('\n');
-  var currentDate='', currentAmt=0, currentDesc='', currentSign='';
-  
+  var lines=txt.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
+  var cur=null;
+
+  function saveCur(){
+    if(!cur||!cur.date||!cur.desc||cur.imp<=0) return;
+    // signo '1'=debe(gasto), '2'=haber(ingreso) - we only import gastos
+    if(cur.signo!=='1') return;
+    // Skip internal transfers
+    var d=cur.desc.toLowerCase();
+    if(d.indexOf('traspaso')>=0||d.indexOf('transferencia')>=0) return;
+    var cat=autoCat(cur.desc);
+    pend.push({f:cur.date,d:cur.desc.slice(0,40),i:cur.imp,b:impBk,c:cat,sel:true,isDupe:false});
+  }
+
   lines.forEach(function(line){
-    line=line.replace(/\r/,'');
-    if(!line||line.length<2) return;
+    if(line.length<2) return;
     var tipo=line.substring(0,2);
-    
-    if(tipo==='23'){
-      // Save previous if exists
-      if(currentDate&&currentDesc&&currentAmt>0){
-        var cat=autoCat(currentDesc);
-        if(cat!=='transferencia'){
-          pend.push({f:currentDate,d:currentDesc.trim().slice(0,40),i:currentAmt,b:impBk,c:cat,sel:true,isDupe:false});
-        }
-      }
-      // Parse new movement
-      var fechaRaw=line.substring(14,20); // AAMMDD
-      var yr='20'+fechaRaw.substring(0,2);
-      var mo=fechaRaw.substring(2,4);
-      var dy=fechaRaw.substring(4,6);
-      currentDate=yr+'-'+mo+'-'+dy;
-      var impStr=line.substring(28,40); // 12 digits
-      currentAmt=parseInt(impStr)/100;
-      var signo=line.substring(40,41)||line.substring(42,43)||'1';
-      // '2' or 'D' = debit (gasto), '1' or 'H' = credit (ingreso)
-      currentSign=signo;
-      currentDesc='';
+
+    if(tipo==='22'&&line.length>=42){
+      saveCur();
+      var fecha=line.substring(10,16); // AAMMDD
+      var date='20'+fecha.substring(0,2)+'-'+fecha.substring(2,4)+'-'+fecha.substring(4,6);
+      var signo=line.substring(27,28);
+      var impRaw=line.substring(28,42);
+      var imp=parseInt(impRaw)/100;
+      cur={date:date,signo:signo,imp:imp,desc:''};
     }
-    
-    if(tipo==='24'){
-      // Complementary concept text
-      var txt2=line.substring(4,40).trim();
-      if(txt2&&!currentDesc) currentDesc=txt2;
-      else if(txt2&&currentDesc.length<30) currentDesc+=' '+txt2;
+
+    if(tipo==='23'&&cur){
+      var d2=line.length>40?line.substring(40,80).trim():'';
+      var d1=line.substring(4,40).trim();
+      var desc=d2||d1;
+      if(!cur.desc) cur.desc=desc;
     }
   });
-  
-  // Save last movement
-  if(currentDate&&currentDesc&&currentAmt>0){
-    var cat=autoCat(currentDesc);
-    if(cat!=='transferencia'){
-      pend.push({f:currentDate,d:currentDesc.trim().slice(0,40),i:currentAmt,b:impBk,c:cat,sel:true,isDupe:false});
-    }
+  saveCur();
+
+  if(!pend.length){
+    setSt('Sin gastos en el archivo Norma 43. Verifica que sea un extracto de gastos.','var(--or)');
+    return;
   }
-  
-  // Filter: only debits (gastos) - sign '2' means debit in Norma43
-  // Actually Unicaja may use different convention, so keep all negatives
-  // For now keep all and let user filter
-  
-  if(!pend.length){setSt('Sin movimientos en Norma 43. Verifica formato.','var(--or)');return;}
   pend.forEach(function(r){r.isDupe=isDupe(r);});
   var nDupes=pend.filter(function(r){return r.isDupe;}).length;
-  setSt('Norma 43: '+pend.length+' movimientos'+(nDupes?' ('+nDupes+' dup.)':''),'var(--gr)');
+  setSt('Norma 43: '+pend.length+' gastos detectados'+(nDupes?' ('+nDupes+' dup.)':''),'var(--gr)');
   renderPrev();
   document.getElementById('impBtn').style.display='block';
   document.getElementById('clrBtn').style.display='block';
