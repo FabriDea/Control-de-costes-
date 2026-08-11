@@ -629,7 +629,7 @@ var XLSPARSER = {
         <button class="btab" onclick="setBk(this,'revolut')">REVOLUT</button>
       </div>
       <div class="drop-zone" id="dz">
-        <input type="file" accept=".csv,.xlsx,.xls,.txt,.csb,.q43,.43,*" id="fInp" onchange="handleF(event)">
+        <input type="file" id="fInp" onchange="handleF(event)">
         <div style="font-size:26px;margin-bottom:6px">+</div>
         <div style="font-size:11px;font-weight:700;margin-bottom:2px">Arrastra o pulsa</div>
         <div style="font-size:9px;color:var(--tx2)">CSV o Excel del banco</div>
@@ -1450,43 +1450,93 @@ function delBudLine(){
 }
 
 // -- MOVIMIENTOS -------------------------------
+var MOV_PAGE = 0;
+var MOV_PER_PAGE = 25;
+var MOV_FILTERED = [];
+
 function renderMov(){
-  var banks=['all','bbva','unicaja','revolut'];
+  var banks=['all','bbva','unicaja','revolut','efectivo'];
   document.getElementById('movBankF').innerHTML=banks.map(function(b){
-    var l=b==='all'?'Todos':(BK[b]?BK[b].l:b);
+    var l=b==='all'?'Todos':(BK[b]?BK[b].l:b.toUpperCase());
     return '<button class="fpill'+(MBF===b?' on':'')+'" data-v="'+b+'" onclick="setMBF(this.dataset.v)" style="font-size:10px">'+l+'</button>';
   }).join('');
 
-  var avail=[];
-  ftx().forEach(function(t){if(avail.indexOf(t.c)<0)avail.push(t.c);});
-  document.getElementById('movCatF').innerHTML=['all'].concat(avail).map(function(c){
-    var l=c==='all'?'Todas':(CATS[c]?CATS[c].l:c);
-    return '<button class="fpill'+(MCF===c?' on':'')+'" style="font-size:9px" data-v="'+c+'" onclick="setMCF(this.dataset.v)">'+l+'</button>';
+  // Month filter
+  var months=['all',1,2,3,4,5,6,7,8,9,10,11,12];
+  var MN2=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var curMF=window._movMonthF||'all';
+  document.getElementById('movMonthF').innerHTML=months.map(function(m){
+    var l=m==='all'?'Todos':MN2[m];
+    return '<button class="fpill'+(curMF==m?' on':'')+'" data-v="'+m+'" onclick="window._movMonthF=this.dataset.v==='+'"all"?"all":parseInt(this.dataset.v);MOV_PAGE=0;renderMov()" style="font-size:10px">'+l+'</button>';
   }).join('');
 
   var search=(document.getElementById('movSearch')||{value:''}).value.toLowerCase().trim();
-  var txns=ftx()
+  MOV_FILTERED=ftx()
     .filter(function(t){return MBF==='all'||t.b===MBF;})
     .filter(function(t){return MCF==='all'||t.c===MCF;})
     .filter(function(t){
-      if(!search)return true;
+      if(curMF==='all') return true;
+      return t.m===parseInt(curMF);
+    })
+    .filter(function(t){
+      if(!search) return true;
       var cat=(CATS[t.c]||{l:t.c}).l.toLowerCase();
-      var bk=(BK[t.b]||{l:t.b}).l.toLowerCase();
-      return t.d.toLowerCase().indexOf(search)>=0||cat.indexOf(search)>=0||bk.indexOf(search)>=0;
+      return t.d.toLowerCase().indexOf(search)>=0||cat.indexOf(search)>=0;
     })
     .sort(function(a,b){return b.f<a.f?-1:1;});
-  document.getElementById('movCount').textContent=txns.length+' mov. - &#8364;'+fmt(txns.reduce(function(s,t){return s+t.i;},0));
-  document.getElementById('movT').innerHTML=txns.map(function(t){
-    var cat=CATS[t.c]||{l:t.c,c:'#888'},bk=BK[t.b]||{l:t.b,cls:'b-bbva'};
-    return '<tr><td class="mono" style="color:var(--tx3)">'+t.f+'</td>'+
-      '<td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+t.d+'</td>'+
-      '<td><span class="bb '+bk.cls+'">'+bk.l+'</span></td>'+
-      '<td><span class="cb"><span class="cdot" style="background:'+cat.c+'"></span>'+cat.l+'</span></td>'+
-      '<td><span class="mono neg">&#8364;'+t.i.toFixed(2)+'</span></td></tr>';
-  }).join('');
+
+  var total=MOV_FILTERED.reduce(function(s,t){return s+t.i;},0);
+  var el=document.getElementById('movCount');
+  if(el) el.innerHTML=MOV_FILTERED.length+' mov. &middot; <b>&#8364;'+fmt(total)+'</b>';
+
+  renderMovPage();
 }
-function setMBF(b){MBF=b;renderMov();}
-function setMCF(c){MCF=c;renderMov();}
+
+function renderMovPage(){
+  var start=MOV_PAGE*MOV_PER_PAGE;
+  var page=MOV_FILTERED.slice(start, start+MOV_PER_PAGE);
+  var totalPages=Math.ceil(MOV_FILTERED.length/MOV_PER_PAGE);
+
+  document.getElementById('movT').innerHTML=page.map(function(t){
+    var txIdx=TX.indexOf(t);
+    var cat=CATS[t.c]||{l:t.c,c:'#888'};
+    var bk=BK[t.b]||{l:t.b||'?',cls:'b-bbva'};
+    return '<tr>'+
+      '<td class="mono" style="color:var(--tx3);font-size:9px;white-space:nowrap">'+t.f.slice(5)+'</td>'+
+      '<td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px" title="'+t.d+'">'+t.d+'</td>'+
+      '<td><span class="bb '+bk.cls+'">'+bk.l+'</span></td>'+
+      '<td>'+
+        '<select class="cat-sel-mini" data-idx="'+txIdx+'" onchange="moveTxToBline(this,parseInt(this.dataset.idx))" style="min-width:100px;font-size:9px">'+
+          buildBlineOpts(t._blineId||'')+
+        '</select>'+
+      '</td>'+
+      '<td><span class="mono neg" style="font-size:10px">&#8364;'+t.i.toFixed(2)+'</span></td>'+
+    '</tr>';
+  }).join('');
+
+  // Pagination controls
+  var pag='';
+  if(totalPages>1){
+    pag='<div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;font-size:10px;color:var(--tx2)">'+
+      '<button onclick="movPage(-1)" style="background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:4px 10px;color:var(--tx2);cursor:pointer"'+(MOV_PAGE===0?' disabled':'')+'>&#8592;</button>'+
+      '<span>'+( MOV_PAGE+1)+' / '+totalPages+' &nbsp;('+MOV_FILTERED.length+' total)</span>'+
+      '<button onclick="movPage(1)" style="background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:4px 10px;color:var(--tx2);cursor:pointer"'+(MOV_PAGE>=totalPages-1?' disabled':'')+'>&#8594;</button>'+
+    '</div>';
+  }
+  var pagEl=document.getElementById('movPag');
+  if(pagEl) pagEl.innerHTML=pag;
+}
+
+function movPage(dir){
+  var totalPages=Math.ceil(MOV_FILTERED.length/MOV_PER_PAGE);
+  MOV_PAGE=Math.max(0,Math.min(totalPages-1,MOV_PAGE+dir));
+  renderMovPage();
+  // Scroll to top of movimientos
+  var mv=document.getElementById('v2');
+  if(mv) mv.scrollTop=0;
+}
+function setMBF(b){MBF=b;MOV_PAGE=0;renderMov();}
+function setMCF(c){MCF=c;MOV_PAGE=0;renderMov();}
 
 // -- BANCOS ------------------------------------
 
@@ -2733,19 +2783,20 @@ function smartCat(d){
   if(/naturgy|endesa|iberdrola|gana energ|emasa|agua/.test(d)) return 'suministros';
   if(/seguro|caser|prosegur|plan uni/.test(d)) return 'seguros';
   if(/mercadona|carrefour|lidl|aldi|coviran|peyma/.test(d)) return 'alimentacion';
-  if(/restaurante|segalerva|kebab|just eat|telepizza|burger|morrofino|chiringuito|meson|cocina|montaditos|taberna|baston|cafeteria|panaderia|jin peng|bar |100 montaditos|pikon|viaducto|de leo|rain forest|capuchinos/.test(d)) return 'restaurantes';
+  if(/restaurante|segalerva|kebab|just eat|telepizza|burger|morrofino|chiringuito|meson|cocina|montaditos|taberna|baston|cafeteria|panaderia|jin peng|bar |100 montaditos|pikon|viaducto|de leo|rain forest|capuchinos|tataguyo|benevolenc|goleta|bk chu|casa rural/.test(d)) return 'restaurantes';
   if(/gasoil|gasolina|petroprix|repsol|cepsa|plenergy/.test(d)) return 'transporte';
   if(/parking|taxi|uber|saba|vueling|volotea|aelia/.test(d)) return 'transporte';
   if(/farmacia|fcia|dental|dentista|hospital|medic|clinica|materno/.test(d)) return 'salud';
   if(/orange|apple|netflix|spotify|chatgpt|claude|openai/.test(d)) return 'suscripciones';
   if(/guarder|mensualidad roi|obelleiro|ingles|academia/.test(d)) return 'educacion';
-  if(/zara|springfield|decathlon|el corte|miravia|sports direct|amazon|bambu/.test(d)) return 'compras';
+  if(/zara|springfield|decathlon|el corte|miravia|sports direct|amazon|bambu|leroy|brico|ikea|fnac|media markt|worten|alcampo/.test(d)) return 'compras';
   if(/barberia|peluquer|multimon/.test(d)) return 'estetica';
   if(/tabacos|estanco|tabaco|tulotero|loteria|once/.test(d)) return 'tabaco_loteria';
   if(/faunia|bioparc|caseta|titanitos|padel|gym|gimnasio|parque|faunia|new multimon/.test(d)) return 'actividades';
   if(/hotel|booking|airbnb|lindabarcas/.test(d)) return 'viajes';
   if(/ayuntamiento|aeat|irpf|adeudo excmo/.test(d)) return 'impuestos';
-  if(/bizum|chvt|varios servicio/.test(d)) return 'ocio_varios';
+  if(/bizum/.test(d)) return 'ocio_varios'; // Bizum - user must reclassify
+  if(/chvt|varios servicio/.test(d)) return 'ocio_varios';
   if(/cajero|efectivo/.test(d)) return 'efectivo';
   return 'otros';
 }
