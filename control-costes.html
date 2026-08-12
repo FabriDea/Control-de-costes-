@@ -713,10 +713,14 @@ var XLSPARSER = {
   </div>
   <div class="card">
     <div class="ctitle"><span>MOVIMIENTOS</span><span id="movCount" style="font-size:7px;color:var(--tx3)"></span></div>
-    <table class="tbl">
-      <thead><tr><th>FECHA</th><th>CONCEPTO</th><th>BANCO</th><th>CAT.</th><th>&#8364;</th></tr></thead>
+    <!-- Month filter -->
+    <div style="display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;margin-bottom:8px;padding-bottom:2px" id="movMonthF"></div>
+    <div id="movCount" style="font-size:9px;color:var(--tx2);margin-bottom:6px"></div>
+    <table class="tbl" style="width:100%">
+      <thead><tr><th>FECHA</th><th>CONCEPTO</th><th>BK</th><th>FAMILIA</th><th>&#8364;</th><th></th></tr></thead>
       <tbody id="movT"></tbody>
     </table>
+    <div id="movPag"></div>
   </div>
 </div>
 
@@ -1573,22 +1577,28 @@ var MOV_FILTERED = [];
 
 function renderMov(){
   var banks=['all','bbva','unicaja','revolut','efectivo'];
-  document.getElementById('movBankF').innerHTML=banks.map(function(b){
+  var bkEl=document.getElementById('movBankF');
+  if(bkEl) bkEl.innerHTML=banks.map(function(b){
     var l=b==='all'?'Todos':(BK[b]?BK[b].l:b.toUpperCase());
     return '<button class="fpill'+(MBF===b?' on':'')+'" data-v="'+b+'" onclick="setMBF(this.dataset.v)" style="font-size:10px">'+l+'</button>';
   }).join('');
 
   // Month filter
-  var months=['all',1,2,3,4,5,6,7,8,9,10,11,12];
   var MN2=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
   var curMF=window._movMonthF||'all';
-  document.getElementById('movMonthF').innerHTML=months.map(function(m){
+  var mfEl=document.getElementById('movMonthF');
+  if(mfEl) mfEl.innerHTML=['all',1,2,3,4,5,6,7,8,9,10,11,12].map(function(m){
     var l=m==='all'?'Todos':MN2[m];
-    return '<button class="fpill'+(curMF==m?' on':'')+'" data-v="'+m+'" onclick="window._movMonthF=this.dataset.v==='+'"all"?"all":parseInt(this.dataset.v);MOV_PAGE=0;renderMov()" style="font-size:10px">'+l+'</button>';
+    var sel=curMF==m?' on':'';
+    return '<button class="fpill'+sel+'" onclick="window._movMonthF='+(m==='all'?'"all"':m)+';MOV_PAGE=0;renderMov()" style="font-size:10px;white-space:nowrap">'+l+'</button>';
   }).join('');
 
-  var search=(document.getElementById('movSearch')||{value:''}).value.toLowerCase().trim();
-  MOV_FILTERED=ftx()
+  var search=((document.getElementById('movSearch')||{}).value||'').toLowerCase().trim();
+  
+  // Use ALL tx (not just filtered period) for movimientos tab
+  var allTx=TX.filter(function(t){return t&&t.d&&t.i>0;});
+  
+  MOV_FILTERED=allTx
     .filter(function(t){return MBF==='all'||t.b===MBF;})
     .filter(function(t){return MCF==='all'||t.c===MCF;})
     .filter(function(t){
@@ -1598,13 +1608,14 @@ function renderMov(){
     .filter(function(t){
       if(!search) return true;
       var cat=(CATS[t.c]||{l:t.c}).l.toLowerCase();
-      return t.d.toLowerCase().indexOf(search)>=0||cat.indexOf(search)>=0;
+      var bk=(BK[t.b]||{l:t.b||''}).l.toLowerCase();
+      return t.d.toLowerCase().indexOf(search)>=0||cat.indexOf(search)>=0||bk.indexOf(search)>=0;
     })
-    .sort(function(a,b){return b.f<a.f?-1:1;});
+    .sort(function(a,b){return b.f>a.f?-1:1;});
 
   var total=MOV_FILTERED.reduce(function(s,t){return s+t.i;},0);
   var el=document.getElementById('movCount');
-  if(el) el.innerHTML=MOV_FILTERED.length+' mov. &middot; <b>&#8364;'+fmt(total)+'</b>';
+  if(el) el.innerHTML='<b>'+MOV_FILTERED.length+'</b> movimientos &middot; <b style="color:var(--rd)">&#8364;'+fmt(total)+'</b>';
 
   renderMovPage();
 }
@@ -1614,20 +1625,23 @@ function renderMovPage(){
   var page=MOV_FILTERED.slice(start, start+MOV_PER_PAGE);
   var totalPages=Math.ceil(MOV_FILTERED.length/MOV_PER_PAGE);
 
-  document.getElementById('movT').innerHTML=page.map(function(t){
+  var tEl=document.getElementById('movT');
+  if(!tEl) return;
+  tEl.innerHTML=page.map(function(t){
     var txIdx=TX.indexOf(t);
-    var cat=CATS[t.c]||{l:t.c,c:'#888'};
     var bk=BK[t.b]||{l:t.b||'?',cls:'b-bbva'};
+    var currentBline=BLINES.find(function(b){return txMatchesLine(t,b);});
+    var blineName=currentBline?currentBline.nom:(CATS[t.c]?CATS[t.c].l:t.c);
     return '<tr>'+
       '<td class="mono" style="color:var(--tx3);font-size:9px;white-space:nowrap">'+t.f.slice(5)+'</td>'+
-      '<td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px" title="'+t.d+'">'+t.d+'</td>'+
+      '<td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px" title="'+t.d+'">'+t.d+'</td>'+
       '<td><span class="bb '+bk.cls+'">'+bk.l+'</span></td>'+
-      '<td>'+
-        '<select class="cat-sel-mini" data-idx="'+txIdx+'" onchange="moveTxToBline(this,parseInt(this.dataset.idx))" style="min-width:100px;font-size:9px">'+
-          buildBlineOpts(t._blineId||'')+
-        '</select>'+
+      '<td style="font-size:9px;color:var(--tx2);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+blineName+'</td>'+
+      '<td class="mono neg" style="font-size:10px;white-space:nowrap">&#8364;'+t.i.toFixed(2)+'</td>'+
+      '<td style="white-space:nowrap">'+
+        '<button data-idx="'+txIdx+'" onclick="editDrillTx(parseInt(this.dataset.idx))" style="background:none;border:none;color:var(--tx3);cursor:pointer;font-size:13px;padding:0 3px" title="Editar">&#9998;</button>'+
+        '<button id="delbtn_'+txIdx+'" data-idx="'+txIdx+'" data-armed="0" onclick="deleteDrillTx(parseInt(this.dataset.idx))" style="background:none;border:none;color:var(--rd);cursor:pointer;font-size:13px;padding:0 3px" title="Eliminar (doble tap)">&#128465;</button>'+
       '</td>'+
-      '<td><span class="mono neg" style="font-size:10px">&#8364;'+t.i.toFixed(2)+'</span></td>'+
     '</tr>';
   }).join('');
 
@@ -2114,8 +2128,17 @@ function parseCSV(txt){
       // Get importe - handle Spanish format: -40,90 or -40.90
       var iIdx=headerCols.imp!==undefined?headerCols.imp:3;
       var impRaw=(parts[iIdx]||'').replace(/"/g,'').trim();
-      // Spanish: 1.295,41 -> remove dots as thousands sep, replace comma with dot
-      var impStr=impRaw.replace(/\./g,'').replace(',','.');
+      // Smart decimal detection:
+      // If has comma -> Spanish format: 1.295,41 -> remove thousand dots -> 1295.41
+      // If no comma -> International: -2.00 or -40.90 -> use as-is
+      var impStr;
+      if(impRaw.indexOf(',')>=0){
+        // Spanish format: remove dots (thousand sep), replace comma with dot
+        impStr=impRaw.replace(/\./g,'').replace(',','.');
+      } else {
+        // International format (Revolut): keep dots as decimal
+        impStr=impRaw;
+      }
       imp=parseFloat(impStr)||0;
     } else {
       // Generic: date in col0, try to find amount
